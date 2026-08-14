@@ -7,7 +7,7 @@ import { StaticGeneratingCardInput } from './_card.type';
 export const filterCards = (
 	sourceCardId: string | null,
 	allCards: AllCardsService,
-	filter: (c: ReferenceCard) => boolean,
+	filter: (c: ReferenceCard) => boolean | undefined,
 	options?: FilterCardsInput | StaticGeneratingCardInput['inputOptions'],
 ): readonly string[] => {
 	const inputOptions = convertOptions(options);
@@ -17,7 +17,7 @@ export const filterCards = (
 export const filterCardsFromThePast = (
 	sourceCardId: string,
 	allCards: AllCardsService,
-	filter: (c: ReferenceCard) => boolean,
+	filter: (c: ReferenceCard) => boolean | undefined,
 	options?: FilterCardsInput | StaticGeneratingCardInput['inputOptions'],
 ): readonly string[] => {
 	const inputOptions = convertOptions(options);

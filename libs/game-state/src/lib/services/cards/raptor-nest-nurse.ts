@@ -2,13 +2,21 @@
 import { CardIds, CardType, Zone } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
 import { hasCorrectType, hasCost } from '../../related-cards/dynamic-pools';
-import { GeneratingCard, GuessInfoInput } from './_card.type';
+import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
-export const RaptorNestNurse: GeneratingCard = {
+export const RaptorNestNurse: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.RaptorNestNurse_DINO_434],
 	hasSequenceInfo: true,
 	publicCreator: true,
+	summonInPlay: true,
+	dynamicPool: (input: StaticGeneratingCardInput) =>
+		filterCards(
+			RaptorNestNurse.cardIds[0],
+			input.allCards,
+			(c) => (hasCorrectType(c, CardType.MINION) || hasCorrectType(c, CardType.SPELL)) && hasCost(c, '==', 1),
+			input.inputOptions,
+		),
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		if (input.card.createdIndex === 0 && input.options?.creatorZone !== Zone.GRAVEYARD) {
 			return {

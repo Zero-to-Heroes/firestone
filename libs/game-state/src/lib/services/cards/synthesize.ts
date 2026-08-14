@@ -2,13 +2,23 @@
 import { CardIds, CardType, hasCorrectTribe, Race } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
 import { hasCorrectType, hasCost } from '../../related-cards/dynamic-pools';
-import { GeneratingCard, GuessInfoInput } from './_card.type';
+import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
-export const Synthesize: GeneratingCard = {
+export const Synthesize: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.Synthesize],
 	hasSequenceInfo: true,
 	publicCreator: true,
+	dynamicPool: (input: StaticGeneratingCardInput) =>
+		filterCards(
+			Synthesize.cardIds[0],
+			input.allCards,
+			(c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasCorrectTribe(c, Race.ELEMENTAL) &&
+				(hasCost(c, '==', 1) || hasCost(c, '==', 2) || hasCost(c, '==', 3)),
+			input.inputOptions,
+		),
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		if (input.card.createdIndex === 0) {
 			return {

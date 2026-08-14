@@ -1,7 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /**
- * Void Soul (JAIL_732)
- * Summon a random 1-Cost Demon. Improve your future Void Souls.
+ * Perjury (MAW_018 / CORE_MAW_018)
+ * Secret: When your turn starts, Discover and cast a Secret from another class.
  */
 import { ALL_CLASSES, CardClass, CardIds, CardType, GameTag, hasMechanic } from '@firestone-hs/reference-data';
 
@@ -11,7 +11,7 @@ import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingC
 import { filterCards } from './utils';
 
 export const Perjury: GeneratingCard & StaticGeneratingCard = {
-	cardIds: [CardIds.Perjury],
+	cardIds: [CardIds.Perjury, CardIds.Perjury_CORE_MAW_018],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		const currentClass = input.inputOptions.deckState.getCurrentClass();

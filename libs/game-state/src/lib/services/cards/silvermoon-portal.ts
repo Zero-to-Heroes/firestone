@@ -9,6 +9,7 @@ import { filterCards } from './utils';
 
 export const SilvermoonPortal: StaticGeneratingCard = {
 	cardIds: [CardIds.SilvermoonPortal, CardIds.SilvermoonPortal_CORE_KAR_077, CardIds.SilvermoonPortal_WON_309],
+	summonInPlay: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		return filterCards(
 			SilvermoonPortal.cardIds[0],

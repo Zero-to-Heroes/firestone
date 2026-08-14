@@ -9,7 +9,7 @@ const isDemonMinion = (c: ReferenceCard): boolean =>
 	hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DEMON);
 
 export const Kiljaeden: GeneratingCard & StaticGeneratingCard = {
-	cardIds: [CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e],
+	cardIds: [CardIds.Kiljaeden_GDB_145, CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		return filterCards(Kiljaeden.cardIds[0], input.allCards, isDemonMinion, input.inputOptions);

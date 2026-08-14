@@ -9,6 +9,7 @@ import { filterCards } from './utils';
 
 export const TalanjisLastStand: StaticGeneratingCard = {
 	cardIds: [CardIds.TalanjisLastStand_CATA_471],
+	summonInPlay: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		return filterCards(
 			TalanjisLastStand.cardIds[0],

@@ -9,6 +9,7 @@ import { filterCards } from './utils';
 
 export const DisposableAcolytes: StaticGeneratingCard = {
 	cardIds: [CardIds.DisposableAcolytes_CATA_499],
+	summonInPlay: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		return filterCards(
 			DisposableAcolytes.cardIds[0],

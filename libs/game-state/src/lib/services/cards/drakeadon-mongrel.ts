@@ -9,6 +9,7 @@ import { filterCards } from './utils';
 
 export const DrakeadonMongrel: StaticGeneratingCard = {
 	cardIds: [CardIds.DrakeadonMongrel_CATA_723],
+	summonInPlay: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		return filterCards(
 			DrakeadonMongrel.cardIds[0],

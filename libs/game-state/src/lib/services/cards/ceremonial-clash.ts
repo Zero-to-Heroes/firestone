@@ -9,6 +9,7 @@ import { filterCards } from './utils';
 
 export const CeremonialClash: StaticGeneratingCard = {
 	cardIds: [CardIds.CeremonialClash_CATA_569],
+	summonInPlay: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		return filterCards(
 			CeremonialClash.cardIds[0],
