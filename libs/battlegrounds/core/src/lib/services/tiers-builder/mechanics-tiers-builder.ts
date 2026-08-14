@@ -26,6 +26,8 @@ const MAIN_MECHANICS_IN_GAME = [
 	{ mechanic: GameTag.DEATHRATTLE, tierId: 'D' },
 	{ mechanic: GameTag.END_OF_TURN, tierId: 'E' },
 	{ mechanic: GameTag.BACON_RALLY, tierId: 'Ra' },
+	{ mechanic: GameTag.CHOOSE_ONE, tierId: 'CO' },
+	{ mechanic: GameTag.DISCOVER, tierId: 'Di' },
 ];
 
 export const MECHANICS_IN_GAME: readonly { mechanic: GameTag; tierId: string; canBeHighlighted?: boolean }[] = [
