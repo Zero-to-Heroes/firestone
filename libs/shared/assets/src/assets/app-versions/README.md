@@ -20,6 +20,8 @@
 
 - When building localized release notes, also include the Discord release notes
 
+- Don't leave blank lines between items
+
 ### Card names
 
 - Reference cards with `{{CARD_ID}}` placeholders instead of plain English names.

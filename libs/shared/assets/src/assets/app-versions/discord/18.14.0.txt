@@ -1,0 +1,69 @@
+**Firestone 18.14.0 — Release notes**
+
+**Battlegrounds**
+- ✨ Update simulator for 36.2
+- ✨ Faster time to first battle simulation in the overlay
+- ✨ MMR is visible without mousing over opponent icons
+- ✨ Horizontal scrollbar on the compositions tab
+- ✨ Aureate Laureate is excluded from auto-highlights
+- ✨ Tavern buff counter includes For the Horde!
+- ✨ Added missing achievements for recent heroes
+- 🐞 Fixed sim issues and improved simulator performance
+- 🐞 Fix an issue where counters would not appear in Battlegrounds anymore
+- 🐞 Fix an issue where battle odds would not stay visible in the tavern
+
+**Decktracker**
+- ✨ Jade Guardians counter also appears for Azalina Soulsever and Lotus Troublemaker
+- ✨ Void Soul counter shows the pool for the next demon to be summoned
+- ✨ Counters that depend on remaining Irida Sinseeker / Godfrey the Betrayer cards now take The Void and Godfrey's discarded cards into account
+- ✨ Aya, Lotus Kingpin is added to the opponent's deck when you go second and have the card in your deck yourself
+- ✨ Updated highlights (Theft Accusation; Void Soul; Twilight's Call; Crystalsmith Cultist; Chrono-Lord Epoch; Headhunter's Hatchet)
+- ✨ Updated dynamic pools (Ivory Knight; Stonehill Defender; Sands of Time; Avatar of Hearthstone; Staff of Trickery; Perjury; Skeletal Dragon; Font of Power; Disc Jockey; Harmonica Soloist)
+- ✨ Updated oracles (Twin Slice; Fight Over Me; Noxious Bribe)
+- 🐞 Void Soul-created cards now cap at 10 mana
+- 🐞 Secret Ingredient no longer shows itself in its dynamic pool
+- 🐞 Crowd Control no longer has incorrect highlights
+- 🐞 Runi, Temporal Guardian counter disappears correctly after minions return
+- 🐞 Attack counter now picks up the CANNOT_ATTACK_HEROES restriction
+- 🐞 Jade Guardians counter no longer shows incorrect values in some cases
+- 🐞 Cards created by King Llane no longer lose their gift status after a copy is revealed
+- 🐞 "Created by" cards are removed from the deck when Recruited
+- 🐞 Card tooltips no longer go out of bounds
+- 🐞 Fixed an info leak for cards sent back to hand by Godfrey the Betrayer
+- 🐞 Fixed an info leak from Alara'shi
+- 🐞 Fixed an info leak from Kil'jaeden
+- 🐞 Fixed an info leak from the second draw of Cultist Map
+- 🐞 Fixed an info leak when discovering several cards with the same name in the opponent's deck
+- 🐞 Godfrey the Betrayer's cards are removed from their zone more reliably
+- 🐞 Warptooth + Chainbreaker Hogger interaction fixed
+- 🐞 Calia Menethil related cards are correct
+- 🐞 Azalina Soulsever is considered when guessing Shattered cards
+- 🐞 Flames of Infinity now correctly handles Locations
+- 🐞 Eternal Toil no longer marks the card it draws as created
+- 🐞 Transformed weapons (e.g. Tiny Pal) are removed from the board when destroyed
+- 🐞 Secrets pool class restrictions apply more reliably
+- 🐞 Untimely Death is properly ruled out in some cases
+- 🐞 Webspinner + PREPARE interaction fixed
+- 🐞 Opponent cards identified in hand are removed from the opponent's deck more reliably
+- 🐞 Bashana Runetotem counter no longer crashes in some cases
+
+**Arena**
+- ✨ Card search field is focused automatically when alt-tabbing to the app
+- 🐞 Minion play order appears again
+
+**Replays**
+- ✨ Buffs on card text are shown more accurately (especially in Battlegrounds)
+- ✨ Enchantments display improved
+
+**Brawl**
+- ✨ Visual feedback when copying a brawl deck
+
+**General**
+- ✨ Reduced memory usage
+- ✨ Profile info refreshes more eagerly, so data is more accurate on startup
+- 🐞 Premium status is no longer incorrectly removed for Tebex subscribers
+- 🐞 The reconnect overlay appears again outside of Battlegrounds on the CN server
+
+**Mods**
+- ✨ Existing mods and config are kept when upgrading the mod engine
+- 🐞 The mods list is no longer cleared after disabling and re-enabling mods
