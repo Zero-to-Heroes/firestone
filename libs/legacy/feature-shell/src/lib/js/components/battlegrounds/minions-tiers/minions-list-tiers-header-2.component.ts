@@ -13,9 +13,9 @@ import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
 import { GameTag, Race } from '@firestone-hs/reference-data';
 import { Tier } from '@firestone/battlegrounds/core';
 import { BgsBoardHighlighterService } from '@firestone/battlegrounds/services';
-import { ENABLE_BGS_COMPS_IN_WIDGET } from '@firestone/shared/common/service';
+import { ENABLE_BGS_COMPS_IN_WIDGET, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
+import { AnalyticsService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
@@ -119,6 +119,25 @@ import { BehaviorSubject, Observable } from 'rxjs';
 							(click)="onTavernClick(currentTier)"
 							(contextmenu)="onTavernRightClick(currentTier)"
 						></tier-icon>
+						<ng-container *ngIf="{ showAll: showAllMechanics$ | async } as toggle">
+							<div
+								class="tier-icon all-mechanics-toggle"
+								(click)="toggleShowAllMechanics($event)"
+								[helpTooltip]="
+									(toggle.showAll
+										? 'battlegrounds.in-game.minions-list.hide-all-mechanics-tooltip'
+										: 'battlegrounds.in-game.minions-list.show-all-mechanics-tooltip'
+									) | fsTranslate
+								"
+							>
+								<div
+									class="tier mechanics"
+									[ngClass]="{ selected: toggle.showAll, expanded: toggle.showAll }"
+								>
+									<span class="symbol"></span>
+								</div>
+							</div>
+						</ng-container>
 					</ul>
 				</ng-container>
 			</ng-container>
@@ -132,12 +151,19 @@ export class BattlegroundsMinionsListTiersHeader2Component
 {
 	enableComps = ENABLE_BGS_COMPS_IN_WIDGET;
 	selectedCategory$: Observable<MinionTierCategory>;
+	showAllMechanics$: Observable<boolean>;
 
 	@Output() displayedTierChange = new EventEmitter<Tier>();
 	@Output() lockedTierChange = new EventEmitter<Tier>();
 
 	@Input() tierLevels: readonly Tier[];
-	@Input() mechanicalTiers: readonly Tier[];
+	@Input() set mechanicalTiers(value: readonly Tier[]) {
+		this._mechanicalTiers = value ?? [];
+		this.ensureLockedMechanicStillVisible();
+	}
+	get mechanicalTiers(): readonly Tier[] {
+		return this._mechanicalTiers;
+	}
 	@Input() tribeTiers: readonly Tier[];
 	@Input() compositions: readonly BgsCompAdvice[];
 
@@ -166,6 +192,7 @@ export class BattlegroundsMinionsListTiersHeader2Component
 	lockedTier: Tier;
 	currentTavernTier = 1;
 
+	private _mechanicalTiers: readonly Tier[] = [];
 	private selectedCategory$$ = new BehaviorSubject<MinionTierCategory | null>(null);
 
 	constructor(
@@ -173,12 +200,17 @@ export class BattlegroundsMinionsListTiersHeader2Component
 		private readonly ow: OverwolfService,
 		private readonly highlighter: BgsBoardHighlighterService,
 		private readonly analytics: AnalyticsService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
 		this.selectedCategory$ = this.selectedCategory$$.asObservable();
+		this.showAllMechanics$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs?.bgsShowAllMechanics ?? false),
+		);
 	}
 
 	async ngAfterViewInit() {
@@ -216,6 +248,15 @@ export class BattlegroundsMinionsListTiersHeader2Component
 
 	trackByFn(index: number, tavernTier: Tier) {
 		return tavernTier?.tavernTier;
+	}
+
+	async toggleShowAllMechanics(event: MouseEvent) {
+		event.preventDefault();
+		event.stopPropagation();
+		const current = this.prefs.preferences$$.getValue()?.bgsShowAllMechanics ?? false;
+		const next = !current;
+		this.analytics.trackEvent('bgs-minions-list', { category: 'show-all-mechanics', value: next });
+		await this.prefs.updatePrefs('bgsShowAllMechanics', next);
 	}
 
 	onTavernClick(tavernTier: Tier) {
@@ -283,6 +324,25 @@ export class BattlegroundsMinionsListTiersHeader2Component
 
 	private getAllTiers(): readonly Tier[] {
 		return [...this.tierLevels, ...this.mechanicalTiers, ...this.tribeTiers];
+	}
+
+	private ensureLockedMechanicStillVisible() {
+		if (this.selectedCategory$$.getValue() !== 'mechanics') {
+			return;
+		}
+		const lockedTavernTier = this.lockedTier?.tavernTier ?? this.displayedTier?.tavernTier;
+		if (lockedTavernTier == null) {
+			return;
+		}
+		const stillPresent = this._mechanicalTiers.some((tier) => tier.tavernTier === lockedTavernTier);
+		if (stillPresent || !this._mechanicalTiers.length) {
+			return;
+		}
+		this.setDisplayedTier(undefined);
+		this.setLockedTier(this._mechanicalTiers[0]);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.markForCheck();
+		}
 	}
 
 	private setLockedTier(tavernTier: Tier) {

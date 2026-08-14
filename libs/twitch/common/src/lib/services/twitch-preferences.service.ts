@@ -51,4 +51,12 @@ export class TwitchPreferencesService {
 		this.prefs.next(value);
 		this.preferences$$.next(value);
 	}
+
+	public async updatePrefs<K extends keyof TwitchPreferences>(key: K, value: TwitchPreferences[K]): Promise<void> {
+		const prefs = this.preferences$$.getValue() ?? new TwitchPreferences();
+		await this.savePrefs({
+			...prefs,
+			[key]: value,
+		});
+	}
 }

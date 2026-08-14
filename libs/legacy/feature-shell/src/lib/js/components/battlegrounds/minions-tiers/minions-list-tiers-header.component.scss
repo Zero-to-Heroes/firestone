@@ -100,4 +100,68 @@
 	&.tribe .tier-icon {
 		margin-right: 1px;
 	}
+
+	.all-mechanics-toggle {
+		cursor: pointer;
+
+		.tier {
+			position: relative;
+			opacity: 0.5;
+			border-radius: 50%;
+			overflow: hidden;
+			height: 28px;
+			aspect-ratio: 1;
+			margin: 2px;
+			top: 2px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: var(--color-4);
+			color: white;
+
+			.symbol {
+				position: relative;
+				width: 12px;
+				height: 12px;
+				flex-shrink: 0;
+
+				&::before,
+				&::after {
+					content: '';
+					position: absolute;
+					background: currentColor;
+					border-radius: 1px;
+				}
+
+				&::before {
+					left: 0;
+					right: 0;
+					top: 50%;
+					height: 2px;
+					transform: translateY(-50%);
+				}
+
+				&::after {
+					top: 0;
+					bottom: 0;
+					left: 50%;
+					width: 2px;
+					transform: translateX(-50%);
+				}
+			}
+
+			&.expanded .symbol::after {
+				display: none;
+			}
+
+			&.selected,
+			&:hover {
+				opacity: 1;
+			}
+
+			&.selected {
+				outline: 2px solid var(--color-1);
+			}
+		}
+	}
 }
