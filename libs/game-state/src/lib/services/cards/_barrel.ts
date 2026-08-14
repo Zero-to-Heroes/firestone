@@ -499,6 +499,7 @@ export { WarCache } from './war-cache';
 export { WardenMaiev } from './warden-maiev';
 export { WarmasterBlackhorn } from './warmaster-blackhorn';
 export { Warptooth } from './warptooth';
+export { Webspinner } from './webspinner';
 export { WelcomeHome } from './welcome-home';
 export { WhatDoesThisDo } from './what-does-this-do';
 export { WhisperoftheVoid } from './whisperofthe-void';
