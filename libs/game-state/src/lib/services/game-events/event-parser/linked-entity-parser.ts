@@ -8,7 +8,7 @@ import { allowDirectFlaggingOfCardInOpponentHand } from '../../hs-utils';
 import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { reverseIfNeeded } from './card-dredged-parser';
-import { DeckManipulationHelper } from './deck-manipulation-helper';
+import { DeckManipulationHelper, reconcileCardInHandWithDeck } from './deck-manipulation-helper';
 
 export class LinkedEntityParser implements EventParser {
 	constructor(
@@ -115,24 +115,30 @@ export class LinkedEntityParser implements EventParser {
 					// When the card is in the setaside zone, we don't want to override the temporaryCard, because it is very likely a temp card
 					temporaryCard: originalCard.zone === 'SETASIDE' ? originalCard.temporaryCard : undefined,
 				} as DeckCard);
+				const otherDeck = isPlayerForCardModification ? currentState.opponentDeck : currentState.playerDeck;
+				const reconciled = reconcileCardInHandWithDeck({
+					removedCard: originalCard,
+					cardId: newCard.cardId,
+					entityId: originalCard.entityId ?? gameEvent.additionalData.linkedEntityId,
+					deck: deckInWhichToModifyTheCard,
+					deckCards: deckInWhichToModifyTheCard.deck,
+					opponentDeck: otherDeck,
+					helper: this.helper,
+				});
 				newPlayerDeck = this.helper.updateCardInDeck(
-					deckInWhichToModifyTheCard,
+					deckInWhichToModifyTheCard.update({
+						deck: reconciled.deckCards,
+						additionalKnownCardsInHand: deckInWhichToModifyTheCard.additionalKnownCardsInHand.filter(
+							(c, i) =>
+								c !== newCard.cardId ||
+								deckInWhichToModifyTheCard.additionalKnownCardsInHand.indexOf(c) !== i,
+						),
+						additionalKnownCardsInDeck: reconciled.additionalKnownCardsInDeck,
+					}),
 					updatedCard,
 					isPlayerForCardModification,
 					true,
 				);
-				newPlayerDeck = newPlayerDeck.update({
-					additionalKnownCardsInHand: deckInWhichToModifyTheCard.additionalKnownCardsInHand.filter(
-						(c, i) =>
-							c !== newCard.cardId ||
-							deckInWhichToModifyTheCard.additionalKnownCardsInHand.indexOf(c) !== i,
-					),
-					additionalKnownCardsInDeck: deckInWhichToModifyTheCard.additionalKnownCardsInDeck.filter(
-						(c, i) =>
-							c !== newCard.cardId ||
-							deckInWhichToModifyTheCard.additionalKnownCardsInDeck.indexOf(c) !== i,
-					),
-				});
 				console.debug('[linked-entity-parser] newPlayerDeck in hand', newPlayerDeck);
 			} else if (isPlayerForCardModification || originalZone !== 'hand') {
 				const updatedCard = originalCard.update({

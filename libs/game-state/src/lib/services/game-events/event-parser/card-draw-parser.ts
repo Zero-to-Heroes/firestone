@@ -393,11 +393,15 @@ export class CardDrawParser implements EventParser {
 			}
 		}
 
-		// Make sure we don't have any more cards in the deck with the same entityId
-		// See the comment above about having an entityId=22 in both deck and hand after it's drawn and not removed
-		// But I agree, this feels very hacky
-		if (newDeck.some((c) => c.entityId === entityId)) {
-			newDeck = newDeck.map((c) => (c.entityId === entityId ? c.update({ entityId: undefined }) : c));
+		// Hidden opponent draws must not delete an already-identified remaining-deck row: that would
+		// leak what they just drew. Keep the named leftover (and its public entityId) so a later
+		// identify can consume that exact row. Unidentified ghosts still drop the public entityId
+		// so later ENTITY_UPDATE cannot treat them as the drawn card — do not copy it to
+		// trueEntityId (that field is opaque gift identity, not a public handle).
+		if (newDeck.some((c) => c.entityId === entityId && !c.cardId?.length)) {
+			newDeck = newDeck.map((c) =>
+				c.entityId === entityId && !c.cardId?.length ? c.update({ entityId: undefined }) : c,
+			);
 			console.debug('[card-draw] removed duplicate entityId from deck', `entityId:${entityId}__`, newDeck);
 		}
 

@@ -383,4 +383,79 @@ describe('reconcileCardInHandWithDeck', () => {
 		expect(result.opponentDeck.deck.some((c) => c.cardId === stolenCardId)).toBe(false);
 		expect(result.opponentDeck.deck).toEqual([]);
 	});
+
+	const leftoverCardId = CardIds.MurlocRaiderLegacy;
+	const otherCardId = CardIds.PrinceMalchezaar_KAR_096;
+
+	const leftoverDeck = (overrides: Partial<DeckCard> = {}) =>
+		DeckState.create({
+			deck: [
+				DeckCard.create({
+					cardId: leftoverCardId,
+					entityId: 18,
+					...overrides,
+				}),
+			],
+		});
+
+	const reconcileLeftover = (
+		deck: DeckState,
+		entityId: number,
+		revealedCardId: string,
+		handAlreadyIdentified = false,
+	) =>
+		reconcileCardInHandWithDeck({
+			removedCard: DeckCard.create({
+				entityId,
+				...(handAlreadyIdentified && revealedCardId ? { cardId: revealedCardId } : {}),
+			}),
+			cardId: revealedCardId,
+			entityId,
+			deck,
+			deckCards: deck.deck,
+			opponentDeck: DeckState.create({ deck: [], hand: [] }),
+			helper,
+		});
+
+	it('does not replace a named leftover when the hand reveal has no cardId', () => {
+		const deck = leftoverDeck();
+		const result = reconcileLeftover(deck, 18, '');
+		expect(result.deckCards).toBe(deck.deck);
+		expect(result.deckCards[0].cardId).toBe(leftoverCardId);
+	});
+
+	it('does not replace a leftover with no cardId even when the hand reveal is known', () => {
+		const deck = leftoverDeck({ cardId: undefined as unknown as string });
+		const result = reconcileLeftover(deck, 18, leftoverCardId, true);
+		expect(result.deckCards).toHaveLength(1);
+		expect(result.deckCards[0].isFiller()).toBe(false);
+	});
+
+	it('does not replace a leftover that only has trueEntityId', () => {
+		const deck = leftoverDeck({ entityId: undefined as unknown as number, trueEntityId: 18 });
+		const result = reconcileLeftover(deck, 18, leftoverCardId, true);
+		expect(result.deckCards).toHaveLength(1);
+		expect(result.deckCards[0].cardId).toBe(leftoverCardId);
+	});
+
+	it('does not replace a leftover whose cardId differs from the hand reveal', () => {
+		const deck = leftoverDeck();
+		const result = reconcileLeftover(deck, 18, otherCardId, true);
+		expect(result.deckCards).toHaveLength(1);
+		expect(result.deckCards[0].cardId).toBe(leftoverCardId);
+	});
+
+	it('turns the leftover into a filler when hand entity and revealed cardId both match', () => {
+		const deck = leftoverDeck({
+			cardId: leftoverCardId,
+			cardName: 'Murloc Raider',
+		});
+		const withOtherKnown = deck.update({
+			deck: [...deck.deck, DeckCard.create({ cardId: otherCardId })],
+		});
+		const result = reconcileLeftover(withOtherKnown, 18, leftoverCardId);
+		expect(result.deckCards).toHaveLength(2);
+		expect(result.deckCards[0].isFiller()).toBe(true);
+		expect(result.deckCards[1].cardId).toBe(otherCardId);
+	});
 });

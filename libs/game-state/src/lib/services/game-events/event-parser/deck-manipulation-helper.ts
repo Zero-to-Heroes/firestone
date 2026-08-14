@@ -822,6 +822,29 @@ export const reconcileCardInHandWithDeck = (input: {
 	const { cardId, entityId, deck, helper } = input;
 	console.debug('[card-played] reconcileCardInHandWithDeck input', `entityId:${entityId}__`, input);
 
+	// Hidden draw left a named remaining-deck row (filler already removed so size is correct).
+	// Once this exact entity is identified in hand — play, Keymaster, etc. — turn that leftover
+	// into a filler. Match public entityId + cardId only; trueEntityId is opaque gift identity.
+	if (entityId > 0 && cardId?.length) {
+		const leftoverIndex = deckCards.findIndex(
+			(card) =>
+				!!card.cardId?.length && card.cardId === cardId && Math.abs(card.entityId ?? 0) === Math.abs(entityId),
+		);
+		if (leftoverIndex >= 0) {
+			const newDeck = [...deckCards];
+			newDeck[leftoverIndex] = DeckCard.create();
+			const additionalKnownCardsInDeck = deck.additionalKnownCardsInDeck.filter(
+				(c, i) => c !== cardId || deck.additionalKnownCardsInDeck.indexOf(c) !== i,
+			);
+			console.debug(
+				'[card-played] reconcileCardInHandWithDeck replaced hidden-draw leftover with filler',
+				`entityId:${entityId}__`,
+				cardId,
+			);
+			return { removedCard, additionalKnownCardsInDeck, deckCards: newDeck, opponentDeck };
+		}
+	}
+
 	// Tradeable cards revealed on trade stay in deck through a hidden re-draw; the leftover deck row
 	// describes the very card being played, so their creator info must match (both absent counts as
 	// a match). Without the creator check, playing an unrelated generated card would remove a known

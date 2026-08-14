@@ -17,7 +17,7 @@ import { CopiedFromEntityIdGameEvent } from '../events/copied-from-entity-id-gam
 import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DREDGE_IN_OPPONENT_DECK_CARD_IDS } from './card-dredged-parser';
-import { DeckManipulationHelper } from './deck-manipulation-helper';
+import { DeckManipulationHelper, reconcileCardInHandWithDeck } from './deck-manipulation-helper';
 
 const COPY_KNOW_EXACT_CARD_IN_OPPONENT_HAND = [
 	CardIds.AzalinaSoulthief,
@@ -427,6 +427,17 @@ export class CopiedFromEntityIdParser implements EventParser {
 				);
 				const refCard = this.allCards.getCard(resolvedRevealCardId);
 				const sourceEntityId = copiedCard?.entityId ?? copiedCardEntityId;
+				const sourceHandCard = copiedDeckWithSecrets.hand.find((card) => card.entityId === sourceEntityId);
+				const otherDeck = isCopiedPlayer ? currentState.opponentDeck : currentState.playerDeck;
+				const reconciled = reconcileCardInHandWithDeck({
+					removedCard: sourceHandCard,
+					cardId: resolvedRevealCardId,
+					entityId: sourceEntityId ?? 0,
+					deck: copiedDeckWithSecrets,
+					deckCards: copiedDeckWithSecrets.deck,
+					opponentDeck: otherDeck,
+					helper: this.helper,
+				});
 				const newHand = copiedDeckWithSecrets.hand.map((card) =>
 					card.entityId === sourceEntityId
 						? card.update({
@@ -439,6 +450,8 @@ export class CopiedFromEntityIdParser implements EventParser {
 				console.debug('[copied-from-entity] newHand', `entityId:${entityId}__`, newHand);
 				copiedDeckWithKnownCardsInHand = copiedDeckWithSecrets.update({
 					hand: newHand,
+					deck: reconciled.deckCards,
+					additionalKnownCardsInDeck: reconciled.additionalKnownCardsInDeck,
 				});
 			} else if (resolvedRevealCardId?.length && isPlayer) {
 				// Only the local player holding the copy actually saw the card (e.g. Deja Vu).
