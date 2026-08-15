@@ -114,7 +114,7 @@ export class QuestPlayedFromHandParser implements EventParser {
 			turn: +currentState.currentTurn,
 			timestamp: new Date().getTime(),
 			effectiveCost: effectiveCost,
-			paidWithAlternateCost: gameEvent.additionalData?.paidWithAlternateCost,
+			paidWithAlternateCost: gameEvent.additionalData?.paidWithAlternateCost || undefined,
 		};
 
 		const deckAfterSpecialCaseUpdate: DeckState =
