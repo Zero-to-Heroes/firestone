@@ -1,5 +1,16 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { getTribeName, Race } from '@firestone-hs/reference-data';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ElementRef,
+	HostListener,
+	NgZone,
+	Optional,
+	Renderer2,
+	ViewRef,
+} from '@angular/core';
+import { CardIds, getTribeName, Race } from '@firestone-hs/reference-data';
 import {
 	DARK_DISCOVERY_GUARANTEED_TYPE_TURN,
 	DARK_DISCOVERY_TEN_PLUS_TURN,
@@ -12,11 +23,17 @@ import {
 	getDarkDiscoveryTurnFloor,
 } from '@firestone/battlegrounds/core';
 import { BgsDarkGiftOverlayService, DarkGiftLiveContext } from '@firestone/battlegrounds/services';
+import { CardMousedOverService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { CardsFacadeService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
+import {
+	CardsFacadeService,
+	ILocalizationService,
+	OverwolfService,
+	waitForReady,
+} from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, Observable, of, timer } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { distinctUntilChanged, map, switchMap, takeUntil } from 'rxjs/operators';
 
 interface DarkGiftOverlayVm {
 	readonly turnLabel: string;
@@ -57,6 +74,7 @@ interface DarkGiftRow {
 			*ngIf="vm$ | async as vm"
 			(mouseenter)="onPanelEnter()"
 			(mouseleave)="onPanelLeave()"
+			(mousedown)="onPanelMouseDown($event)"
 		>
 			<div class="header">
 				<div class="title" [fsTranslate]="'battlegrounds.in-game.dark-gifts.title'"></div>
@@ -138,7 +156,12 @@ export class BgsDarkGiftOverlayComponent extends AbstractSubscriptionComponent i
 	private readonly selectedTribe$$ = new BehaviorSubject<Race | null>(null);
 	private readonly hoveredMinion$$ = new BehaviorSubject<string | null>(null);
 	private readonly panelHovered$$ = new BehaviorSubject(false);
+	private readonly dismissed$$ = new BehaviorSubject(false);
 	private lastTribeLog: string | null = null;
+	private unlistenMouseDown: (() => void) | null = null;
+	private unlistenGlobalMouseDown: (() => void) | null = null;
+	private ignoreNextGlobalClick = false;
+	private globalClickTimer: ReturnType<typeof setTimeout> | null = null;
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -146,29 +169,64 @@ export class BgsDarkGiftOverlayComponent extends AbstractSubscriptionComponent i
 		private readonly prefs: PreferencesService,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: ILocalizationService,
+		private readonly mouseOver: CardMousedOverService,
+		private readonly el: ElementRef,
+		private readonly renderer: Renderer2,
+		private readonly ngZone: NgZone,
+		@Optional() private readonly ow: OverwolfService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.overlay, this.prefs);
+		await waitForReady(this.overlay, this.prefs, this.mouseOver);
 		await this.allCards.waitForReady();
 
-		const buttonHovered$ = this.overlay.buttonHovered$$.pipe(
-			switchMap((hovered) => (hovered ? of(true) : timer(300).pipe(map(() => false)))),
+		this.unlistenMouseDown = this.renderer.listen('window', 'mousedown', (event: MouseEvent) =>
+			this.onWindowMouseDown(event),
+		);
+		this.unlistenGlobalMouseDown = this.listenForGlobalMouseDown();
+
+		this.overlay.buttonHovered$$.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((hovered) => {
+			if (hovered) {
+				this.dismissed$$.next(false);
+			}
+		});
+
+		const buttonHovered$ = this.mouseOver.mousedOverCard$$.pipe(
+			map((card) => {
+				if (card?.CardId === CardIds.DarkDiscoveryToken_BG36_Button_DarkGift) {
+					return 'button';
+				}
+				return card?.CardId ? 'other' : 'none';
+			}),
+			distinctUntilChanged(),
+			switchMap((state) => {
+				if (state === 'button') {
+					return of(true);
+				}
+				if (state === 'other') {
+					return of(false);
+				}
+				return timer(300).pipe(map(() => false));
+			}),
 		);
 
 		this.overlay.context$$.pipe(this.mapData((context) => context)).subscribe((context) => {
 			if (!context) {
 				this.panelHovered$$.next(false);
+				this.dismissed$$.next(false);
 			}
 		});
 
 		this.vm$ = combineLatest([
 			buttonHovered$,
 			this.panelHovered$$,
+			this.dismissed$$,
 			this.overlay.context$$,
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsEnableDarkGiftOverlay)),
+			this.prefs.preferences$$.pipe(
+				this.mapData((prefs) => prefs.bgsEnableDarkGiftOverlay && prefs.bgsFullToggle),
+			),
 			this.selectedTurn$$,
 			this.userTenPlus$$,
 			this.showGuaranteed$$,
@@ -179,6 +237,7 @@ export class BgsDarkGiftOverlayComponent extends AbstractSubscriptionComponent i
 				([
 					buttonHovered,
 					panelHovered,
+					dismissed,
 					context,
 					pref,
 					selectedTurn,
@@ -187,7 +246,7 @@ export class BgsDarkGiftOverlayComponent extends AbstractSubscriptionComponent i
 					selectedTribe,
 					hoveredCardId,
 				]) => {
-					if (!pref || !context || (!buttonHovered && !panelHovered)) {
+					if (!pref || !context || dismissed || (!buttonHovered && !panelHovered)) {
 						return null;
 					}
 					return this.buildVm(
@@ -209,6 +268,19 @@ export class BgsDarkGiftOverlayComponent extends AbstractSubscriptionComponent i
 		}
 	}
 
+	@HostListener('window:beforeunload')
+	override ngOnDestroy() {
+		this.unlistenMouseDown?.();
+		this.unlistenMouseDown = null;
+		this.unlistenGlobalMouseDown?.();
+		this.unlistenGlobalMouseDown = null;
+		if (this.globalClickTimer != null) {
+			clearTimeout(this.globalClickTimer);
+			this.globalClickTimer = null;
+		}
+		super.ngOnDestroy();
+	}
+
 	onPanelEnter() {
 		this.panelHovered$$.next(true);
 	}
@@ -216,6 +288,95 @@ export class BgsDarkGiftOverlayComponent extends AbstractSubscriptionComponent i
 	onPanelLeave() {
 		this.panelHovered$$.next(false);
 		this.hoveredMinion$$.next(null);
+	}
+
+	onPanelMouseDown(event: MouseEvent) {
+		this.markClickInsideTooltip();
+		event.stopPropagation();
+	}
+
+	private listenForGlobalMouseDown(): (() => void) | null {
+		if (this.ow?.isOwEnabled()) {
+			const handler = (data: { onGame?: boolean }) => {
+				if (!data?.onGame) {
+					return;
+				}
+				this.ngZone.run(() => this.dismiss());
+			};
+			this.ow.addMouseDownListener(handler);
+			return () => this.ow.removeMouseDownListener(handler);
+		}
+		const api = (
+			window as unknown as {
+				electronAPI?: { onFsOverlayMouseDown?: (callback: () => void) => () => void };
+			}
+		).electronAPI;
+		if (!api?.onFsOverlayMouseDown) {
+			return null;
+		}
+		return api.onFsOverlayMouseDown(() => this.onGlobalMouseDown());
+	}
+
+	private onGlobalMouseDown() {
+		this.ngZone.run(() => {
+			if (this.dismissed$$.value) {
+				return;
+			}
+			const panel = (this.el.nativeElement as HTMLElement).querySelector('.dark-gift-overlay');
+			if (!panel) {
+				return;
+			}
+			if (this.globalClickTimer != null) {
+				clearTimeout(this.globalClickTimer);
+			}
+			this.globalClickTimer = setTimeout(() => {
+				this.globalClickTimer = null;
+				if (this.ignoreNextGlobalClick) {
+					this.ignoreNextGlobalClick = false;
+					return;
+				}
+				this.dismiss();
+			}, 50);
+		});
+	}
+
+	private onWindowMouseDown(event: MouseEvent) {
+		const panel = (this.el.nativeElement as HTMLElement).querySelector('.dark-gift-overlay');
+		if (!panel) {
+			return;
+		}
+		if (this.isInsideTooltipArea(event, panel)) {
+			this.markClickInsideTooltip();
+			return;
+		}
+		this.dismiss();
+	}
+
+	private markClickInsideTooltip() {
+		this.ignoreNextGlobalClick = true;
+	}
+
+	private dismiss() {
+		this.dismissed$$.next(true);
+		this.panelHovered$$.next(false);
+		this.hoveredMinion$$.next(null);
+	}
+
+	private isInsideTooltipArea(event: MouseEvent, panel: Element): boolean {
+		const path = (typeof event.composedPath === 'function' ? event.composedPath() : []) as EventTarget[];
+		const nodes = path.length ? path : event.target != null ? [event.target] : [];
+		return nodes.some((node) => {
+			if (node === panel) {
+				return true;
+			}
+			if (!(node instanceof Element)) {
+				return false;
+			}
+			if (panel.contains(node)) {
+				return true;
+			}
+			return !!node.closest('.cdk-overlay-pane, .cdk-overlay-connected-position-bounding-box, help-tooltip');
+		});
 	}
 
 	goPrev() {

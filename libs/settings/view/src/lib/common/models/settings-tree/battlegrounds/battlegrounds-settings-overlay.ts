@@ -115,6 +115,7 @@ export const battlegroundsOverlaySettings = (context: SettingContext): SettingNo
 						label: context.i18n.translateString('settings.battlegrounds.overlay.dark-gift-overlay-label'),
 						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.dark-gift-overlay-tooltip'),
 						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle,
+						keywords: ['dark gift', 'dark gifts', 'dark discovery'],
 					},
 					{
 						type: 'toggle',

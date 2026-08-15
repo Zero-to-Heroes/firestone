@@ -109,6 +109,22 @@ export class OverlayService extends EventEmitter {
 	}
 
 	/**
+	 * Forward a global mouse-down to the overlay renderer. Used when clicks pass through
+	 * to the game and never reach Chromium DOM listeners.
+	 */
+	public notifyOverlayMouseDown(): void {
+		const window = this.overlayWindow?.window;
+		if (!window || window.isDestroyed()) {
+			return;
+		}
+		try {
+			window.webContents.send('fs-overlay-mousedown');
+		} catch (error) {
+			console.warn('[Overlay] Failed to notify overlay mouse-down', error);
+		}
+	}
+
+	/**
 	 * Runtime passthrough toggle for the main overlay (Overwolf shared-texture workaround).
 	 * @see https://dev.overwolf.com/ow-electron/reference/examples/overlay/shared-texture-rendering/#beta-limitation-hit-testing-ignores-transparent-pixels
 	 */

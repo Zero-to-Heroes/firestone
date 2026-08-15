@@ -188,7 +188,34 @@ export class OverwolfService
 	}
 
 	public addMouseUpListener(callback) {
+		if (!this.isOwEnabled()) {
+			return;
+		}
 		overwolf.games.inputTracking.onMouseUp.addListener(callback);
+	}
+
+	public addMouseDownListener(callback: (data: { onGame?: boolean }) => void): void {
+		if (!this.isOwEnabled()) {
+			return;
+		}
+		const tracking = overwolf.games.inputTracking;
+		if (tracking?.onMouseDown) {
+			tracking.onMouseDown.addListener(callback);
+			return;
+		}
+		tracking.onMouseUp.addListener(callback);
+	}
+
+	public removeMouseDownListener(callback: (data: { onGame?: boolean }) => void): void {
+		if (!this.isOwEnabled()) {
+			return;
+		}
+		const tracking = overwolf.games.inputTracking;
+		if (tracking?.onMouseDown) {
+			tracking.onMouseDown.removeListener(callback);
+			return;
+		}
+		tracking.onMouseUp.removeListener(callback);
 	}
 
 	public addKeyUpListener(callback) {
@@ -673,9 +700,7 @@ export class OverwolfService
 			overwolf.profile.subscriptions.getActivePlans(
 				(activePlans: overwolf.profile.subscriptions.GetActivePlansResult) => {
 					const hideAds =
-						activePlans &&
-						activePlans.plans &&
-						activePlans.plans.includes(LEGACY_OW_SUBSCRIPTION_PLAN_ID);
+						activePlans && activePlans.plans && activePlans.plans.includes(LEGACY_OW_SUBSCRIPTION_PLAN_ID);
 					console.log('[ads] active plans', activePlans);
 					resolve(!hideAds);
 				},

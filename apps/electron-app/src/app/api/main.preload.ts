@@ -117,6 +117,12 @@ const electronAPI = {
 		ipcRenderer.invoke('overlay-shared-texture-hit-test-workaround') as Promise<boolean>,
 	setOverlayPassthrough: (mode: 'noPassThrough' | 'passThrough' | 'passThroughAndNotify') =>
 		ipcRenderer.send('set-overlay-passthrough', mode),
+	/** Clicks that went to the game (overlay is click-through). */
+	onFsOverlayMouseDown: (callback: () => void) => {
+		const listener = () => callback();
+		ipcRenderer.on('fs-overlay-mousedown', listener);
+		return () => ipcRenderer.removeListener('fs-overlay-mousedown', listener);
+	},
 	platform: process.platform,
 };
 

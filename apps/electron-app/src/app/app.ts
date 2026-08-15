@@ -730,6 +730,7 @@ export default class App {
 			// Register global hotkeys (Alt+C, Alt+B, Tab)
 			const hotkeyHandler = electronInjector.get(ElectronHotkeyHandlerService);
 			await hotkeyHandler.init();
+			uIOhook.on('mousedown', () => App.overlay?.notifyOverlayMouseDown());
 
 			// Don't create overlay window yet - wait for game launch event
 			console.log('⏳ Waiting for Hearthstone to launch...');
