@@ -2,6 +2,7 @@ import { BlockType, CardIds, CardType, GameTag, Zone } from '@firestone-hs/refer
 import { ActionParser } from '../action-parser';
 import { GameEventHelper, GameEventProvider } from '../game-event';
 import { Action, FullEntity, Node, NodeType, ShowEntity } from '../models';
+import { isIgnoredSpawnToDeckFxPrefab } from '../ignore-spawn-to-deck-fx-prefabs';
 import { Oracle } from '../oracle';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
@@ -50,7 +51,7 @@ export class CreateCardInDeckParser implements ActionParser {
 
 	private createFromShowEntity(node: Node): GameEventProvider[] | null {
 		const showEntity = node.Object as ShowEntity;
-		if (showEntity.SubSpellInEffect?.Prefab === 'DMFFX_SpawnToDeck_CthunTheShattered_CardFromScript_FX') {
+		if (isIgnoredSpawnToDeckFxPrefab(showEntity.SubSpellInEffect?.Prefab)) {
 			return null;
 		}
 
@@ -108,7 +109,7 @@ export class CreateCardInDeckParser implements ActionParser {
 
 	private createFromFullEntity(node: Node): GameEventProvider[] | null {
 		const fullEntity = node.Object as FullEntity;
-		if (fullEntity.SubSpellInEffect?.Prefab === 'DMFFX_SpawnToDeck_CthunTheShattered_CardFromScript_FX') {
+		if (isIgnoredSpawnToDeckFxPrefab(fullEntity.SubSpellInEffect?.Prefab)) {
 			return null;
 		}
 

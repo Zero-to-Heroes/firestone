@@ -3,14 +3,12 @@ import { ActionParser } from '../action-parser';
 import { GameEventProvider, GameEventHelper } from '../game-event';
 import { Action, FullEntity, MetaData, Node, NodeType, ShowEntity } from '../models';
 import { MetaDataType } from '../enums';
+import { isIgnoredSpawnToDeckFxPrefab } from '../ignore-spawn-to-deck-fx-prefabs';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
 
-const SPECIAL_CASE_CARD_IDS: string[] = [
-	CardIds.FindTheImposter_SpyOMaticToken,
-	CardIds.DisarmingElemental,
-];
+const SPECIAL_CASE_CARD_IDS: string[] = [CardIds.FindTheImposter_SpyOMaticToken, CardIds.DisarmingElemental];
 
 export class CardUpdatedInDeckParser implements ActionParser {
 	readonly ParserName = 'CardUpdatedInDeckParser';
@@ -39,9 +37,7 @@ export class CardUpdatedInDeckParser implements ActionParser {
 		const appliesForAction =
 			node.Type === NodeType.Action &&
 			this.GameState.CurrentEntities.has((node.Object as Action).Entity) &&
-			SPECIAL_CASE_CARD_IDS.includes(
-				this.GameState.CurrentEntities.get((node.Object as Action).Entity)!.CardId,
-			);
+			SPECIAL_CASE_CARD_IDS.includes(this.GameState.CurrentEntities.get((node.Object as Action).Entity)!.CardId);
 		return stateType === StateType.PowerTaskList && (appliesOnShow || appliesForAction);
 	}
 
@@ -79,9 +75,17 @@ export class CardUpdatedInDeckParser implements ActionParser {
 			return GameEventProvider.Create(
 				info.TimeStamp,
 				eventName,
-				GameEventHelper.CreateProvider(eventName, entity.CardId, entity.GetController(), entity.Id, this.StateFacade, {
-					LastInfluencedByCardId: this.GameState.CurrentEntities.get((node.Object as Action).Entity)!.CardId,
-				}),
+				GameEventHelper.CreateProvider(
+					eventName,
+					entity.CardId,
+					entity.GetController(),
+					entity.Id,
+					this.StateFacade,
+					{
+						LastInfluencedByCardId: this.GameState.CurrentEntities.get((node.Object as Action).Entity)!
+							.CardId,
+					},
+				),
 				true,
 				node,
 			);
@@ -90,7 +94,7 @@ export class CardUpdatedInDeckParser implements ActionParser {
 
 	private createFromShowEntity(node: Node): GameEventProvider[] | null {
 		const showEntity = node.Object as ShowEntity;
-		if (showEntity.SubSpellInEffect?.Prefab === 'DMFFX_SpawnToDeck_CthunTheShattered_CardFromScript_FX') {
+		if (isIgnoredSpawnToDeckFxPrefab(showEntity.SubSpellInEffect?.Prefab)) {
 			return null;
 		}
 
@@ -106,7 +110,10 @@ export class CardUpdatedInDeckParser implements ActionParser {
 		const parentNode = node.Parent?.Object;
 		if (parentNode?.constructor === Action) {
 			const parentAction = node.Parent!.Object as Action;
-			if (parentAction.Type === (BlockType.POWER as number) || parentAction.Type === (BlockType.TRIGGER as number)) {
+			if (
+				parentAction.Type === (BlockType.POWER as number) ||
+				parentAction.Type === (BlockType.TRIGGER as number)
+			) {
 				const parentEntityId = parentAction.Entity;
 				const parentEntity = this.GameState.CurrentEntities.get(parentEntityId)!;
 				if (parentEntity.HasDredge()) {
@@ -117,10 +124,17 @@ export class CardUpdatedInDeckParser implements ActionParser {
 						GameEventProvider.Create(
 							showEntity.TimeStamp,
 							'CARD_DREDGED',
-							GameEventHelper.CreateProvider('CARD_DREDGED', cardId, controllerId, entity.Id, this.StateFacade, {
-								DredgedByEntityId: parentEntityId,
-								DredgedByCardId: lastAffectedByEntity?.CardId ?? null,
-							}),
+							GameEventHelper.CreateProvider(
+								'CARD_DREDGED',
+								cardId,
+								controllerId,
+								entity.Id,
+								this.StateFacade,
+								{
+									DredgedByEntityId: parentEntityId,
+									DredgedByCardId: lastAffectedByEntity?.CardId ?? null,
+								},
+							),
 							true,
 							node,
 						),
@@ -134,7 +148,11 @@ export class CardUpdatedInDeckParser implements ActionParser {
 			? this.GameState.CurrentEntities.get(creatorEntityId)!.CardId
 			: null;
 
-		if (cardId === CardIds.PhotographerFizzle_FizzlesSnapshotToken && entity != null && entity.KnownEntityIds.length === 0) {
+		if (
+			cardId === CardIds.PhotographerFizzle_FizzlesSnapshotToken &&
+			entity != null &&
+			entity.KnownEntityIds.length === 0
+		) {
 			entity.KnownEntityIds = [...this.GameState.CurrentEntities.values()]
 				.filter((e) => e.GetController() === entity.GetController())
 				.filter((e) => e.InHand())
@@ -145,10 +163,17 @@ export class CardUpdatedInDeckParser implements ActionParser {
 			GameEventProvider.Create(
 				showEntity.TimeStamp,
 				'CARD_CHANGED_IN_DECK',
-				GameEventHelper.CreateProvider('CARD_CHANGED_IN_DECK', cardId, controllerId, entity.Id, this.StateFacade, {
-					CreatorCardId: creatorEntityCardId,
-					SubSpell: showEntity.SubSpellInEffect?.Prefab ?? null,
-				}),
+				GameEventHelper.CreateProvider(
+					'CARD_CHANGED_IN_DECK',
+					cardId,
+					controllerId,
+					entity.Id,
+					this.StateFacade,
+					{
+						CreatorCardId: creatorEntityCardId,
+						SubSpell: showEntity.SubSpellInEffect?.Prefab ?? null,
+					},
+				),
 				true,
 				node,
 			),

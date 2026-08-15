@@ -2,6 +2,7 @@ import { BlockType, CardIds, GameTag, Zone } from '@firestone-hs/reference-data'
 import { ActionParser } from '../action-parser';
 import { GameEventHelper, GameEventProvider } from '../game-event';
 import { Action, Node, NodeType, ShowEntity } from '../models';
+import { isIgnoredSpawnToDeckFxPrefab } from '../ignore-spawn-to-deck-fx-prefabs';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -33,7 +34,7 @@ export class EntityUpdateParser implements ActionParser {
 
 	CreateGameEventProviderFromClose(node: Node): GameEventProvider[] | null {
 		const showEntity = node.Object as ShowEntity;
-		if (showEntity.SubSpellInEffect?.Prefab === 'DMFFX_SpawnToDeck_CthunTheShattered_CardFromScript_FX') {
+		if (isIgnoredSpawnToDeckFxPrefab(showEntity.SubSpellInEffect?.Prefab)) {
 			return null;
 		}
 

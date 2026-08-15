@@ -2,6 +2,7 @@ import { GameTag, MetaTags, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventHelper, GameEventProvider } from '../game-event';
 import { Action, FullEntity, MetaData, Node, NodeType, ShowEntity, TagChange } from '../models';
+import { isIgnoredSpawnToDeckFxPrefab } from '../ignore-spawn-to-deck-fx-prefabs';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -25,8 +26,7 @@ export class CardRemovedFromDeckParser implements ActionParser {
 			stateType === StateType.PowerTaskList &&
 			node.Type === NodeType.TagChange &&
 			(tagChange = node.Object as TagChange).Name === (GameTag.ZONE as number) &&
-			(tagChange.Value === (Zone.SETASIDE as number) ||
-				tagChange.Value === (Zone.GRAVEYARD as number)) &&
+			(tagChange.Value === (Zone.SETASIDE as number) || tagChange.Value === (Zone.GRAVEYARD as number)) &&
 			this.GameState.CurrentEntities.get((node.Object as TagChange).Entity)?.GetTag(GameTag.ZONE) ===
 				(Zone.DECK as number)
 		);
@@ -52,10 +52,7 @@ export class CardRemovedFromDeckParser implements ActionParser {
 
 	CreateGameEventProviderFromNew(node: Node): GameEventProvider[] | null {
 		const tagChange = node.Object as TagChange;
-		if (
-			tagChange.SubSpellInEffect?.Prefab ===
-			'DMFFX_SpawnToDeck_CthunTheShattered_CardFromScript_FX'
-		) {
+		if (isIgnoredSpawnToDeckFxPrefab(tagChange.SubSpellInEffect?.Prefab)) {
 			return null;
 		}
 
@@ -108,6 +105,9 @@ export class CardRemovedFromDeckParser implements ActionParser {
 	}
 
 	private createEventFromShowEntity(node: Node, showEntity: ShowEntity): GameEventProvider[] | null {
+		if (isIgnoredSpawnToDeckFxPrefab(showEntity.SubSpellInEffect?.Prefab)) {
+			return null;
+		}
 		let removedByCardId: string | null = null;
 		let removedByEntityId: number | null = null;
 		if (node.Parent!.Type === NodeType.Action) {
@@ -155,6 +155,9 @@ export class CardRemovedFromDeckParser implements ActionParser {
 	}
 
 	private createEventFromFullEntity(node: Node, fullEntity: FullEntity): GameEventProvider[] | null {
+		if (isIgnoredSpawnToDeckFxPrefab(fullEntity.SubSpellInEffect?.Prefab)) {
+			return null;
+		}
 		if (node.Parent!.Type === NodeType.Action) {
 			const act = node.Parent!.Object as Action;
 			const cardBurned = act.Data.filter((data) => data.constructor === MetaData)

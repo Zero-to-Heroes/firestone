@@ -1,3 +1,5 @@
+// Dragon Soul, Shattered (CATA_EVENT_110): 6 Mana Neutral Legendary
+// Start of Game: Break into 6 Essences. Adjoining Essences are cast together.
 import { CardIds } from '@firestone-hs/reference-data';
 import { DeckCard } from '../../models/deck-card';
 import { CustomEffectCard } from './_card.type';
@@ -35,8 +37,8 @@ export const DragonSoulShattered: CustomEffectCard = {
 					cardName: cardData.name,
 					refManaCost: cardData ? cardData.cost : undefined,
 					rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : undefined,
-					creatorCardId: gameEvent.cardId,
-					creatorEntityId: gameEvent.entityId,
+					creatorCardId: gameEvent.additionalData?.sourceCardId ?? gameEvent.cardId,
+					creatorEntityId: gameEvent.additionalData?.sourceEntityId ?? gameEvent.entityId,
 				}),
 			);
 		}
