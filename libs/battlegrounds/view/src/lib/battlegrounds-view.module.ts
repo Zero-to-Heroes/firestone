@@ -40,6 +40,8 @@ import { BattlegroundsMetaStatsTrinketTierComponent } from './meta-trinkets/batt
 import { BattlegroundsMetaStatsTrinketsViewComponent } from './meta-trinkets/battlegrounds-meta-stats-trinkets-view.component';
 import { BgsActionCountWidgetWrapperComponent } from './overlay/bgs-action-count-widget-wrapper.component';
 import { ActionCountComponent } from './overlay/bgs-action-count.component';
+import { BgsDarkGiftOverlayWidgetWrapperComponent } from './overlay/bgs-dark-gift-overlay-widget-wrapper.component';
+import { BgsDarkGiftOverlayComponent } from './overlay/bgs-dark-gift-overlay.component';
 import { BgsFullAnomalyWidgetWrapperComponent } from './overlay/bgs-full-anomaly-widget-wrapper.component';
 import { FullAnomalyComponent } from './overlay/bgs-full-anomaly.component';
 import { BattlegroundsDesktopYourStatsComponent } from './personal-stats/battlegrounds-desktop-your-stats.component';
@@ -73,6 +75,8 @@ const components = [
 
 	BgsActionCountWidgetWrapperComponent,
 	ActionCountComponent,
+	BgsDarkGiftOverlayWidgetWrapperComponent,
+	BgsDarkGiftOverlayComponent,
 	BgsFullAnomalyWidgetWrapperComponent,
 	FullAnomalyComponent,
 

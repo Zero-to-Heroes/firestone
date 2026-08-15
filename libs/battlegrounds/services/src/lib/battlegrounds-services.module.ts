@@ -12,6 +12,7 @@ import { StatsDataAccessModule } from '@firestone/stats/data-access';
 import { StatsServicesModule } from '@firestone/stats/services';
 import { BgsCommonBootstrapService } from './services/_bgs-common-bootstrap.service';
 import { BgsBoardHighlighterService } from './services/bgs-board-highlighter.service';
+import { BgsDarkGiftOverlayService } from './services/bgs-dark-gift-overlay.service';
 import { BattlegroundsCardsService } from './services/bgs-cards.service';
 import { BattlegroundsCompsService } from './services/bgs-comps.service';
 import { BgsInGameCompositionsService } from './services/bgs-in-game-compositions.service';
@@ -67,9 +68,10 @@ import { BgsRunStatsService } from './services/bgs-run-stats.service';
 		BgsMetaCompositionStrategiesService,
 		BgsInGameCompositionsService,
 		BgsBoardHighlighterService,
+		BgsDarkGiftOverlayService,
 		BattlegroundsCardsService,
 		BattlegroundsCompsService,
 		BgsInGameWindowNavigationService,
 	],
 })
-export class BattlegroundsServicesModule { }
+export class BattlegroundsServicesModule {}

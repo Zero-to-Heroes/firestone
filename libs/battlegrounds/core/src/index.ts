@@ -27,4 +27,5 @@ export * from './lib/services/tiers-builder/tiers-to-include';
 export * from './lib/services/tiers-builder/tribe-tiers-builder';
 export * from './lib/services/tiers-builder/utils';
 export * from './lib/services/tiers.model';
+export * from './lib/services/dark-gifts/dark-gift-rules';
 export * from './lib/services/tribe-utils';

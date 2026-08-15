@@ -43,6 +43,14 @@
 				left: 3vh;
 				top: 15vh;
 			}
+
+			bgs-dark-gift-overlay-widget-wrapper {
+				right: 42vh;
+				top: 18vh;
+				width: 92vh;
+				pointer-events: none;
+				z-index: 5;
+			}
 		}
 	}
 

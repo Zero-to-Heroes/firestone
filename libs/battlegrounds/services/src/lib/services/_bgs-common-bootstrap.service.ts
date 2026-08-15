@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BgsBoardHighlighterService } from './bgs-board-highlighter.service';
+import { BgsDarkGiftOverlayService } from './bgs-dark-gift-overlay.service';
 import { BattlegroundsCardsService } from './bgs-cards.service';
 import { BattlegroundsCompsService } from './bgs-comps.service';
 import { BgsInGameTimewarpedGuardianService } from './bgs-in-game-timewarped-guardian.service';
@@ -26,6 +27,7 @@ export class BgsCommonBootstrapService {
 		private readonly init_BgsMetaTrinketStrategiesService: BgsMetaTrinketStrategiesService,
 		private readonly init_BgsMetaCompositionStrategiesService: BgsMetaCompositionStrategiesService,
 		private readonly init_BgsBoardHighlighterService: BgsBoardHighlighterService,
+		private readonly init_BgsDarkGiftOverlayService: BgsDarkGiftOverlayService,
 		private readonly init_BgsReconnectorService: BgsReconnectorService,
-	) { }
+	) {}
 }

@@ -111,6 +111,13 @@ export const battlegroundsOverlaySettings = (context: SettingContext): SettingNo
 					},
 					{
 						type: 'toggle',
+						field: 'bgsEnableDarkGiftOverlay',
+						label: context.i18n.translateString('settings.battlegrounds.overlay.dark-gift-overlay-label'),
+						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.dark-gift-overlay-tooltip'),
+						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle,
+					},
+					{
+						type: 'toggle',
 						field: 'bgsShowHeroSelectionAchievements',
 						label: context.i18n.translateString('settings.battlegrounds.general.show-achievements-label'),
 						tooltip: context.i18n.translateString('settings.battlegrounds.general.show-achievements-tooltip'),

@@ -3,6 +3,7 @@ export * from './lib/model/bgs-hero-sort-filter.type';
 export * from './lib/services/_bgs-common-bootstrap.service';
 export * from './lib/services/bgs-anomalies.service';
 export * from './lib/services/bgs-board-highlighter.service';
+export * from './lib/services/bgs-dark-gift-overlay.service';
 export * from './lib/services/bgs-cards.service';
 export * from './lib/services/bgs-comps.service';
 export * from './lib/services/bgs-in-game-compositions.service';
@@ -28,4 +29,3 @@ export * from './lib/services/bgs-run-stats-event-handler.interface';
 export * from './lib/services/bgs-run-stats-input-builder';
 export * from './lib/services/bgs-run-stats.service';
 export * from './lib/services/bgs-trinkets.service';
-

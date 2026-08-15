@@ -690,6 +690,7 @@ export class Preferences implements IPreferences {
 	readonly bgsHeroSelectionOverlayScale = 100;
 	readonly bgsBannedTribesShowVertically: boolean;
 	readonly bgsEnableOpponentBoardMouseOver: boolean = true;
+	readonly bgsEnableDarkGiftOverlay: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly bgsOpponentBoardScale = 101.6;
 	readonly bgsEnableMinionListOverlay: boolean = true;

@@ -82,6 +82,7 @@ type ElectronOverlayHitTestApi = {
 							<choosing-bgs-quest-widget-wrapper></choosing-bgs-quest-widget-wrapper>
 							<choosing-bgs-trinket-widget-wrapper></choosing-bgs-trinket-widget-wrapper>
 							<choosing-bgs-timewarped-widget-wrapper></choosing-bgs-timewarped-widget-wrapper>
+							<bgs-dark-gift-overlay-widget-wrapper></bgs-dark-gift-overlay-widget-wrapper>
 						</ng-container>
 
 						<ng-container *ngIf="showConstructedOverlays$ | async">
