@@ -19,14 +19,9 @@
 	background-repeat: no-repeat;
 	background-size: 100% 100%;
 	background-image: var(--bgs-session-widget-background-image, var(--bgs-simulation-widget-background-image));
-	border-width: 1px;
-	border-style: solid;
-	border-image-slice: 1;
-	border-image-source: linear-gradient(
-		to bottom right,
-		rgba(255, 185, 72, 0) 0%,
-		var(--color-common-2, #ffb948) 100%
-	);
+	border: 1px solid var(--color-common-2, #ffb948);
+	border-radius: 15px;
+	overflow: hidden;
 }
 
 .header {
