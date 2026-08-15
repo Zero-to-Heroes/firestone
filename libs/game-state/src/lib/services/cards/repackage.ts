@@ -3,8 +3,9 @@
  * A Littleof This (JAIL_201a)
  * Give your hero +2 Attack this turn.
  */
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, CardType } from '@firestone-hs/reference-data';
 import { StoredInformation } from '../../models/deck-card';
+import { hasCorrectType } from '../../related-cards/dynamic-pools';
 import {
 	Card,
 	GeneratingCard,
@@ -34,6 +35,7 @@ export const Repackage: Card & GeneratingCard & OnCardPlayedCard = {
 	},
 	onCardPlayed: (input: OnCardPlayedInput) => {
 		const cards = [...input.deckState.board, ...input.opponentDeckState.board]
+			.filter((c) => hasCorrectType(input.allCards.getCard(c.cardId), CardType.MINION))
 			.sort((a, b) => (a.playTiming ?? 0) - (b.playTiming ?? 0))
 			.map((c) => ({ cardId: c.cardId, entityId: c.entityId }));
 		const result: StoredInformation = {

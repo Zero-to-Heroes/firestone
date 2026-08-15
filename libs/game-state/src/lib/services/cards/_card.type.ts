@@ -183,4 +183,5 @@ export interface OnCardPlayedInput {
 	deckState: DeckState;
 	opponentDeckState: DeckState;
 	gameState: GameState;
+	allCards: AllCardsService;
 }

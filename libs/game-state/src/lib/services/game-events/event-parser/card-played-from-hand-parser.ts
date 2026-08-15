@@ -175,6 +175,7 @@ export class CardPlayedFromHandParser implements EventParser {
 				gameTagTurnNumber: currentState.gameTagTurnNumber,
 				targetCardId: gameEvent.additionalData.targetCardId,
 				targetEntityId: gameEvent.additionalData.targetEntityId,
+				allCards: this.allCards.getService(),
 			}),
 			tags: toTagsObject(gameEvent.additionalData.tags),
 		});

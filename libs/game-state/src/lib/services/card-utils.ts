@@ -169,6 +169,7 @@ export const storeInformationOnCardPlayed = (
 		gameTagTurnNumber: number;
 		targetCardId: string | null;
 		targetEntityId: number | null;
+		allCards: AllCardsService;
 	},
 ): StoredInformation | null => {
 	let result: StoredInformation | null = null;
@@ -201,6 +202,7 @@ export const storeInformationOnCardPlayed = (
 					deckState: options.deckState,
 					opponentDeckState: options.opponentDeckState,
 					gameState: options.gameState,
+					allCards: options.allCards,
 				});
 			}
 	}
