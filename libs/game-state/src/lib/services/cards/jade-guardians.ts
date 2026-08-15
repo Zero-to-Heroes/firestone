@@ -21,7 +21,7 @@ import { filterCards } from './utils';
 const minionFilter = (c: ReferenceCard) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 8);
 
 export const countTwoManaCardsPlayedThisMatch = (deckState: DeckState | undefined): number =>
-	deckState?.cardsPlayedThisMatch?.filter((c) => c.effectiveCost === 2)?.length ?? 0;
+	deckState?.cardsPlayedThisMatch?.filter((c) => c.effectiveCost === 2 && !c.paidWithAlternateCost)?.length ?? 0;
 
 export const JadeGuardians: GeneratingCard & StaticGeneratingCard & SelectorCard = {
 	cardIds: [CardIds.JadeGuardians_JAIL_474],

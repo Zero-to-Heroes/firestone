@@ -344,6 +344,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'tiny-pal': 'tiny-pal/tiny-pal.log',
 	'perjury-secret': 'perjury-secret/perjury-secret.log',
 	'void-counters': 'void-counters/void-counters.log',
+	'jade-guardians-health': 'jade-guardians-health/jade-guardians-health.log',
 };
 
 /**

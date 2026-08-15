@@ -28,6 +28,7 @@ export * from './lib/services/card-utils';
 export * from './lib/services/cards/_barrel';
 export * from './lib/services/cards/_card.type';
 export * from './lib/services/cards/_mapping';
+export { countTwoManaCardsPlayedThisMatch } from './lib/services/cards/jade-guardians';
 export * from './lib/services/cards/gift-creators';
 export * from './lib/services/cards/global/_registers';
 export * from './lib/services/cards/godfreythe-betrayer';

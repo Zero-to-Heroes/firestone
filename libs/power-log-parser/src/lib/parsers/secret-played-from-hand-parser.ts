@@ -1,5 +1,6 @@
 import { BlockType, CardIds, CardType, GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
+import { nodePlayPaidWithAlternateCost } from '../action-paid-with-alternate-cost';
 import { GameEventHelper, GameEventProvider } from '../game-event';
 import { Action, Node, NodeType, ShowEntity, TagChange } from '../models';
 import { GameState } from '../state/game-state';
@@ -68,11 +69,19 @@ export class SecretPlayedFromHandParser implements ActionParser {
 				GameEventProvider.Create(
 					tagChange.TimeStamp,
 					eventName,
-					GameEventHelper.CreateProvider(eventName, cardId, controllerId, entity.Id, this.StateFacade, {
-						PlayerClass: playerClass,
-						CreatorCardId: creatorEntityCardId,
-						Cost: entity.GetTag(GameTag.COST, 0),
-					}),
+					GameEventHelper.CreateProviderWithDeferredProps(
+						eventName,
+						cardId,
+						controllerId,
+						entity.Id,
+						this.StateFacade,
+						() => ({
+							PlayerClass: playerClass,
+							CreatorCardId: creatorEntityCardId,
+							Cost: entity.GetTag(GameTag.COST, 0),
+							PaidWithAlternateCost: nodePlayPaidWithAlternateCost(node),
+						}),
+					),
 					true,
 					node,
 				),
@@ -94,23 +103,23 @@ export class SecretPlayedFromHandParser implements ActionParser {
 					const cardId = showEntity.CardId;
 					const controllerId = showEntity.GetEffectiveController();
 					const playerClass = showEntity.GetPlayerClass();
-					const eventName =
-						showEntity.GetTag(GameTag.SECRET) === 1 ? 'SECRET_PLAYED' : 'QUEST_PLAYED';
+					const eventName = showEntity.GetTag(GameTag.SECRET) === 1 ? 'SECRET_PLAYED' : 'QUEST_PLAYED';
 					this.GameState.OnCardPlayed(showEntity.Entity);
 					return [
 						GameEventProvider.Create(
 							action.TimeStamp,
 							eventName,
-							GameEventHelper.CreateProvider(
+							GameEventHelper.CreateProviderWithDeferredProps(
 								eventName,
 								cardId,
 								controllerId,
 								showEntity.Entity,
 								this.StateFacade,
-								{
+								() => ({
 									PlayerClass: playerClass,
 									Cost: showEntity.GetTag(GameTag.COST, 0),
-								},
+									PaidWithAlternateCost: nodePlayPaidWithAlternateCost(node),
+								}),
 							),
 							true,
 							node,

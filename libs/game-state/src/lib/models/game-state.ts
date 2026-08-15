@@ -82,6 +82,8 @@ export interface ShortCard {
 	readonly cardId: string;
 	readonly side?: 'player' | 'opponent';
 	readonly effectiveCost?: number;
+	/** True when the PLAY block paid with SPEND_HEALTH or SPEND_ARMOR. */
+	readonly paidWithAlternateCost?: boolean;
 }
 export interface ShortCardWithTurn extends ShortCard {
 	readonly turn: number;

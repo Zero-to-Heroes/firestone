@@ -1,5 +1,6 @@
 import { BlockType, CardIds, CardType, GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
+import { nodePlayPaidWithAlternateCost } from '../action-paid-with-alternate-cost';
 import { GameEventHelper, GameEventProvider } from '../game-event';
 import { Action, FullEntity, Node, NodeType, ShowEntity, TagChange } from '../models';
 import { GameState } from '../state/game-state';
@@ -120,7 +121,10 @@ export class CardPlayedFromHandParser implements ActionParser {
 							LocalPlayer: this.StateFacade.LocalPlayer,
 							OpponentPlayer: this.StateFacade.OpponentPlayer,
 							EntityId: entity.Id,
-							AdditionalProps: additionalProps,
+							AdditionalProps: {
+								...additionalProps,
+								PaidWithAlternateCost: nodePlayPaidWithAlternateCost(node),
+							},
 						},
 					}),
 					true,
@@ -186,13 +190,16 @@ export class CardPlayedFromHandParser implements ActionParser {
 				GameEventProvider.Create(
 					showEntity.TimeStamp,
 					'CARD_PLAYED',
-					GameEventHelper.CreateProvider(
+					GameEventHelper.CreateProviderWithDeferredProps(
 						'CARD_PLAYED',
 						cardId,
 						controllerId,
 						showEntity.Entity,
 						this.StateFacade,
-						additionalProps,
+						() => ({
+							...additionalProps,
+							PaidWithAlternateCost: nodePlayPaidWithAlternateCost(node),
+						}),
 					),
 					true,
 					node,

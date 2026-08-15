@@ -275,6 +275,7 @@ export class CardPlayedFromHandParser implements EventParser {
 			turn: +currentState.currentTurn,
 			timestamp: new Date().getTime(),
 			effectiveCost: costFromTags,
+			paidWithAlternateCost: gameEvent.additionalData?.paidWithAlternateCost,
 		};
 		const [playerDeckAfterSpecialCaseUpdate, opponentDeckAfterSpecialCaseUpdate] = modifyDecksForSpecialCards(
 			cardToAdd.cardId,

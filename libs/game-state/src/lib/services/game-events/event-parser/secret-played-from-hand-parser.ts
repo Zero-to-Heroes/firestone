@@ -140,6 +140,7 @@ export class SecretPlayedFromHandParser implements EventParser {
 			turn: +currentState.currentTurn,
 			timestamp: new Date().getTime(),
 			effectiveCost: effectiveCost,
+			paidWithAlternateCost: gameEvent.additionalData?.paidWithAlternateCost,
 		};
 
 		const deckAfterSpecialCaseUpdate: DeckState =

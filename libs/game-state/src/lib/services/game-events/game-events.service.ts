@@ -426,6 +426,7 @@ export class GameEvents {
 									dormant: gameEvent.Value.AdditionalProps.Dormant,
 									cost: gameEvent.Value.AdditionalProps.Cost,
 									magnetized: gameEvent.Value.AdditionalProps.Magnetized,
+									paidWithAlternateCost: gameEvent.Value.AdditionalProps.PaidWithAlternateCost,
 									tags: gameEvent.Value.AdditionalProps.Tags,
 								}
 							: {},
@@ -724,6 +725,7 @@ export class GameEvents {
 								? gameEvent.Value.AdditionalProps.PlayerClass.toLowerCase()
 								: null,
 						cost: gameEvent.Value.AdditionalProps?.Cost,
+						paidWithAlternateCost: gameEvent.Value.AdditionalProps?.PaidWithAlternateCost,
 					}),
 				);
 				break;
@@ -810,6 +812,7 @@ export class GameEvents {
 								? gameEvent.Value.AdditionalProps.PlayerClass.toLowerCase()
 								: null,
 						cost: gameEvent.Value.AdditionalProps?.Cost,
+						paidWithAlternateCost: gameEvent.Value.AdditionalProps?.PaidWithAlternateCost,
 					}),
 				);
 				break;
@@ -1860,8 +1863,7 @@ export class GameEvents {
 			// PTL BG_BATTLE_STARTING=0 (tag 2022): combat boards are visible — stamp receive
 			// time (user-facing start) and flush the log queue so board snapshot + sim
 			// kickoff are not held behind the normal 500ms ProcessingQueue tick.
-			const isPtlBgBattleStarting =
-				data.includes('PowerTaskList') && data.includes('tag=2022 value=0');
+			const isPtlBgBattleStarting = data.includes('PowerTaskList') && data.includes('tag=2022 value=0');
 			if (isPtlBgBattleStarting) {
 				this.bgBattleStartingReceivedAt =
 					typeof performance !== 'undefined' && typeof performance.now === 'function'
