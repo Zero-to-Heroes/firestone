@@ -1,4 +1,4 @@
-**Firestone 18.14.1 — Release notes**
+**Firestone 18.14.2 — Release notes**
 
 **Battlegrounds**
 - ✨ Update simulator for 36.2. You can now check the simulator's accuracy at https://www.firestoneapp.com/monitoring/simulator (updated daily)
@@ -16,6 +16,7 @@
 - 🐞 Fixed sim issues and improved simulator performance
 - 🐞 Fix an issue where counters would not appear in Battlegrounds anymore
 - 🐞 Fix an issue where battle odds would not stay visible in the tavern
+- 🐞 Fix an issue where some heroes (e.g. Teron, Onyxia) would not show stats in the hero selection overlay
 
 **Decktracker**
 - ✨ Jade Guardians counter also appears for Azalina Soulsever and Lotus Troublemaker
@@ -23,6 +24,7 @@
 - ✨ Counters that depend on remaining Irida Sinseeker / Godfrey the Betrayer cards now take The Void and Godfrey's discarded cards into account
 - ✨ Aya, Lotus Kingpin is added to the opponent's deck when you go second and have the card in your deck yourself
 - ✨ V'ama, Looming Death now also highlights minions on the opponent's board
+- ✨ Cost Modifier info is shown in the opponent card tooltip in hand
 - ✨ Updated highlights (Theft Accusation; Void Soul; Twilight's Call; Crystalsmith Cultist; Chrono-Lord Epoch; Headhunter's Hatchet)
 - ✨ Updated dynamic pools (Ivory Knight; Stonehill Defender; Sands of Time; Avatar of Hearthstone; Staff of Trickery; Perjury; Skeletal Dragon; Font of Power; Disc Jockey; Harmonica Soloist; Watfin; Merch Seller; Sketchy Stranger; Instrument Smasher; Legendary Invitation)
 - ✨ Updated oracles (Twin Slice; Fight Over Me; Noxious Bribe)
@@ -53,6 +55,8 @@
 - 🐞 Opponent cards identified in hand are removed from the opponent's deck more reliably
 - 🐞 Bashana Runetotem counter no longer crashes in some cases
 - 🐞 Repackaged Box no longer includes Locations in its pool
+- 🐞 Jade Guardians counter no longer increments when a card is paid with health
+- 🐞 Cards created by Dragon Soul, Shattered are no longer duplicated in the opponent's deck
 
 **Arena**
 - ✨ Card search field is focused automatically when alt-tabbing to the app
