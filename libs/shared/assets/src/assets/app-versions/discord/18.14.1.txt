@@ -1,13 +1,18 @@
-**Firestone 18.14.0 — Release notes**
+**Firestone 18.14.1 — Release notes**
 
 **Battlegrounds**
-- ✨ Update simulator for 36.2
+- ✨ Update simulator for 36.2. You can now check the simulator's accuracy at https://www.firestoneapp.com/monitoring/simulator (updated daily)
+- ✨ Tooltip when mousing over the Dark Gifts button
+    - It shows you all the minions you can get, and which Dark Gifts any given minion can get
+    - Can be turned off in Settings > Battlegrounds > Overlay
 - ✨ Faster time to first battle simulation in the overlay
 - ✨ MMR is visible without mousing over opponent icons
 - ✨ Horizontal scrollbar on the compositions tab
 - ✨ Aureate Laureate is excluded from auto-highlights
 - ✨ Tavern buff counter includes For the Horde!
 - ✨ Added missing achievements for recent heroes
+- ✨ Toggle on the Powers tab to switch between expanded and compact views
+- ✨ Choose One and Discover are now listed in the main mechanics entries of the cards list
 - 🐞 Fixed sim issues and improved simulator performance
 - 🐞 Fix an issue where counters would not appear in Battlegrounds anymore
 - 🐞 Fix an issue where battle odds would not stay visible in the tavern
@@ -17,8 +22,9 @@
 - ✨ Void Soul counter shows the pool for the next demon to be summoned
 - ✨ Counters that depend on remaining Irida Sinseeker / Godfrey the Betrayer cards now take The Void and Godfrey's discarded cards into account
 - ✨ Aya, Lotus Kingpin is added to the opponent's deck when you go second and have the card in your deck yourself
+- ✨ V'ama, Looming Death now also highlights minions on the opponent's board
 - ✨ Updated highlights (Theft Accusation; Void Soul; Twilight's Call; Crystalsmith Cultist; Chrono-Lord Epoch; Headhunter's Hatchet)
-- ✨ Updated dynamic pools (Ivory Knight; Stonehill Defender; Sands of Time; Avatar of Hearthstone; Staff of Trickery; Perjury; Skeletal Dragon; Font of Power; Disc Jockey; Harmonica Soloist)
+- ✨ Updated dynamic pools (Ivory Knight; Stonehill Defender; Sands of Time; Avatar of Hearthstone; Staff of Trickery; Perjury; Skeletal Dragon; Font of Power; Disc Jockey; Harmonica Soloist; Watfin; Merch Seller; Sketchy Stranger; Instrument Smasher; Legendary Invitation)
 - ✨ Updated oracles (Twin Slice; Fight Over Me; Noxious Bribe)
 - 🐞 Void Soul-created cards now cap at 10 mana
 - 🐞 Secret Ingredient no longer shows itself in its dynamic pool
@@ -46,6 +52,7 @@
 - 🐞 Webspinner + PREPARE interaction fixed
 - 🐞 Opponent cards identified in hand are removed from the opponent's deck more reliably
 - 🐞 Bashana Runetotem counter no longer crashes in some cases
+- 🐞 Repackaged Box no longer includes Locations in its pool
 
 **Arena**
 - ✨ Card search field is focused automatically when alt-tabbing to the app
