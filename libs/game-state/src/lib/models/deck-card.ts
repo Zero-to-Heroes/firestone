@@ -207,6 +207,7 @@ export interface GuessedInfo {
 	readonly health?: number | null;
 	readonly attackBuff?: number | null;
 	readonly healthBuff?: number | null;
+	readonly costModifier?: number | null;
 	readonly possibleCards?: readonly string[] | null;
 	readonly spellSchools?: readonly SpellSchool[] | null;
 	readonly races?: readonly Race[] | null;

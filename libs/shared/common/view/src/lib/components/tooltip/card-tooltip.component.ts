@@ -120,6 +120,13 @@ function buildTooltipCardImages(usualUrl: string | null): {
 							<div class="value">{{ formatCost(info.cost) }}</div>
 						</div>
 						<div
+							class="info-item cost-modifier"
+							*ngIf="info.costModifier !== null && info.costModifier !== undefined"
+						>
+							<div class="label" [fsTranslate]="'decktracker.guessed-info.cost-modifier'"></div>
+							<div class="value">{{ info.costModifier }}</div>
+						</div>
+						<div
 							class="info-item attack-buff"
 							*ngIf="info.attackBuff !== null && info.attackBuff !== undefined"
 						>
@@ -754,6 +761,7 @@ export interface CardTooltipAdditionalInfo {
 	readonly rarity?: CardRarity | null;
 	readonly attackBuff?: number | null;
 	readonly healthBuff?: number | null;
+	readonly costModifier?: number | null;
 	readonly mainAttribute?: number | null;
 }
 export const isGuessedInfoEmpty = (info: CardTooltipAdditionalInfo | null) => {
@@ -767,6 +775,7 @@ export const isGuessedInfoEmpty = (info: CardTooltipAdditionalInfo | null) => {
 		!info?.rarity &&
 		info?.attackBuff == null &&
 		info?.healthBuff == null &&
+		info?.costModifier == null &&
 		info?.mainAttribute == null
 	);
 };

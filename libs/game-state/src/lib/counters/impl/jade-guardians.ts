@@ -2,6 +2,7 @@ import { CardClass, CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
 import { initialHeroClassIs } from '../../models/hero-card';
+import { countTwoManaCardsPlayedThisMatch } from '../../services/cards/jade-guardians';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../counter-type';
 
@@ -14,10 +15,7 @@ export class JadeGuardiansCounterDefinitionV2 extends CounterDefinitionV2<number
 	readonly player = {
 		pref: 'playerJadeGuardiansCounter' as const,
 		display: (state: GameState): boolean => true,
-		value: (state: GameState): number | null => {
-			console.debug('[debug] jade guardians counter value', state.playerDeck?.cardsPlayedThisMatch);
-			return state.playerDeck?.cardsPlayedThisMatch.filter((c) => c.effectiveCost == 2).length || null;
-		},
+		value: (state: GameState): number | null => countTwoManaCardsPlayedThisMatch(state.playerDeck) || null,
 		setting: {
 			label: (i18n: ILocalizationService): string => this.allCards.getCard(CardIds.JadeGuardians_JAIL_474)?.name,
 			tooltip: (i18n: ILocalizationService, allCards: CardsFacadeService): string =>
@@ -30,8 +28,7 @@ export class JadeGuardiansCounterDefinitionV2 extends CounterDefinitionV2<number
 		display: (state: GameState): boolean => {
 			return initialHeroClassIs(state.opponentDeck?.hero, [CardClass.ROGUE]);
 		},
-		value: (state: GameState): number | null =>
-			state.opponentDeck?.cardsPlayedThisMatch.filter((c) => c.effectiveCost == 2).length || null,
+		value: (state: GameState): number | null => countTwoManaCardsPlayedThisMatch(state.opponentDeck) || null,
 		setting: {
 			label: (i18n: ILocalizationService): string => this.allCards.getCard(CardIds.JadeGuardians_JAIL_474)?.name,
 			tooltip: (i18n: ILocalizationService, allCards: CardsFacadeService): string =>

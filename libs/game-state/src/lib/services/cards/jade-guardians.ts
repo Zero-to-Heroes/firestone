@@ -6,6 +6,7 @@
 import { CardIds, CardType, ReferenceCard } from '@firestone-hs/reference-data';
 
 import { GuessedInfo } from '../../models/deck-card';
+import { DeckState } from '../../models/deck-state';
 import { hasCorrectType, hasCost } from '../../related-cards/dynamic-pools';
 import { and, effectiveCostEqual, inDeck, inHand, or, side } from '../card-highlight/selectors';
 import {
@@ -19,25 +20,22 @@ import { filterCards } from './utils';
 
 const minionFilter = (c: ReferenceCard) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 8);
 
+export const countTwoManaCardsPlayedThisMatch = (deckState: DeckState | undefined): number =>
+	deckState?.cardsPlayedThisMatch?.filter((c) => c.effectiveCost === 2)?.length ?? 0;
+
 export const JadeGuardians: GeneratingCard & StaticGeneratingCard & SelectorCard = {
 	cardIds: [CardIds.JadeGuardians_JAIL_474],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) =>
-		filterCards(
-			CardIds.JadeGuardians_JAIL_474,
-			input.allCards,
-			minionFilter,
-			input.inputOptions,
-		),
-	guessInfo: (input: GuessInfoInput): GuessedInfo | null => ({
-		cardType: CardType.MINION,
-		cost: { cost: 8, comparison: '==' },
-		possibleCards: filterCards(
-			CardIds.JadeGuardians_JAIL_474,
-			input.allCards,
-			minionFilter,
-			input.options,
-		),
-	}),
+		filterCards(CardIds.JadeGuardians_JAIL_474, input.allCards, minionFilter, input.inputOptions),
+	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
+		const discount = Math.min(countTwoManaCardsPlayedThisMatch(input.deckState), 8);
+		return {
+			cardType: CardType.MINION,
+			cost: { cost: 8, comparison: '==' },
+			costModifier: discount > 0 ? -discount : null,
+			possibleCards: filterCards(CardIds.JadeGuardians_JAIL_474, input.allCards, minionFilter, input.options),
+		};
+	},
 	selector: (inputSide) => and(side(inputSide), or(inHand, inDeck), effectiveCostEqual(2)),
 };

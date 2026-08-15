@@ -286,7 +286,8 @@
 
 		.label {
 			color: var(--default-text-color);
-			width: 80px;
+			width: 120px;
+			flex-shrink: 0;
 		}
 
 		.value {
