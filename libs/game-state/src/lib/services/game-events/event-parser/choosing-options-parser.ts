@@ -51,24 +51,27 @@ export class ChoosingOptionsParser implements EventParser {
 		}
 
 		const newDeck = deck.update({
-			currentOptions: gameEvent.additionalData.options.map((o) => {
-				const result: CardOption = {
-					entityId: o.EntityId,
-					cardId: o.CardId,
-					source: cardId,
-					context: gameEvent.additionalData.context,
-					questDifficulty: o.QuestDifficulty,
-					questReward: o.QuestReward,
-					willBeActive: willBeActive(
-						o.CardId,
-						o.EntityId,
-						deck,
-						currentState.currentTurn === 'mulligan' ? 0 : currentState.currentTurn,
-						this.allCards,
-					),
-				};
-				return result;
-			}),
+			currentOptions: gameEvent.additionalData.options
+				// Not a real discover option
+				.filter((o) => o.CardId !== CardIds.TransformtheKey_JAIL_319t)
+				.map((o) => {
+					const result: CardOption = {
+						entityId: o.EntityId,
+						cardId: o.CardId,
+						source: cardId,
+						context: gameEvent.additionalData.context,
+						questDifficulty: o.QuestDifficulty,
+						questReward: o.QuestReward,
+						willBeActive: willBeActive(
+							o.CardId,
+							o.EntityId,
+							deck,
+							currentState.currentTurn === 'mulligan' ? 0 : currentState.currentTurn,
+							this.allCards,
+						),
+					};
+					return result;
+				}),
 		});
 		// console.debug('[choosing-options] updating options', newDeck.currentOptions, gameEvent);
 
