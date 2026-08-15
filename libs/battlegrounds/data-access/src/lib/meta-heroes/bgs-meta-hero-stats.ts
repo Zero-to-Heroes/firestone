@@ -138,6 +138,34 @@ export const buildTiers = (
 	].filter((tier) => tier.items?.length);
 };
 
+/** Look up an offered hero in tribe-filtered tiers, then unfiltered tiers. Match on baseCardId (skins normalize to the base hero). */
+export const findHeroStatInTiers = (
+	normalizedCardId: string | null | undefined,
+	preferredTiers: readonly BgsMetaHeroStatTier[] | null | undefined,
+	fallbackTiers?: readonly BgsMetaHeroStatTier[] | null,
+): { stat: BgsMetaHeroStatTierItem | undefined; tier: BgsMetaHeroStatTier | undefined } => {
+	const lookup = (tiers: readonly BgsMetaHeroStatTier[] | null | undefined) => {
+		if (!normalizedCardId || !tiers?.length) {
+			return { stat: undefined, tier: undefined };
+		}
+		const matches = (item: BgsMetaHeroStatTierItem) =>
+			item.baseCardId === normalizedCardId || item.id === normalizedCardId;
+		const tier = tiers.find((t) => t.items.some(matches));
+		const stat = tier?.items?.find(matches);
+		return { stat, tier };
+	};
+	const preferred = lookup(preferredTiers);
+	if (preferred.stat) {
+		return preferred;
+	}
+	return lookup(fallbackTiers);
+};
+
+const isMinionStyleHeroCardRule = (heroCardId: string, cardRules: CardRules): boolean => {
+	const alwaysAvailableForHeroes = cardRules[heroCardId]?.bgsMinionTypesRules?.alwaysAvailableForHeroes ?? [];
+	return alwaysAvailableForHeroes.length > 0 && !alwaysAvailableForHeroes.includes(heroCardId);
+};
+
 export const buildHeroStats = (
 	stats: readonly WithMmrAndTimePeriod<BgsGlobalHeroStat>[],
 	tribes: readonly Race[],
@@ -154,6 +182,11 @@ export const buildHeroStats = (
 			return true;
 		}
 		const cardId = normalizeHeroCardId(stat.heroCardId, allCards);
+		// Minion-pool rules are sometimes keyed on a hero ID (alwaysAvailableForHeroes lists other
+		// heroes, not this one). Those must not hide the offered hero from the overlay / tier list.
+		if (isMinionStyleHeroCardRule(cardId, cardRules)) {
+			return true;
+		}
 		const cardRule = cardRules[cardId];
 		const requiredTribes = cardRule?.bgsMinionTypesRules?.needTypesInLobby ?? [];
 		return requiredTribes.every((tribe) => tribes.includes(Race[tribe]));

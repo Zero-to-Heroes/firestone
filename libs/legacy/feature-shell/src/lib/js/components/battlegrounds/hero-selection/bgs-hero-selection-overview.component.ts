@@ -13,13 +13,18 @@ import {
 	findCategory,
 	retrieveAllAchievements,
 } from '@firestone/achievements/common';
-import { BgsHeroTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
+import {
+	BgsHeroTier,
+	BgsMetaHeroStatTierItem,
+	buildTiers,
+	findHeroStatInTiers,
+} from '@firestone/battlegrounds/data-access';
 import { BgsPlayerHeroStatsService, DEFAULT_MMR_PERCENTILE } from '@firestone/battlegrounds/services';
 import { BgsHeroSelectionOverviewPanel, Config, GameStateFacadeService, equalConfig } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, CardsFacadeService, IAdsService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, distinctUntilChanged, switchMap, takeUntil, tap } from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged, of, switchMap, takeUntil, tap } from 'rxjs';
 import { getAchievementsForHero } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
@@ -119,11 +124,21 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 			switchMap((config) => this.playerHeroStats.buildFinalStats(config, config.mmrFilter)),
 			this.mapData((stats) => buildTiers(stats?.stats, this.i18n)),
 		);
+		const unfilteredTiers$ = statsConfig$.pipe(
+			switchMap((config) => {
+				if (!config.tribesFilter?.length) {
+					return of(null);
+				}
+				return this.playerHeroStats.buildFinalStats({ ...config, tribesFilter: [] }, config.mmrFilter);
+			}),
+			this.mapData((stats) => (stats?.stats ? buildTiers(stats.stats, this.i18n) : [])),
+		);
 
 		this.showAds$ = this.ads.hasPremiumSub$$.pipe(this.mapData((showAds) => !showAds));
 
 		this.heroOverviews$ = combineLatest([
 			tiers$,
+			unfilteredTiers$,
 			this.achievements.groupedAchievements$$,
 			this.gameState.gameState$$.pipe(
 				this.mapData(
@@ -137,7 +152,7 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 			),
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsShowHeroSelectionAchievements)),
 		]).pipe(
-			this.mapData(([tiers, achievements, panel, showAchievements]) => {
+			this.mapData(([tiers, unfilteredTiers, achievements, panel, showAchievements]) => {
 				if (!panel) {
 					return [];
 				}
@@ -155,8 +170,7 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 					: [];
 				const heroOverviews: readonly InternalBgsHeroStat[] = selectionOptions.map((cardId) => {
 					const normalized = normalizeHeroCardId(cardId, this.allCards);
-					const tier = tiers.find((t) => t.items.map((i) => i.baseCardId).includes(normalized));
-					const existingStat = tier?.items?.find((overview) => overview.id === normalized);
+					const { stat: existingStat, tier } = findHeroStatInTiers(normalized, tiers, unfilteredTiers);
 					const statWithDefault = existingStat ?? ({ id: normalized } as BgsMetaHeroStatTierItem);
 					const achievementsForHero: readonly VisualAchievement[] = showAchievements
 						? getAchievementsForHero(normalized, heroAchievements, this.allCards)

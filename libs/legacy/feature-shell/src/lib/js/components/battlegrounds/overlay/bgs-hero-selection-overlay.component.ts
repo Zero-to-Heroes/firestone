@@ -13,7 +13,12 @@ import {
 	findCategory,
 	retrieveAllAchievements,
 } from '@firestone/achievements/common';
-import { BgsMetaHeroStatTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
+import {
+	BgsMetaHeroStatTier,
+	BgsMetaHeroStatTierItem,
+	buildTiers,
+	findHeroStatInTiers,
+} from '@firestone/battlegrounds/data-access';
 import {
 	BgsInGameHeroSelectionGuardianService,
 	BgsPlayerHeroStatsService,
@@ -36,6 +41,7 @@ import {
 	startWith,
 	switchMap,
 	takeUntil,
+	of,
 } from 'rxjs';
 import { getAchievementsForHero } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -144,6 +150,17 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 			startWith([] as readonly BgsMetaHeroStatTier[]),
 			takeUntil(this.destroyed$),
 		);
+		const unfilteredTiers$ = statsConfigs.pipe(
+			switchMap((config) => {
+				if (!config.tribesFilter?.length) {
+					return of(null);
+				}
+				return this.playerHeroStats.buildFinalStats({ ...config, tribesFilter: [] }, config.mmrFilter);
+			}),
+			this.mapData((stats) => (stats?.stats ? buildTiers(stats.stats, this.i18n) : [])),
+			startWith([] as readonly BgsMetaHeroStatTier[]),
+			takeUntil(this.destroyed$),
+		);
 
 		const panel$ = this.gameState.gameState$$.pipe(
 			this.mapData(
@@ -157,11 +174,12 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 
 		const heroOverwiewsWithoutAchievements$ = combineLatest([
 			tiers$,
+			unfilteredTiers$,
 			panel$,
 			availableRaces$,
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsShowHeroSelectionAchievements)),
 		]).pipe(
-			this.mapData(([tiers, panel, availableRaces, showAchievements]) => {
+			this.mapData(([tiers, unfilteredTiers, panel, availableRaces, showAchievements]) => {
 				if (!panel) {
 					console.log('no panel');
 					return [];
@@ -178,8 +196,7 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 
 				const heroOverviews: readonly InternalBgsHeroStat[] = selectionOptions.map((cardId) => {
 					const normalized = normalizeHeroCardId(cardId, this.allCards);
-					const tier = tiers.find((t) => t.items.map((i) => i.baseCardId).includes(normalized));
-					const existingStat = tier?.items?.find((overview) => overview.id === normalized);
+					const { stat: existingStat, tier } = findHeroStatInTiers(normalized, tiers, unfilteredTiers);
 					const statWithDefault = existingStat ?? ({ id: normalized } as BgsMetaHeroStatTierItem);
 					const tooltipPosition: TooltipPositionType = 'fixed-top-center';
 					const result: InternalBgsHeroStat = {
