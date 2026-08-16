@@ -178,6 +178,7 @@ import {
 import { MercenariesOutOfCombatTreasureSelectionComponent } from './js/components/mercenaries/overlay/treasure-selection/mercenaries-out-of-combat-treasure-selection.component';
 import { NotificationsComponent } from './js/components/notifications.component';
 import { FullScreenOverlaysComponent } from './js/components/overlays/_full-screen-overlays.component';
+import { TrackerFlavorTextComponent } from './js/components/overlays/tracker-flavor-text.component';
 import { BgsBannedTribesWidgetWrapperComponent } from './js/components/overlays/bgs-banned-tribes-widget-wrapper.component';
 import { BgsBattleSimulationWidgetWrapperComponent } from './js/components/overlays/bgs-battle-simulation-widget-wrapper.component';
 import { BgsBoardWidgetWrapperComponent } from './js/components/overlays/bgs-board-widget-wrapper.component';
@@ -581,6 +582,7 @@ import { DebugService } from './js/services/debug.service';
 import { DeckCardService } from './js/services/decktracker/deck-card.service';
 import { DynamicZoneHelperService } from './js/services/decktracker/dynamic-zone-helper.service';
 import { DecktrackerStateLoaderService } from './js/services/decktracker/main/decktracker-state-loader.service';
+import { TrackerFlavorTextService } from './js/services/decktracker/tracker-flavor-text.service';
 import { ZoneOrderingService } from './js/services/decktracker/zone-ordering.service';
 import { DevService } from './js/services/dev.service';
 import { HotkeyService } from './js/services/hotkey.service';
@@ -865,6 +867,7 @@ try {
 		MainWindowComponent,
 		LoadingComponent,
 		NotificationsComponent,
+		TrackerFlavorTextComponent,
 		BattlegroundsComponent,
 		BattlegroundsRootComponent,
 		FullScreenOverlaysComponent,
@@ -1335,6 +1338,7 @@ try {
 		MatchStatsService,
 
 		DeckCardService,
+		TrackerFlavorTextService,
 		ReviewIdService,
 		DynamicZoneHelperService,
 		ZoneOrderingService,

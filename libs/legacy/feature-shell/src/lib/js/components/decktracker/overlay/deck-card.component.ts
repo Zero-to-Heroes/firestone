@@ -39,6 +39,7 @@ import {
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, Observable, takeUntil } from 'rxjs';
+import { TrackerFlavorTextService, toPlainFlavorText } from '../../../services/decktracker/tracker-flavor-text.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
@@ -266,6 +267,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 
 	@Input() removeDuplicatesInTooltip: boolean;
 	@Input() gameTypeOverride: GameType | null = null;
+	@Input() showFlavorTextOnHover = false;
 
 	cardId: string;
 	entityId: number;
@@ -310,8 +312,11 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	private _referenceCard: ReferenceCard;
 	// Using number type for browser setTimeout return value (ReturnType<typeof setTimeout> returns NodeJS.Timeout)
 	private scrollTimeout: number | null = null;
+	private flavorTextTimeout: number | null = null;
 	// Delay before text starts scrolling on hover (prevents flicker on quick mouseovers)
 	private static readonly TEXT_SCROLL_DELAY_MS = 500;
+	private static readonly FLAVOR_TEXT_DELAY_MS = 300;
+	private overlayShowFlavorTextOnHover = false;
 	private _uniqueId: string;
 	private _zone: DeckZone;
 
@@ -330,6 +335,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		@Optional() private readonly cardsHighlightService: CardsHighlightFacadeService,
 		@Optional() private readonly i18n: LocalizationFacadeService,
 		@Optional() private readonly arenaRef: ArenaRefService,
+		@Optional() private readonly flavorTextService: TrackerFlavorTextService,
 	) {
 		super(cdr);
 	}
@@ -354,6 +360,15 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.markForCheck();
 				}
+			});
+
+		this.prefs.preferences$$
+			.pipe(
+				this.mapData((prefs) => prefs.overlayShowFlavorTextOnHover),
+				distinctUntilChanged(),
+			)
+			.subscribe((overlayShowFlavorTextOnHover) => {
+				this.overlayShowFlavorTextOnHover = overlayShowFlavorTextOnHover;
 			});
 
 		combineLatest([
@@ -455,6 +470,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			window.clearTimeout(this.scrollTimeout);
 			this.scrollTimeout = null;
 		}
+		this.hideFlavorText();
 	}
 
 	doHighlight(highlight: SelectorOutput) {
@@ -477,6 +493,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 
 		// Check if text is truncated and schedule scroll after delay
 		this.scheduleTextScroll();
+		this.scheduleFlavorText();
 
 		if (!this.card$$.value.cardId && this.card$$.value.guessedInfo?.possibleCards?.length) {
 			this.relatedCardIds = this.card$$.value.guessedInfo.possibleCards;
@@ -535,6 +552,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 
 	onMouseLeave(event: MouseEvent) {
 		this.cardsHighlightService?.onMouseLeave(this.cardId);
+		this.hideFlavorText();
 
 		// Clear the scroll timeout and reset scroll state
 		if (this.scrollTimeout !== null) {
@@ -544,6 +562,43 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		this.scrollText = false;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();
+		}
+	}
+
+	private scheduleFlavorText() {
+		this.clearFlavorTextTimeout();
+		if (
+			!this.showFlavorTextOnHover ||
+			!this.overlayShowFlavorTextOnHover ||
+			!this.flavorTextService ||
+			!this.cardId ||
+			!this._referenceCard?.flavor?.length
+		) {
+			return;
+		}
+
+		const cardId = this.cardId;
+		const cardName = this.cardName;
+		const flavorText = toPlainFlavorText(this._referenceCard.flavor);
+		if (!flavorText.length) {
+			return;
+		}
+
+		this.flavorTextTimeout = window.setTimeout(() => {
+			this.flavorTextTimeout = null;
+			this.flavorTextService?.show({ cardId, cardName, flavorText });
+		}, DeckCardComponent.FLAVOR_TEXT_DELAY_MS);
+	}
+
+	private hideFlavorText() {
+		this.clearFlavorTextTimeout();
+		this.flavorTextService?.hide(this.cardId);
+	}
+
+	private clearFlavorTextTimeout() {
+		if (this.flavorTextTimeout !== null) {
+			window.clearTimeout(this.flavorTextTimeout);
+			this.flavorTextTimeout = null;
 		}
 	}
 

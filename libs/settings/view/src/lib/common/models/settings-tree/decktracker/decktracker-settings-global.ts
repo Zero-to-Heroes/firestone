@@ -44,6 +44,12 @@ export const decktrackerGlobalSettings = (context: SettingContext): SettingNode 
 					},
 					{
 						type: 'toggle',
+						field: 'overlayShowFlavorTextOnHover',
+						label: context.i18n.translateString('settings.decktracker.global.show-flavor-text-on-hover'),
+						tooltip: context.i18n.translateString('settings.decktracker.global.show-flavor-text-on-hover-tooltip'),
+					},
+					{
+						type: 'toggle',
 						field: 'overlayShowRelatedCards',
 						label: context.i18n.translateString('settings.collection.general.show-related-cards-label'),
 						tooltip: context.i18n.translateString('settings.collection.general.show-related-cards-tooltip'),
