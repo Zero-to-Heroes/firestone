@@ -2,7 +2,7 @@
 import { getAllCounters } from '@firestone/game-state';
 import { SettingContext, SettingNode } from '@firestone/settings/services';
 import { Preferences } from '@firestone/shared/common/service';
-import { sizeKnobs, toSetting } from '../common';
+import { sizeKnobs, toSetting, useGroupedCountersSetting } from '../common';
 import { CounterSetting } from '../decktracker/internal/decktracker-settings-internal';
 
 export const battlegroundsOverlaySettings = (context: SettingContext): SettingNode => {
@@ -181,7 +181,7 @@ export const battlegroundsOverlaySettings = (context: SettingContext): SettingNo
 			{
 				id: 'battlegrounds-counters',
 				title: context.i18n.translateString('settings.battlegrounds.overlay.counters-title'),
-				settings: counters(context).map((counter) => toSetting(counter)),
+				settings: [useGroupedCountersSetting(context), ...counters(context).map((counter) => toSetting(counter))],
 			},
 			{
 				id: 'battlegrounds-quests',

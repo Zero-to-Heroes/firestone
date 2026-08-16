@@ -4,7 +4,7 @@ import { SettingContext, SettingNode } from '@firestone/settings/services';
 import { Preferences } from '@firestone/shared/common/service';
 import { Mutable } from '@firestone/shared/framework/common';
 import { debounceTime, map, Observable } from 'rxjs';
-import { sizeKnobs, toSetting } from '../common';
+import { sizeKnobs, toSetting, useGroupedCountersSetting } from '../common';
 import { CounterSetting } from './internal/decktracker-settings-internal';
 
 export const decktrackerYourDeckSettings = (context: SettingContext): SettingNode => {
@@ -175,6 +175,7 @@ export const decktrackerYourDeckSettings = (context: SettingContext): SettingNod
 				id: 'decktracker-your-deck-counters',
 				title: context.i18n.translateString('settings.decktracker.opponent-deck.counters.title'),
 				settings: [
+					useGroupedCountersSetting(context),
 					{
 						text: isAtLeastOneCounterDisabled$.pipe(
 							map((isDisabled) => (isDisabled ? context.i18n.translateString('settings.decktracker.your-deck.counters.enable-all') : context.i18n.translateString('settings.decktracker.your-deck.counters.disable-all'))),

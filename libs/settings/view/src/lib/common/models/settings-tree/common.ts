@@ -16,6 +16,13 @@ export const sizeKnobs = (context: SettingContext) => [
 	},
 ];
 
+export const useGroupedCountersSetting = (context: SettingContext): Setting => ({
+	type: 'toggle',
+	field: 'useGroupedCounters',
+	label: context.i18n.translateString('settings.general.widgets.use-grouped-counters-label'),
+	tooltip: context.i18n.translateString('settings.general.widgets.use-grouped-counters-tooltip'),
+});
+
 export const toSetting = (counter: CounterSetting): Setting => {
 	if (counter.showLimitedOption) {
 		return {

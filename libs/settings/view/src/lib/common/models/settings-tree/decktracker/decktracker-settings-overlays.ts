@@ -1,6 +1,6 @@
 import { SettingContext, SettingNode } from '@firestone/settings/services';
 import { CONSTRUCTED_DISCOVERS_DAILY_FREE_USES, Preferences } from '@firestone/shared/common/service';
-import { sizeKnobs } from '../common';
+import { sizeKnobs, useGroupedCountersSetting } from '../common';
 
 export const decktrackerOverlaysSettings = (context: SettingContext): SettingNode => {
 	return {
@@ -90,6 +90,7 @@ export const decktrackerOverlaysSettings = (context: SettingContext): SettingNod
 				id: 'decktracker-global-counters',
 				title: null,
 				settings: [
+					useGroupedCountersSetting(context),
 					{
 						type: 'toggle',
 						field: 'countersUseExpandedView',

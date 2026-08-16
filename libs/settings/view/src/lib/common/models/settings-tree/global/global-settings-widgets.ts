@@ -1,5 +1,5 @@
 import { SettingContext, SettingNode } from '@firestone/settings/services';
-import { sizeKnobs } from '../common';
+import { sizeKnobs, useGroupedCountersSetting } from '../common';
 
 export const globalWidgetSettings = (context: SettingContext): SettingNode => {
 	return {
@@ -93,12 +93,7 @@ export const globalWidgetSettings = (context: SettingContext): SettingNode => {
 				id: 'global-widgets-counters',
 				title: context.i18n.translateString('settings.decktracker.opponent-deck.counters.title'),
 				settings: [
-					{
-						type: 'toggle',
-						field: 'useGroupedCounters',
-						label: context.i18n.translateString('settings.general.widgets.use-grouped-counters-label'),
-						tooltip: context.i18n.translateString('settings.general.widgets.use-grouped-counters-tooltip'),
-					},
+					useGroupedCountersSetting(context),
 					{
 						type: 'slider',
 						field: 'groupedCountersScale',
