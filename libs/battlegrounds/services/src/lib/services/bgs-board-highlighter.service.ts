@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
 import { CardIds, CardType, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
-import { ExtendedBgsCompAdvice, ExtendedReferenceCard } from '@firestone/battlegrounds/core';
+import { ExtendedBgsCompAdvice, ExtendedReferenceCard, isInMechanicalTier } from '@firestone/battlegrounds/core';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual, SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
@@ -339,7 +339,7 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 		anomalies: readonly string[],
 		enableAutoHighlight: boolean,
 	): boolean {
-		const highlightedFromMechanics = card?.mechanics?.some((m) => highlightedMechanics.includes(GameTag[m]));
+		const highlightedFromMechanics = highlightedMechanics.some((mechanic) => isInMechanicalTier(card, mechanic));
 		if (highlightedFromMechanics) {
 			return true;
 		}

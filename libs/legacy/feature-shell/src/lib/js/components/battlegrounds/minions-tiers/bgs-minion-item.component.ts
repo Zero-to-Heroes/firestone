@@ -2,7 +2,12 @@ import { ComponentType } from '@angular/cdk/portal';
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardType, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { BgsTrinketStrategyTipsTooltipComponent } from '@firestone/battlegrounds/common';
-import { ExtendedReferenceCard, isBgsTrinket, MECHANICS_IN_GAME } from '@firestone/battlegrounds/core';
+import {
+	ExtendedReferenceCard,
+	isBgsTrinket,
+	isInMechanicalTier,
+	MECHANICS_IN_GAME,
+} from '@firestone/battlegrounds/core';
 import { buildAllCardIds, buildRelatedCardIds, isBgsTimewarped } from '@firestone/battlegrounds/data-access';
 import { BgsBoardHighlighterService } from '@firestone/battlegrounds/services';
 import { isBgsSpell } from '@firestone/game-state';
@@ -208,7 +213,7 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 					const mechanicsHighlights: readonly MinionHighlight[] = MECHANICS_IN_GAME.filter(
 						(m) => m.canBeHighlighted !== false,
 					).map((m) => {
-						const hasMechanics = card.mechanics?.includes(GameTag[m.mechanic]);
+						const hasMechanics = isInMechanicalTier(card, m.mechanic);
 						const highlighted = hasMechanics && highlightedMechanics.includes(m.mechanic);
 						const mechanicsName = this.i18n.translateString(
 							`global.mechanics.${GameTag[m.mechanic].toLowerCase()}`,

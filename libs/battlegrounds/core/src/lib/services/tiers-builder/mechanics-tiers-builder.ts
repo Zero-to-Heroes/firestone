@@ -21,13 +21,14 @@ import { TierBuilderConfig } from './tiers-config.model';
 import { buildSingleTribeTier } from './tribe-tiers-builder';
 import { getTrinketNameKey } from './utils';
 
-const MAIN_MECHANICS_IN_GAME = [
+export const MAIN_MECHANICS_IN_GAME = [
 	{ mechanic: GameTag.BATTLECRY, tierId: 'B' },
 	{ mechanic: GameTag.DEATHRATTLE, tierId: 'D' },
 	{ mechanic: GameTag.END_OF_TURN, tierId: 'E' },
 	{ mechanic: GameTag.BACON_RALLY, tierId: 'Ra' },
 	{ mechanic: GameTag.CHOOSE_ONE, tierId: 'CO' },
 	{ mechanic: GameTag.DISCOVER, tierId: 'Di' },
+	{ mechanic: GameTag.INTERACTABLE_OBJECT, tierId: 'A' },
 ];
 
 export const MECHANICS_IN_GAME: readonly { mechanic: GameTag; tierId: string; canBeHighlighted?: boolean }[] = [
@@ -35,7 +36,6 @@ export const MECHANICS_IN_GAME: readonly { mechanic: GameTag; tierId: string; ca
 	{ mechanic: GameTag.DIVINE_SHIELD, tierId: 'DS' },
 	{ mechanic: GameTag.TAUNT, tierId: 'T' },
 	{ mechanic: GameTag.REBORN, tierId: 'Re' },
-	{ mechanic: GameTag.CHOOSE_ONE, tierId: 'C' },
 	{ mechanic: GameTag.MODULAR, tierId: 'M' },
 	{ mechanic: GameTag.BACON_BUFFS_TAVERN_SPELL, tierId: 'TS' },
 	{ mechanic: GameTag.BG_SPELL, tierId: 'S' },
@@ -268,5 +268,5 @@ const buildBuddies = (
 	return buddies;
 };
 
-const isInMechanicalTier = (card: ReferenceCard, mechanic: GameTag): boolean =>
-	!!card.mechanics?.includes(GameTag[mechanic]) || !!card.referencedTags?.includes(GameTag[mechanic]);
+export const isInMechanicalTier = (card: ReferenceCard | null | undefined, mechanic: GameTag): boolean =>
+	!!card?.mechanics?.includes(GameTag[mechanic]) || !!card?.referencedTags?.includes(GameTag[mechanic]);
