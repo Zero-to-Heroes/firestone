@@ -461,13 +461,13 @@ export const hasSpellSchool = (input: SelectorInput): boolean => {
 
 // TODO: Implement this
 export const canTargetFriendlyMinion = (input: SelectorInput): boolean => {
-	return true;
+	return !!input.card?.otherTags?.includes('TARGETS_FRIENDLY_MINION');
 };
 export const canTargetMinion = (input: SelectorInput): boolean => {
-	return true;
+	return !!input.card?.otherTags?.includes('TARGETS_MINION');
 };
 export const canTargetFriendlyCharacter = (input: SelectorInput): boolean => {
-	return true;
+	return !!input.card?.otherTags?.includes('TARGETS_FRIENDLY_CHARACTER');
 };
 
 export const spellSchoolPlayedThisMatch = (input: SelectorInput): boolean =>

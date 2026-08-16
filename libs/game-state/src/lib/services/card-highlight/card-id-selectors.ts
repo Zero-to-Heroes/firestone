@@ -24,6 +24,7 @@ import {
 	bloodRune,
 	canTargetFriendlyCharacter,
 	canTargetFriendlyMinion,
+	canTargetMinion,
 	cardIs,
 	cardType,
 	cardsPlayedLastTurn,
@@ -1598,7 +1599,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), combo);
 		// Fragment of Nothing: After you cast a spell on a minion, draw a card.
 		case CardIds.FragmentOfNothing_END_026:
-			return and(side(inputSide), or(inHand, inDeck), spellExtended);
+			return and(side(inputSide), or(inHand, inDeck), spellExtended, canTargetMinion);
 		case CardIds.FreeAdmission:
 			return highlightConditions(
 				and(side(inputSide), or(inDeck, inHand), demon),
