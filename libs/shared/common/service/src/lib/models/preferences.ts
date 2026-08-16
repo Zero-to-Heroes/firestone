@@ -645,6 +645,7 @@ export class Preferences implements IPreferences {
 	readonly bgsEnableApp = true;
 	readonly bgsUseOverlay = false;
 	readonly bgsEnableBattleSimulationOverlay = true;
+	readonly bgsHideBattleOddsUntilMouseOver = false;
 	readonly bgsShowBannedTribesOverlay = true;
 	readonly bgsShowHeroTipsOverlay = true;
 	readonly bgsShowTrinketTipsOverlay = true;

@@ -81,6 +81,13 @@ export const battlegroundsBattleOddsSettings = (context: SettingContext): Settin
 					},
 					{
 						type: 'toggle',
+						field: 'bgsHideBattleOddsUntilMouseOver',
+						label: context.i18n.translateString('settings.battlegrounds.overlay.hide-battle-odds-until-mouseover-label'),
+						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.hide-battle-odds-until-mouseover-tooltip'),
+						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsEnableSimulation || !prefs.bgsEnableBattleSimulationOverlay,
+					},
+					{
+						type: 'toggle',
 						field: 'bgsHideSimResultsOnRecruit',
 						label: context.i18n.translateString('settings.battlegrounds.general.hide-simulation-label'),
 						tooltip: context.i18n.translateString('settings.battlegrounds.general.hide-simulation-tooltip'),

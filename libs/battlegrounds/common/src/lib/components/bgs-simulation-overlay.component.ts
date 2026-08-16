@@ -19,7 +19,18 @@ import { filter, map } from 'rxjs/operators';
 	selector: 'bgs-simulation-overlay',
 	styleUrls: [`./bgs-simulation-overlay.component.scss`],
 	template: `
-		<div class="app-container battlegrounds-theme simulation-overlay scalable">
+		<div
+			class="app-container battlegrounds-theme simulation-overlay scalable"
+			[ngClass]="{ 'hide-until-hover': hideUntilHover, expanded: hovered }"
+			(mouseenter)="onMouseEnter()"
+			(mouseleave)="onMouseLeave()"
+		>
+			<div
+				class="odds-banner"
+				*ngIf="hideUntilHover"
+				(mouseenter)="onMouseEnter()"
+				[fsTranslate]="'battlegrounds.battle.odds-banner-label'"
+			></div>
 			<bgs-battle-status
 				[nextBattle]="nextBattle$ | async"
 				[showReplayLink]="showSimulationSample$ | async"
@@ -27,10 +38,16 @@ import { filter, map } from 'rxjs/operators';
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
+	host: {
+		'[class.hide-until-hover]': 'hideUntilHover',
+		'[class.expanded]': 'hovered',
+	},
 })
 export class BgsSimulationOverlayComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	nextBattle$: Observable<BgsFaceOffWithSimulation | null>;
 	showSimulationSample$: Observable<boolean>;
+	hideUntilHover = false;
+	hovered = false;
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -84,7 +101,26 @@ export class BgsSimulationOverlayComponent extends AbstractSubscriptionComponent
 		this.showSimulationSample$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => prefs?.bgsEnableSimulationSampleInOverlay),
 		);
+		this.prefs.preferences$$
+			.pipe(this.mapData((prefs) => !!prefs?.bgsHideBattleOddsUntilMouseOver))
+			.subscribe((hideUntilHover) => {
+				this.hideUntilHover = hideUntilHover;
+			});
 
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.markForCheck();
+		}
+	}
+
+	onMouseEnter() {
+		this.hovered = true;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.markForCheck();
+		}
+	}
+
+	onMouseLeave() {
+		this.hovered = false;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();
 		}
