@@ -81,8 +81,12 @@ export class MembershipIntegrityService {
 	}
 
 	private async start(): Promise<void> {
-		// No environment gating: NODE_ENV / isPreReleaseBuild are themselves patchable by the
-		// injected script, so we always run and report their values instead of trusting them.
+		// Skip in local/dev only. process.env.NODE_ENV (dot notation) is inlined by the bundler, so
+		// mutating process.env at runtime cannot disable this in production. Do not gate on
+		// this.preReleaseBuild - that field is assigned at runtime and is patchable.
+		if (process.env.NODE_ENV !== 'production') {
+			return;
+		}
 		await waitForReady(this.ads);
 
 		this.ads.hasPremiumSub$$.pipe(distinctUntilChanged()).subscribe((hasPremium) => {

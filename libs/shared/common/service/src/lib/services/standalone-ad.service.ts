@@ -27,6 +27,8 @@ export class StandaloneAdService extends AbstractFacadeService<StandaloneAdServi
 
 	private subscriptions: SubscriptionService;
 	private appNavigation: AppNavigationService;
+	/** Dev-only; production never reads this (NODE_ENV is inlined). */
+	private devPremiumOverride: boolean | null = null;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'StandaloneAdService', () => !!this.hasPremiumSub$$);
@@ -46,6 +48,7 @@ export class StandaloneAdService extends AbstractFacadeService<StandaloneAdServi
 		this.bypassDetected$$ = new BehaviorSubject<boolean>(false);
 		this.subscriptions = AppInjector.get(SubscriptionService);
 		this.appNavigation = AppInjector.get(AppNavigationService);
+		this.addDevMode();
 
 		// await waitForReady(this.subscriptions, this.lottery);
 		await waitForReady(this.subscriptions, this.appNavigation);
@@ -65,8 +68,12 @@ export class StandaloneAdService extends AbstractFacadeService<StandaloneAdServi
 		this.startTamperResistance();
 	}
 
-	// Server truth (currentPlan) gated by the bypass latch.
+	// Server truth (currentPlan) gated by the bypass latch. The NODE_ENV check is inlined in
+	// production, so a runtime override field is never consulted in shipped builds.
 	private computeHasPremiumSub(plan: CurrentPlan | null, bypassDetected: boolean): boolean {
+		if (process.env.NODE_ENV !== 'production' && this.devPremiumOverride != null) {
+			return this.devPremiumOverride;
+		}
 		return !bypassDetected && isActivePremiumPlan(plan);
 	}
 
@@ -214,5 +221,20 @@ export class StandaloneAdService extends AbstractFacadeService<StandaloneAdServi
 	public async shouldDisplayAdsInternal(): Promise<boolean> {
 		const plan = await this.subscriptions.currentPlan$$.getValueWithInit(undefined);
 		return !isActivePremiumPlan(plan);
+	}
+
+	private addDevMode() {
+		if (process.env.NODE_ENV === 'production' || typeof window === 'undefined') {
+			return;
+		}
+		window['toggleAds'] = () => {
+			this.devPremiumOverride = !(this.devPremiumOverride ?? this.hasPremiumSub$$.value);
+			const plan = this.currentPlan$$.value;
+			const bypassDetected = this.bypassDetected$$.value;
+			const hasPremium = this.computeHasPremiumSub(plan, bypassDetected);
+			this.hasPremiumSub$$.next(hasPremium);
+			this.enablePremiumFeatures$$.next(!bypassDetected && hasPremium);
+			console.debug('[ads] toggled ads', hasPremium);
+		};
 	}
 }

@@ -29,6 +29,8 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 	private subscriptions: SubscriptionService;
 	private appNavigation: AppNavigationService;
 	private lottery: LotteryWidgetControllerService;
+	/** Dev-only; production never reads this (NODE_ENV is inlined). */
+	private devPremiumOverride: boolean | null = null;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'adsService', () => !!this.hasPremiumSub$$);
@@ -70,8 +72,12 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 	}
 
 	// Server truth (currentPlan) gated by the bypass latch. isPreReleaseBuild forces premium for
-	// internal builds, but is ignored once a bypass is confirmed.
+	// internal builds, but is ignored once a bypass is confirmed. The NODE_ENV check is inlined
+	// in production, so a runtime override field is never consulted in shipped builds.
 	private computeHasPremiumSub(plan: CurrentPlan | null, bypassDetected: boolean): boolean {
+		if (process.env.NODE_ENV !== 'production' && this.devPremiumOverride != null) {
+			return this.devPremiumOverride;
+		}
 		if (bypassDetected) {
 			return false;
 		}
@@ -167,9 +173,7 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 		this.bypassDetected$$.next(false);
 		const plan = this.currentPlan$$.value;
 		this.hasPremiumSub$$.next(this.computeHasPremiumSub(plan, false));
-		this.enablePremiumFeatures$$.next(
-			this.computeHasPremiumSub(plan, false) || this.lottery.shouldTrack$$.value,
-		);
+		this.enablePremiumFeatures$$.next(this.computeHasPremiumSub(plan, false) || this.lottery.shouldTrack$$.value);
 	}
 
 	// Anti-tamper speed bump (not a security boundary): periodically re-derive the gates from server
@@ -235,9 +239,13 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 			return;
 		}
 		window['toggleAds'] = () => {
-			this.hasPremiumSub$$.next(!this.hasPremiumSub$$.value);
-			this.enablePremiumFeatures$$.next(this.hasPremiumSub$$.value);
-			console.debug('[ads] toggled ads', !this.hasPremiumSub$$.value);
+			this.devPremiumOverride = !(this.devPremiumOverride ?? this.hasPremiumSub$$.value);
+			const plan = this.currentPlan$$.value;
+			const bypassDetected = this.bypassDetected$$.value;
+			const hasPremium = this.computeHasPremiumSub(plan, bypassDetected);
+			this.hasPremiumSub$$.next(hasPremium);
+			this.enablePremiumFeatures$$.next(!bypassDetected && (hasPremium || this.lottery.shouldTrack$$.value));
+			console.debug('[ads] toggled ads', hasPremium);
 		};
 	}
 }
