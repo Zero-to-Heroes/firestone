@@ -22,7 +22,9 @@ export class AstralAutomatonCounterDefinitionV2 extends CounterDefinitionV2<numb
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.opponent-deck.counters.astral-automaton-label'),
 			tooltip: (i18n: ILocalizationService): string =>
-				i18n.translateString('settings.decktracker.your-deck.counters.astral-automaton-tooltip'),
+				i18n.translateString('settings.decktracker.your-deck.counters.card-name-summoned-tooltip', {
+					cardName: this.allCards.getCard(CardIds.AstralAutomaton).name,
+				}),
 		},
 	};
 	readonly opponent = {
@@ -36,7 +38,9 @@ export class AstralAutomatonCounterDefinitionV2 extends CounterDefinitionV2<numb
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.opponent-deck.counters.astral-automaton-label'),
 			tooltip: (i18n: ILocalizationService): string =>
-				i18n.translateString('settings.decktracker.opponent-deck.counters.astral-automaton-tooltip'),
+				i18n.translateString('settings.decktracker.your-deck.counters.card-name-summoned-tooltip', {
+					cardName: this.allCards.getCard(CardIds.AstralAutomaton).name,
+				}),
 		},
 	};
 
