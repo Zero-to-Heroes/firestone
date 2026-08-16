@@ -281,26 +281,26 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 					collection,
 				),
 			)(section.cards);
-			let cards = Object.keys(grouped)
-				.map((groupingKey) => {
-					const cards = grouped[groupingKey];
-					const creatorCardIds: readonly string[] = [
-						...new Set(
-							cards
-								.map((card) => card.creatorCardIds)
-								.reduce((a, b) => a.concat(b), [])
-								.filter((creator) => creator),
-						),
-					];
+			let cards = Object.keys(grouped).map((groupingKey) => {
+				const cards = grouped[groupingKey];
+				const creatorCardIds: readonly string[] = [
+					...new Set(
+						cards
+							.map((card) => card.creatorCardIds)
+							.reduce((a, b) => a.concat(b), [])
+							.filter((creator) => creator),
+					),
+				];
 
-					const result = VisualDeckCard.create(cards[0]).update({
-						totalQuantity: cards.length,
-						creatorCardIds: creatorCardIds,
-						isMissing: groupingKey.includes('missing'),
-						internalEntityIds: cards.map((card) => card.internalEntityId),
-					});
-					return result;
+				const result = VisualDeckCard.create(cards[0]).update({
+					totalQuantity: cards.length,
+					creatorCardIds: creatorCardIds,
+					isMissing: groupingKey.includes('missing'),
+					internalEntityIds: cards.map((card) => card.internalEntityId),
+					mulliganedAway: cards.some((card) => card.mulliganedAway),
 				});
+				return result;
+			});
 			if (!zone.preserveInputOrder) {
 				cards = cards.sort((a, b) => this.compare(a, b, showUpdatedCost, deckState));
 			}
@@ -344,9 +344,7 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 		const singleGuessId = getDisplayCardIdWhenGuessedPoolIsSingleCard(card);
 		const effectiveCardId = card.cardId || singleGuessId;
 		const refCard = this.allCards.getCard(effectiveCardId);
-		let cardIdForGrouping = !!effectiveCardId
-			? (refCard?.counterpartCards?.[0] ?? effectiveCardId)
-			: '';
+		let cardIdForGrouping = !!effectiveCardId ? (refCard?.counterpartCards?.[0] ?? effectiveCardId) : '';
 		if (groupByName) {
 			cardIdForGrouping = card.cardName ?? refCard?.name;
 		}

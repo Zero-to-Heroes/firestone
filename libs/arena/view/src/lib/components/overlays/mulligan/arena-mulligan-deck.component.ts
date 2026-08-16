@@ -46,6 +46,7 @@ import {
 			[ngClass]="{ hidden: hidden$ | async }"
 			[deckMulliganInfo]="allDeckMulliganInfo$ | async"
 			[showMulliganOverview]="showMulliganOverview$ | async"
+			[showDismiss]="showDismiss$ | async"
 			[sampleSize]="sampleSize$ | async"
 			[opponentTooltip]="opponentTooltip$ | async"
 			[opponentLabel]="opponentLabel$ | async"
@@ -53,6 +54,7 @@ import {
 			[timeLabel]="timeLabel$ | async"
 			[cycleOpponent]="cycleOpponent"
 			[cycleTime]="cycleTime"
+			[dismiss]="dismissMulligan"
 		>
 		</mulligan-deck-view>
 	`,
@@ -61,6 +63,7 @@ import {
 export class ArenaMulliganDeckComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	allDeckMulliganInfo$: Observable<MulliganDeckData | null>;
 	showMulliganOverview$: Observable<boolean | null>;
+	showDismiss$: Observable<boolean>;
 	sampleSize$: Observable<string>;
 	opponentLabel$: Observable<string>;
 	opponentTooltip$: Observable<string>;
@@ -88,7 +91,7 @@ export class ArenaMulliganDeckComponent extends AbstractSubscriptionComponent im
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.gameState, this.ads, this.guardian, this.prefs, this.patches);
+		await waitForReady(this.gameState, this.ads, this.guardian, this.prefs, this.patches, this.mulligan);
 
 		const showWidget$ = combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$]).pipe(
 			debounceTime(200),
@@ -99,6 +102,7 @@ export class ArenaMulliganDeckComponent extends AbstractSubscriptionComponent im
 			showWidget$,
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaShowMulliganDeckOverview)),
 		]).pipe(this.mapData(([showWidget, showMulliganOverview]) => showWidget && showMulliganOverview));
+		this.showDismiss$ = this.mulligan.mulliganAdvice$$.pipe(this.mapData((advice) => !!advice?.lingering));
 		this.hidden$ = combineLatest([
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.hideMulliganWhenFriendsListIsOpen)),
 			this.gameNativeStore.isFriendsListOpen$$,
@@ -127,6 +131,11 @@ export class ArenaMulliganDeckComponent extends AbstractSubscriptionComponent im
 							.includes(
 								this.allCards.getRootCardId(getBaseCardId(advice.cardId, this.allCards.getService())),
 							),
+						dumped: !!(guide?.cardsMulliganedAway ?? []).some(
+							(cardId) =>
+								this.allCards.getRootCardId(getBaseCardId(cardId, this.allCards.getService())) ===
+								this.allCards.getRootCardId(getBaseCardId(advice.cardId, this.allCards.getService())),
+						),
 						keptColor: buildColor(
 							'hsl(112, 100%, 64%)',
 							'hsl(0, 100%, 64%)',
@@ -158,9 +167,10 @@ export class ArenaMulliganDeckComponent extends AbstractSubscriptionComponent im
 
 		this.gameState.gameState$$
 			.pipe(
-				this.mapData((gameState) =>
-					CardClass[gameState?.opponentDeck?.hero?.classes?.[0] ?? CardClass.NEUTRAL]?.toLowerCase() ??
-					'neutral',
+				this.mapData(
+					(gameState) =>
+						CardClass[gameState?.opponentDeck?.hero?.classes?.[0] ?? CardClass.NEUTRAL]?.toLowerCase() ??
+						'neutral',
 				),
 			)
 			.subscribe(this.opponentActualClass$$);
@@ -210,6 +220,10 @@ export class ArenaMulliganDeckComponent extends AbstractSubscriptionComponent im
 			this.cdr.markForCheck();
 		}
 	}
+
+	dismissMulligan = () => {
+		this.mulligan.dismissMulliganWidget();
+	};
 
 	cycleOpponent = async () => {
 		const prefs = await this.prefs.getPreferences();

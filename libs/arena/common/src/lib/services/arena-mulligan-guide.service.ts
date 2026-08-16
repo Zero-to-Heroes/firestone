@@ -3,7 +3,7 @@
 import { Injectable } from '@angular/core';
 import { decode } from '@firestone-hs/deckstrings';
 import { CardClass, SceneMode, getBaseCardId, isArena, isCoin } from '@firestone-hs/reference-data';
-import { MulliganCardAdvice, MulliganGuide } from '@firestone/constructed/common';
+import { collectMulliganedAwayCardIds, MulliganCardAdvice, MulliganGuide } from '@firestone/constructed/common';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { ArenaModeFilterType, Preferences, PreferencesService } from '@firestone/shared/common/service';
@@ -25,9 +25,12 @@ import {
 	distinctUntilChanged,
 	filter,
 	map,
+	of,
 	shareReplay,
+	startWith,
 	switchMap,
 	tap,
+	timer,
 } from 'rxjs';
 import { ArenaCardStatsService } from './arena-card-stats.service';
 import { ArenaClassStatsService } from './arena-class-stats.service';
@@ -46,6 +49,7 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 	private allCards: CardsFacadeService;
 	private cardStats: ArenaCardStatsService;
 	private classStats: ArenaClassStatsService;
+	private mulliganDismissed$$: BehaviorSubject<boolean>;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'ArenaMulliganGuideService', () => !!this.mulliganAdvice$$);
@@ -64,9 +68,40 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 		this.allCards = AppInjector.get(CardsFacadeService);
 		this.cardStats = AppInjector.get(ArenaCardStatsService);
 		this.classStats = AppInjector.get(ArenaClassStatsService);
+		this.mulliganDismissed$$ = new BehaviorSubject<boolean>(false);
 
 		await waitForReady(this.scene, this.prefs, this.cardStats, this.classStats, this.gameState);
 		await this.ads.isReady();
+
+		const lingerPref$ = this.prefs.preferences$$.pipe(
+			map((prefs) => prefs.decktrackerMulliganLinger ?? 'off'),
+			distinctUntilChanged(),
+		);
+		const mulliganOver$ = this.gameState.gameState$$.pipe(
+			map((gameState) => !!gameState?.mulliganOver),
+			distinctUntilChanged(),
+		);
+		this.gameState.gameState$$
+			.pipe(
+				map((gameState) => !!gameState?.gameStarted && !gameState?.mulliganOver),
+				distinctUntilChanged(),
+			)
+			.subscribe((inMulligan) => {
+				if (inMulligan) {
+					this.mulliganDismissed$$.next(false);
+				}
+			});
+		const lingerExpired$ = combineLatest([mulliganOver$, lingerPref$]).pipe(
+			switchMap(([mulliganOver, linger]) => {
+				if (!mulliganOver || (linger !== '5' && linger !== '10')) {
+					return of(false);
+				}
+				return timer(Number(linger) * 1000).pipe(
+					map(() => true),
+					startWith(false),
+				);
+			}),
+		);
 
 		const showWidget$ = combineLatest([
 			this.scene.currentScene$$,
@@ -78,14 +113,17 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 				),
 			),
 			this.gameState.gameState$$,
+			lingerPref$,
+			this.mulliganDismissed$$,
+			lingerExpired$,
 		]).pipe(
 			debounceTime(200),
-			map(([currentScene, displayFromPrefs, gameState]) => {
+			map(([currentScene, displayFromPrefs, gameState, linger, dismissed, lingerExpired]) => {
 				const gameStarted = gameState?.gameStarted;
 				const gameEnded = gameState?.gameEnded;
 				const mulliganOver = gameState?.mulliganOver;
 
-				if (!gameStarted || mulliganOver || !displayFromPrefs) {
+				if (!gameStarted || !displayFromPrefs) {
 					return false;
 				}
 
@@ -101,6 +139,14 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 					return false;
 				}
 
+				if (!mulliganOver) {
+					return true;
+				}
+
+				if (dismissed || linger === 'off' || lingerExpired) {
+					return false;
+				}
+
 				return true;
 			}),
 			distinctUntilChanged(),
@@ -109,9 +155,10 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 		);
 
 		const opponentActualClass$ = this.gameState.gameState$$.pipe(
-			map((gameState) =>
-				CardClass[gameState?.opponentDeck?.hero?.classes?.[0] ?? CardClass.NEUTRAL]?.toLowerCase() ??
-				'neutral',
+			map(
+				(gameState) =>
+					CardClass[gameState?.opponentDeck?.hero?.classes?.[0] ?? CardClass.NEUTRAL]?.toLowerCase() ??
+					'neutral',
 			),
 			distinctUntilChanged(),
 		);
@@ -220,8 +267,7 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 			map(([classStats, playerClass]) =>
 				classStats?.stats?.find(
 					(stat) =>
-						stat.playerClass ===
-						(CardClass[playerClass ?? CardClass.INVALID]?.toLowerCase() ?? 'invalid'),
+						stat.playerClass === (CardClass[playerClass ?? CardClass.INVALID]?.toLowerCase() ?? 'invalid'),
 				),
 			),
 			tap((stats) => console.debug('[mulligan-arena-guide] class stats', stats)),
@@ -239,6 +285,14 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 			}),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			tap((cardsInHand) => console.debug('[mulligan-arena-guide] cardsInHand', cardsInHand)),
+			shareReplay(1),
+		);
+		const cardsMulliganedAway$ = showWidget$.pipe(
+			filter((showWidget) => showWidget),
+			debounceTime(200),
+			switchMap(() => this.gameState.gameState$$),
+			map((gameState) => collectMulliganedAwayCardIds(gameState?.playerDeck)),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			shareReplay(1),
 		);
 		const deckCards$ = showWidget$.pipe(
@@ -262,13 +316,14 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 			shareReplay(1),
 		);
 
-		const mulliganAdvice$ = combineLatest([cardsInHand$, deckCards$]).pipe(
+		const mulliganAdvice$ = combineLatest([cardsInHand$, deckCards$, cardsMulliganedAway$]).pipe(
 			filter(([cardsInHand, deckCards]) => !!cardsInHand && !!deckCards),
 			debounceTime(200),
-			switchMap(([cardsInHand, deckCards]) =>
+			switchMap(([cardsInHand, deckCards, cardsMulliganedAway]) =>
 				combineLatest([cardStats$, classStats$, opponentClass$, playCoin$]).pipe(
 					map(([cardStats, classStats, opponentClass, playCoin]) => ({
 						cardsInHand: cardsInHand,
+						cardsMulliganedAway: cardsMulliganedAway,
 						deckCards: deckCards,
 						cardStats: cardStats,
 						classStats: classStats,
@@ -277,7 +332,7 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 					})),
 				),
 			),
-			map(({ cardsInHand, deckCards, cardStats, classStats, opponentClass, playCoin }) => {
+			map(({ cardsInHand, cardsMulliganedAway, deckCards, cardStats, classStats, opponentClass, playCoin }) => {
 				// const statToUse =
 				// 	playCoin === 'coin'
 				// 		? stat.coinPlayInfo.find((s) => s.coinPlay === 'coin')
@@ -345,6 +400,7 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 				const result: MulliganGuide = {
 					noData: !cardStats?.stats?.length,
 					cardsInHand: cardsInHand!,
+					cardsMulliganedAway: cardsMulliganedAway,
 					allDeckCards: allDeckCards,
 					sampleSize: (!!matchup ? matchup.totalGames : classStats?.totalGames) ?? 0,
 					opponentClass: opponentClass,
@@ -359,8 +415,8 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 			tap((mulliganAdvice) => console.debug('[mulligan-arena-guide] mulliganAdvice', mulliganAdvice)),
 			shareReplay(1),
 		);
-		combineLatest([showWidget$, mulliganAdvice$]).subscribe(([showWidget, advice]) =>
-			this.mulliganAdvice$$.next(showWidget ? advice : null),
+		combineLatest([showWidget$, mulliganAdvice$, mulliganOver$]).subscribe(([showWidget, advice, mulliganOver]) =>
+			this.mulliganAdvice$$.next(showWidget && advice ? { ...advice, lingering: mulliganOver } : null),
 		);
 	}
 
@@ -370,5 +426,17 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 
 	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
 		this.mulliganAdvice$$ = new BehaviorSubject<MulliganGuide | null>(null);
+	}
+
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('dismissMulliganWidgetInternal', () => this.dismissMulliganWidgetInternal());
+	}
+
+	public dismissMulliganWidget(): void {
+		void this.callOnMainProcess('dismissMulliganWidgetInternal');
+	}
+
+	private dismissMulliganWidgetInternal(): void {
+		this.mulliganDismissed$$.next(true);
 	}
 }

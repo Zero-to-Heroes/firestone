@@ -146,6 +146,15 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					</div>
 				</div>
 				<div
+					class="icon-symbol overlay-icon mulliganed-away"
+					*ngIf="isMulliganedAway"
+					[helpTooltip]="'decktracker.card-mulliganed-away' | fsTranslate"
+				>
+					<div class="inner-border">
+						<div class="svg-container" inlineSVG="assets/svg/card_discarded.svg"></div>
+					</div>
+				</div>
+				<div
 					class="icon-symbol overlay-icon countered"
 					*ngIf="isCountered"
 					[helpTooltip]="'decktracker.card-countered' | owTranslate"
@@ -291,6 +300,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	giftTooltip: string;
 	isBurned: boolean;
 	isDiscarded: boolean;
+	isMulliganedAway: boolean;
 	isCountered: boolean;
 	isGraveyard: boolean;
 	isTransformed: boolean;
@@ -694,6 +704,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 				: this.relatedCardIds;
 		this.isBurned = !groupSameCardsTogether && (card.zone === 'BURNED' || card.milled);
 		this.isDiscarded = !groupSameCardsTogether && card.zone === 'DISCARD';
+		this.isMulliganedAway = !!card.mulliganedAway;
 		this.isCountered = !groupSameCardsTogether && card.countered;
 		this.isGraveyard = !groupSameCardsTogether && card.zone === 'GRAVEYARD';
 		// TRANSFORMED_FROM_CARD for infuse
@@ -738,6 +749,9 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			this.mouseOverRight += 25;
 		}
 		if (this.isDiscarded) {
+			this.mouseOverRight += 25;
+		}
+		if (this.isMulliganedAway) {
 			this.mouseOverRight += 25;
 		}
 		if (this.isCountered) {

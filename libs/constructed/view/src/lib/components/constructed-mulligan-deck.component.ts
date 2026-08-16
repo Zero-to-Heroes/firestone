@@ -50,6 +50,7 @@ import { buildColor } from './utils';
 			[ngClass]="{ hidden: hidden$ | async }"
 			[deckMulliganInfo]="allDeckMulliganInfo$ | async"
 			[showMulliganOverview]="showMulliganOverview$ | async"
+			[showDismiss]="showDismiss$ | async"
 			[showFilters]="true"
 			[showArchetypeSelection]="true"
 			[rankBracketTooltip]="rankBracketTooltip$ | async"
@@ -67,6 +68,7 @@ import { buildColor } from './utils';
 			[cyclePlayCoin]="cyclePlayCoin"
 			[cycleTime]="cycleTime"
 			[cycleFormat]="cycleFormat"
+			[dismiss]="dismissMulligan"
 		>
 		</mulligan-deck-view>
 	`,
@@ -78,6 +80,7 @@ export class ConstructedMulliganDeckComponent
 {
 	allDeckMulliganInfo$: Observable<MulliganDeckData>;
 	showMulliganOverview$: Observable<boolean | null>;
+	showDismiss$: Observable<boolean>;
 
 	rankBracketLabel$: Observable<string>;
 	rankBracketTooltip$: Observable<string>;
@@ -109,7 +112,7 @@ export class ConstructedMulliganDeckComponent
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.gameState, this.ads, this.guardian, this.prefs, this.patches);
+		await waitForReady(this.gameState, this.ads, this.guardian, this.prefs, this.patches, this.mulligan);
 
 		const showWidget$ = combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$]).pipe(
 			debounceTime(200),
@@ -120,6 +123,7 @@ export class ConstructedMulliganDeckComponent
 			showWidget$,
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.decktrackerShowMulliganDeckOverview)),
 		]).pipe(this.mapData(([showWidget, showMulliganOverview]) => showWidget && showMulliganOverview));
+		this.showDismiss$ = this.mulligan.mulliganAdvice$$.pipe(this.mapData((advice) => !!advice?.lingering));
 		this.hidden$ = combineLatest([
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.hideMulliganWhenFriendsListIsOpen)),
 			this.gameNativeStore.isFriendsListOpen$$,
@@ -148,6 +152,11 @@ export class ConstructedMulliganDeckComponent
 							.includes(
 								this.allCards.getRootCardId(getBaseCardId(advice.cardId, this.allCards.getService())),
 							),
+						dumped: !!(guide?.cardsMulliganedAway ?? []).some(
+							(cardId) =>
+								this.allCards.getRootCardId(getBaseCardId(cardId, this.allCards.getService())) ===
+								this.allCards.getRootCardId(getBaseCardId(advice.cardId, this.allCards.getService())),
+						),
 						keptColor: buildColor(
 							'hsl(112, 100%, 64%)',
 							'hsl(0, 100%, 64%)',
@@ -268,9 +277,10 @@ export class ConstructedMulliganDeckComponent
 		this.gameState.gameState$$
 			.pipe(
 				auditTime(500),
-				this.mapData((gameState) =>
-					CardClass[gameState?.opponentDeck?.hero?.classes?.[0] ?? CardClass.NEUTRAL]?.toLowerCase() ??
-					'neutral',
+				this.mapData(
+					(gameState) =>
+						CardClass[gameState?.opponentDeck?.hero?.classes?.[0] ?? CardClass.NEUTRAL]?.toLowerCase() ??
+						'neutral',
 				),
 			)
 			.subscribe(this.opponentActualClass$$);
@@ -287,6 +297,10 @@ export class ConstructedMulliganDeckComponent
 			this.cdr.markForCheck();
 		}
 	}
+
+	dismissMulligan = () => {
+		this.mulligan.dismissMulliganWidget();
+	};
 
 	cycleRanks = async () => {
 		const prefs = await this.prefs.getPreferences();

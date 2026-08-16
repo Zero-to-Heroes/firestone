@@ -6,6 +6,8 @@ export interface MulliganGuide {
 	readonly archetypeId: number | null;
 	readonly allDeckCards: readonly MulliganCardAdvice[];
 	readonly cardsInHand: readonly string[];
+	readonly cardsMulliganedAway?: readonly string[];
+	readonly lingering?: boolean;
 	readonly sampleSize: number;
 	readonly format: GameFormatString;
 	readonly playCoin: 'coin' | 'play' | 'all';
@@ -37,6 +39,7 @@ export interface MulliganChartDataCard {
 	readonly rawValue?: number;
 	readonly keepRate?: number | null;
 	readonly selected: boolean;
+	readonly dumped?: boolean;
 	// TODO: don't make that optional?
 	readonly keptColor?: string;
 	readonly impactColor?: string;

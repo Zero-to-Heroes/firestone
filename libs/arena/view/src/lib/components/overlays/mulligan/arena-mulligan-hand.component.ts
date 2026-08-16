@@ -44,10 +44,12 @@ import {
 			<mulligan-hand-view
 				[showHandInfo]="showHandInfo$ | async"
 				[showPremiumBanner]="showPremiumBanner$ | async"
+				[showDismiss]="showDismiss$ | async"
 				[cardsInHandInfo]="cardsInHandInfo$ | async"
 				[impactWithFreeUsersHelpTooltip]="helpTooltip$ | async"
 				[premiumType]="'arena'"
 				[freeUses]="freeUses"
+				[dismiss]="dismissMulligan"
 			>
 			</mulligan-hand-view>
 		</div>
@@ -58,6 +60,7 @@ export class ArenaMulliganHandComponent extends AbstractSubscriptionComponent im
 	cardsInHandInfo$: Observable<readonly InternalMulliganAdvice[] | null>;
 	showHandInfo$: Observable<boolean | null>;
 	showPremiumBanner$: Observable<boolean>;
+	showDismiss$: Observable<boolean>;
 	helpTooltip$: Observable<string | null>;
 	freeUses = ARENA_MULLIGAN_DAILY_FREE_USES;
 
@@ -80,7 +83,7 @@ export class ArenaMulliganHandComponent extends AbstractSubscriptionComponent im
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.gameState, this.ads, this.guardian, this.prefs);
+		await waitForReady(this.gameState, this.ads, this.guardian, this.prefs, this.mulligan);
 
 		this.mulligan.mulliganAdvice$$
 			.pipe(
@@ -100,6 +103,7 @@ export class ArenaMulliganHandComponent extends AbstractSubscriptionComponent im
 			.subscribe((showWidget) => this.showPremiumBanner$$.next(!showWidget));
 		this.showPremiumBanner$ = this.showPremiumBanner$$.asObservable();
 		this.showHandInfo$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaShowMulliganCardImpact));
+		this.showDismiss$ = this.mulligan.mulliganAdvice$$.pipe(this.mapData((advice) => !!advice?.lingering));
 		this.helpTooltip$ = combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$]).pipe(
 			debounceTime(200),
 			this.mapData(([hasPremiumSub, freeUsesLeft]) => {
@@ -155,6 +159,10 @@ export class ArenaMulliganHandComponent extends AbstractSubscriptionComponent im
 			this.cdr.markForCheck();
 		}
 	}
+
+	dismissMulligan = () => {
+		this.mulligan.dismissMulliganWidget();
+	};
 
 	override ngOnDestroy(): void {
 		super.ngOnDestroy();

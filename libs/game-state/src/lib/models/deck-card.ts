@@ -66,6 +66,7 @@ export class DeckCard {
 	// "milled" status doesn't exist, so we need a special flag
 	readonly milled?: boolean;
 	readonly countered?: boolean;
+	readonly mulliganedAway?: boolean;
 	// Store state for cards like Ignite. Similar state info will be added for attack / health (maybe
 	// other things too)
 	readonly mainAttributeChange?: number;

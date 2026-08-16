@@ -1,4 +1,4 @@
-import { Setting, SettingContext } from '@firestone/settings/services';
+import { DropdownOption, Setting, SettingContext } from '@firestone/settings/services';
 import { CounterSetting } from './decktracker/internal/decktracker-settings-internal';
 
 export const sizeKnobs = (context: SettingContext) => [
@@ -14,6 +14,25 @@ export const sizeKnobs = (context: SettingContext) => [
 		percentageValue: 100,
 		label: context.i18n.translateString('settings.global.knob-sizes.large'),
 	},
+];
+
+export const mulliganLingerOptions = (context: SettingContext): readonly DropdownOption[] => [
+	{
+		value: 'off',
+		label: context.i18n.translateString('settings.decktracker.mulligan.keep-after-mulligan-off'),
+	} as DropdownOption,
+	{
+		value: '5',
+		label: context.i18n.translateString('settings.decktracker.mulligan.keep-after-mulligan-5'),
+	} as DropdownOption,
+	{
+		value: '10',
+		label: context.i18n.translateString('settings.decktracker.mulligan.keep-after-mulligan-10'),
+	} as DropdownOption,
+	{
+		value: 'until-dismissed',
+		label: context.i18n.translateString('settings.decktracker.mulligan.keep-after-mulligan-until-dismissed'),
+	} as DropdownOption,
 ];
 
 export const useGroupedCountersSetting = (context: SettingContext): Setting => ({

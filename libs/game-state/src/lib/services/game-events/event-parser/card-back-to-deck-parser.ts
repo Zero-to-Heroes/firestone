@@ -1,4 +1,4 @@
-import { CardIds, GameTag, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardIds, GameTag, ReferenceCard, isCoin } from '@firestone-hs/reference-data';
 
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../../models/deck-card';
@@ -211,9 +211,19 @@ export class CardBackToDeckParser implements EventParser {
 		// 		rarity: this.allCards.getCard(CardIds.WallowTheWretched_EDR_487).rarity,
 		// 	});
 		// }
+		const isMulliganDump =
+			isPlayer &&
+			initialZone === 'HAND' &&
+			(currentState.currentTurn === 0 || currentState.currentTurn === 'mulligan') &&
+			!(cardWithPosition?.cardId && isCoin(cardWithPosition.cardId, this.allCards));
+		const cardToAdd = isMulliganDump
+			? cardWithPosition.update({
+					mulliganedAway: true,
+				})
+			: cardWithPosition;
 		const newDeck: readonly DeckCard[] = shouldKeepDeckAsIs
 			? previousDeck
-			: this.helper.addSingleCardToZone(previousDeck, cardWithPosition);
+			: this.helper.addSingleCardToZone(previousDeck, cardToAdd);
 
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: newDeck,

@@ -38,6 +38,14 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 	template: `
 		<div class="mulligan-deck-overview scalable" *ngIf="showMulliganOverview">
 			<div class="widget-header">
+				<button
+					class="close-button"
+					*ngIf="showDismiss"
+					type="button"
+					(click)="onDismiss()"
+					[helpTooltip]="'decktracker.overlay.mulligan.dismiss-tooltip' | fsTranslate"
+					inlineSVG="assets/svg/close.svg"
+				></button>
 				<div class="title" [fsTranslate]="'decktracker.overlay.mulligan.deck-mulligan-overview-title'"></div>
 				<mulligan-deck-view-archetype
 					*ngIf="showArchetypeSelection"
@@ -118,7 +126,7 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 					<div
 						class="deck-card"
 						*ngFor="let card of allDeckMulliganInfo"
-						[ngClass]="{ selected: card.selected }"
+						[ngClass]="{ selected: card.selected, dumped: card.dumped }"
 					>
 						<div class="cell keep-rate" [style.color]="card.keptColor">
 							{{ card.keepRate === null ? '-' : card.keepRate?.toFixed(2) + '%' }}
@@ -143,6 +151,7 @@ export class MulliganDeckViewComponent extends AbstractSubscriptionComponent imp
 
 	@Input() showMulliganOverview: boolean | null;
 	@Input() showArchetypeSelection: boolean | null;
+	@Input() showDismiss: boolean | null;
 	@Input() showFilters: boolean;
 	@Input() rankBracketTooltip: string | null;
 	@Input() rankBracketLabel: string | null;
@@ -161,6 +170,7 @@ export class MulliganDeckViewComponent extends AbstractSubscriptionComponent imp
 	@Input() cyclePlayCoin: () => void;
 	@Input() cycleTime: () => void;
 	@Input() cycleFormat: () => void;
+	@Input() dismiss: () => void;
 
 	@Input() set deckMulliganInfo(value: MulliganDeckData | null) {
 		this.deckMulliganInfo$$.next(value);
@@ -209,6 +219,10 @@ export class MulliganDeckViewComponent extends AbstractSubscriptionComponent imp
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();
 		}
+	}
+
+	onDismiss() {
+		this.dismiss?.();
 	}
 
 	onSortClick(rawCriteria: string) {

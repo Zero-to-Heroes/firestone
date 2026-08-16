@@ -317,6 +317,9 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 				const creatorCardIds = cardsToShowWithName.map((c) => c.creatorCardId).filter((id) => !!id);
 				const shouldShowGiftLine = !hideGeneratedCardsInOtherZone && !!creatorCardIds.length;
 				const shouldShowDeckLine = isInInitialDecklist || quantityInDeck > 0;
+				const wasMulliganedAway =
+					matchingCards.some((c) => c.mulliganedAway) ||
+					deck.some((c) => c.cardName === cardName && c.mulliganedAway);
 				const result: VisualDeckCard[] = [];
 
 				if (shouldShowDeckLine) {
@@ -346,6 +349,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 									highlight: displayMode,
 									internalEntityIds: matchingCards.map((c) => c.internalEntityId),
 									mainAttributeChange: statsModifier,
+									mulliganedAway: wasMulliganedAway,
 								}),
 							),
 						);
@@ -430,6 +434,9 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 						.filter((c) => c.cardName === cardName)
 						.map((c) => c.creatorCardId)
 						.filter((id) => !!id).length;
+				const wasMulliganedAway =
+					matchingCards.some((c) => c.mulliganedAway) ||
+					deck.some((c) => c.cardName === cardName && c.mulliganedAway);
 				const result: VisualDeckCard[] = [];
 
 				if (shouldShowDeckLine) {
@@ -455,6 +462,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 										highlight: null,
 										internalEntityIds: matchingCards.map((c) => c.internalEntityId),
 										mainAttributeChange: statsModifier,
+										mulliganedAway: wasMulliganedAway,
 									}),
 								),
 							);
@@ -476,6 +484,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 									actualManaCost: this.getManaCost(refCard),
 									highlight: 'dim',
 									internalEntityIds: matchingCards.map((c) => c.internalEntityId),
+									mulliganedAway: wasMulliganedAway,
 								}),
 							),
 						);

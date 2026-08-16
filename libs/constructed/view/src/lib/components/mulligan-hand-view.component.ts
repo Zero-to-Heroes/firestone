@@ -9,6 +9,14 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 	styleUrls: ['./mulligan-hand-view.component.scss'],
 	template: `
 		<div class="root">
+			<button
+				class="close-button"
+				*ngIf="showDismiss && showHandInfo"
+				type="button"
+				(click)="onDismiss()"
+				[helpTooltip]="'decktracker.overlay.mulligan.dismiss-tooltip' | fsTranslate"
+				inlineSVG="assets/svg/close.svg"
+			></button>
 			<ng-container *ngIf="showHandInfo">
 				<ul class="mulligan-guide" *ngIf="cardsInHandInfo" [ngClass]="{ wide: cardsInHandInfo.length === 4 }">
 					<ng-container *ngIf="showPremiumBanner === false">
@@ -61,13 +69,19 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 export class MulliganHandViewComponent extends AbstractSubscriptionComponent {
 	@Input() showHandInfo: boolean | null;
 	@Input() showPremiumBanner: boolean | null;
+	@Input() showDismiss: boolean | null;
 	@Input() cardsInHandInfo: readonly InternalMulliganAdvice[] | null;
 	@Input() impactWithFreeUsersHelpTooltip: string | null;
 	@Input() premiumType: 'arena' | 'constructed';
 	@Input() freeUses: number;
+	@Input() dismiss: () => void;
 
 	constructor(protected override readonly cdr: ChangeDetectorRef) {
 		super(cdr);
+	}
+
+	onDismiss() {
+		this.dismiss?.();
 	}
 }
 

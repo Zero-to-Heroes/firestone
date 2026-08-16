@@ -51,7 +51,7 @@ export class ConstructedMulliganHandWidgetWrapperComponent
 		await this.mulliganGuide.isReady();
 
 		this.showWidget$ = this.mulliganGuide.mulliganAdvice$$.pipe(
-			this.mapData((advice) => !!advice),
+			this.mapData((advice) => !!advice && !advice.lingering),
 			this.handleReposition(),
 		);
 

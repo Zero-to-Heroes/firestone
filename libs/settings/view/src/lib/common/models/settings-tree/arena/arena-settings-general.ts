@@ -1,6 +1,6 @@
 import { SettingContext, SettingNode } from '@firestone/settings/services';
 import { ARENA_DISCOVERS_DAILY_FREE_USES, Preferences } from '@firestone/shared/common/service';
-import { sizeKnobs } from '../common';
+import { mulliganLingerOptions, sizeKnobs } from '../common';
 
 export const arenaGeneralSettings = (context: SettingContext): SettingNode => {
 	return {
@@ -43,6 +43,15 @@ export const arenaGeneralSettings = (context: SettingContext): SettingNode => {
 						label: context.i18n.translateString('settings.battlegrounds.session-widget.hide-when-friends-list-open'),
 						tooltip: context.i18n.translateString('settings.battlegrounds.session-widget.hide-when-friends-list-open-tooltip'),
 						disabledIf: (prefs: Preferences) => !prefs.arenaShowMulliganDeckOverview,
+					},
+					{
+						type: 'dropdown',
+						field: 'decktrackerMulliganLinger',
+						label: context.i18n.translateString('settings.decktracker.mulligan.keep-after-mulligan-label'),
+						tooltip: context.i18n.translateString('settings.decktracker.mulligan.keep-after-mulligan-tooltip'),
+						dropdownConfig: {
+							options: mulliganLingerOptions(context),
+						},
 					},
 					{
 						type: 'toggle',

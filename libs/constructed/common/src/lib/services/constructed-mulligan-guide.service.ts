@@ -48,6 +48,7 @@ import {
 	startWith,
 	switchMap,
 	tap,
+	timer,
 } from 'rxjs';
 import { MulliganCardAdvice, MulliganGuide } from '../models/mulligan-advice';
 import { ConstructedMetaDecksStateService } from './constructed-meta-decks-state-builder.service';
@@ -68,6 +69,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 	private archetypeService: ConstructedArchetypeService;
 	private gameStats: GameStatsLoaderService;
 	private patches: PatchesConfigService;
+	private mulliganDismissed$$: BehaviorSubject<boolean>;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'ConstructedMulliganGuideService', () => !!this.mulliganAdvice$$);
@@ -88,9 +90,40 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 		this.archetypeService = AppInjector.get(ConstructedArchetypeService);
 		this.gameStats = AppInjector.get(GameStatsLoaderService);
 		this.patches = AppInjector.get(PatchesConfigService);
+		this.mulliganDismissed$$ = new BehaviorSubject<boolean>(false);
 
 		await waitForReady(this.scene, this.prefs, this.archetypes, this.gameState, this.gameStats, this.patches);
 		await this.ads.isReady();
+
+		const lingerPref$ = this.prefs.preferences$$.pipe(
+			map((prefs) => prefs.decktrackerMulliganLinger ?? 'off'),
+			distinctUntilChanged(),
+		);
+		const mulliganOver$ = this.gameState.gameState$$.pipe(
+			map((gameState) => !!gameState?.mulliganOver),
+			distinctUntilChanged(),
+		);
+		this.gameState.gameState$$
+			.pipe(
+				map((gameState) => !!gameState?.gameStarted && !gameState?.mulliganOver),
+				distinctUntilChanged(),
+			)
+			.subscribe((inMulligan) => {
+				if (inMulligan) {
+					this.mulliganDismissed$$.next(false);
+				}
+			});
+		const lingerExpired$ = combineLatest([mulliganOver$, lingerPref$]).pipe(
+			switchMap(([mulliganOver, linger]) => {
+				if (!mulliganOver || (linger !== '5' && linger !== '10')) {
+					return of(false);
+				}
+				return timer(Number(linger) * 1000).pipe(
+					map(() => true),
+					startWith(false),
+				);
+			}),
+		);
 
 		const showWidget$ = combineLatest([
 			this.scene.currentScene$$,
@@ -102,10 +135,13 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 				),
 			),
 			this.gameState.gameState$$,
+			lingerPref$,
+			this.mulliganDismissed$$,
+			lingerExpired$,
 			// canShowWidget$,
 		]).pipe(
 			debounceTime(200),
-			map(([currentScene, displayFromPrefs, gameState]) => {
+			map(([currentScene, displayFromPrefs, gameState, linger, dismissed, lingerExpired]) => {
 				// return true;
 				const gameStarted = gameState?.gameStarted;
 				const gameEnded = gameState?.gameEnded;
@@ -119,7 +155,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 				// 	mulliganOver,
 				// );
 
-				if (!gameStarted || mulliganOver || !displayFromPrefs) {
+				if (!gameStarted || !displayFromPrefs) {
 					return false;
 				}
 
@@ -149,6 +185,14 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 				}
 
 				if (gameEnded) {
+					return false;
+				}
+
+				if (!mulliganOver) {
+					return true;
+				}
+
+				if (dismissed || linger === 'off' || lingerExpired) {
 					return false;
 				}
 
@@ -235,9 +279,10 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 		);
 		const opponentActualClass$ = this.gameState.gameState$$.pipe(
 			debounceTime(500),
-			map((gameState) =>
-				CardClass[gameState?.opponentDeck?.hero?.classes?.[0] ?? CardClass.NEUTRAL]?.toLowerCase() ??
-				'neutral',
+			map(
+				(gameState) =>
+					CardClass[gameState?.opponentDeck?.hero?.classes?.[0] ?? CardClass.NEUTRAL]?.toLowerCase() ??
+					'neutral',
 			),
 			distinctUntilChanged(),
 		);
@@ -441,6 +486,18 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			),
 			shareReplay(1),
 		);
+		const cardsMulliganedAway$ = showWidget$.pipe(
+			switchMap((showWidget) =>
+				showWidget
+					? this.gameState.gameState$$.pipe(
+							auditTime(500),
+							map((gameState) => collectMulliganedAwayCardIds(gameState?.playerDeck)),
+							distinctUntilChanged((a, b) => arraysEqual(a, b)),
+						)
+					: of([]),
+			),
+			shareReplay(1),
+		);
 
 		const deckCards$ = showWidget$.pipe(
 			switchMap(
@@ -467,12 +524,12 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			shareReplay(1),
 		);
 
-		const mulliganAdvice$ = combineLatest([cardsInHand$, deckCards$]).pipe(
+		const mulliganAdvice$ = combineLatest([cardsInHand$, deckCards$, cardsMulliganedAway$]).pipe(
 			// tap((info) => console.log('[mulligan-guide] mulliganAdvice 0', info)),
 			filter(([cardsInHand, deckCards]) => !!cardsInHand && !!deckCards),
 			// tap((info) => console.log('[mulligan-guide] mulliganAdvice 1', info)),
 			debounceTime(200),
-			switchMap(([cardsInHand, deckCards]) =>
+			switchMap(([cardsInHand, deckCards, cardsMulliganedAway]) =>
 				combineLatest([
 					archetype$,
 					deckDetails$,
@@ -498,6 +555,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 							deckstring,
 						]) => ({
 							cardsInHand: cardsInHand,
+							cardsMulliganedAway: cardsMulliganedAway,
 							deckCards: deckCards,
 							archetype: archetype,
 							deckDetails: deckDetails,
@@ -514,6 +572,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			map(
 				({
 					cardsInHand,
+					cardsMulliganedAway,
 					deckCards,
 					archetype,
 					deckDetails,
@@ -645,6 +704,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 						noData: !cardsData.length,
 						againstAi: gameType === GameType.GT_VS_AI,
 						cardsInHand: cardsInHand!,
+						cardsMulliganedAway: cardsMulliganedAway,
 						allDeckCards: allDeckCards,
 						sampleSize: sampleSize,
 						rankBracket: playerRank,
@@ -659,8 +719,8 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			),
 			shareReplay(1),
 		);
-		combineLatest([showWidget$, mulliganAdvice$]).subscribe(([showWidget, advice]) => {
-			this.mulliganAdvice$$.next(showWidget ? advice : null);
+		combineLatest([showWidget$, mulliganAdvice$, mulliganOver$]).subscribe(([showWidget, advice, mulliganOver]) => {
+			this.mulliganAdvice$$.next(showWidget && advice ? { ...advice, lingering: mulliganOver } : null);
 		});
 	}
 
@@ -678,6 +738,15 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			(deckstring: string, prefs: Preferences, options?: MulliganGuideOptions) =>
 				this.getMulliganAdviceInternal(deckstring, prefs, options),
 		);
+		this.registerMainProcessMethod('dismissMulliganWidgetInternal', () => this.dismissMulliganWidgetInternal());
+	}
+
+	public dismissMulliganWidget(): void {
+		void this.callOnMainProcess('dismissMulliganWidgetInternal');
+	}
+
+	private dismissMulliganWidgetInternal(): void {
+		this.mulliganDismissed$$.next(true);
 	}
 
 	// TODO: refactor this to get the prefs in input. Just recomputing and passing the new prefs
@@ -868,6 +937,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			noData: !cardsData.length,
 			againstAi: false,
 			cardsInHand: [],
+			cardsMulliganedAway: [],
 			allDeckCards: allDeckCards,
 			sampleSize: sampleSize,
 			rankBracket: playerRank,
@@ -941,3 +1011,27 @@ export interface MulliganDeckStats {
 export interface MulliganGuideOptions {
 	useDeckFormat?: boolean;
 }
+
+export const collectMulliganedAwayCardIds = (
+	playerDeck:
+		| {
+				deck?: readonly { cardId?: string; mulliganedAway?: boolean }[];
+				hand?: readonly { cardId?: string; mulliganedAway?: boolean }[];
+				board?: readonly { cardId?: string; mulliganedAway?: boolean }[];
+				otherZone?: readonly { cardId?: string; mulliganedAway?: boolean }[];
+		  }
+		| null
+		| undefined,
+): readonly string[] => {
+	if (!playerDeck) {
+		return [];
+	}
+	return [
+		...(playerDeck.deck ?? []),
+		...(playerDeck.hand ?? []),
+		...(playerDeck.board ?? []),
+		...(playerDeck.otherZone ?? []),
+	]
+		.filter((card) => card.mulliganedAway && !!card.cardId)
+		.map((card) => card.cardId!);
+};
