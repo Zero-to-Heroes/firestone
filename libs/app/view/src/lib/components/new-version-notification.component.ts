@@ -212,6 +212,10 @@ const versions: readonly AppVersion[] = [
 							></a>
 						</div>
 						<div class="update-text">
+							<featured-spotlights
+								[version]="selectedVersion.version"
+								[latestVersion]="latestVersion"
+							></featured-spotlights>
 							<release-notes-content
 								[html]="selectedVersion.textHtml | highlighter: (searchString$ | async)"
 							></release-notes-content>
@@ -279,6 +283,10 @@ export class NewVersionNotificationComponent
 	selectedVersion: AppVersion;
 	releaseNotesPreferEnglish = false;
 	selectedVersionHasLocalizedNotes = false;
+
+	get latestVersion(): string | undefined {
+		return this.versions?.[0]?.version;
+	}
 
 	get showReleaseNotesLanguageToggle(): boolean {
 		return this.appLocale !== 'enUS' && this.selectedVersionHasLocalizedNotes;

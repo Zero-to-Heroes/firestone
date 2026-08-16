@@ -1,4 +1,5 @@
 import { A11yModule } from '@angular/cdk/a11y';
+import { OverlayModule } from '@angular/cdk/overlay';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CommonModule, DatePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
@@ -42,6 +43,7 @@ import { ComponentTooltipDirective } from './components/tooltip/component-toolti
 import { ConfirmationComponent } from './components/tooltip/confirmation.component';
 import { HelpTooltipComponent } from './components/tooltip/help-tooltip.component';
 import { HelpTooltipDirective } from './components/tooltip/help-tooltip.directive';
+import { SpotlightMediaLightboxComponent } from './components/spotlight/spotlight-media-lightbox.component';
 import { ActiveThemeDirective } from './directives/active-theme.directive';
 import { OverlayAppearanceThemeDirective } from './directives/overlay-appearance-theme.directive';
 import { PremiumSettingDirective } from './directives/premium-setting.directive';
@@ -91,6 +93,7 @@ const components = [
 	ScrollableDirective,
 	PremiumSettingDirective,
 	AskConfirmationDirective,
+	SpotlightMediaLightboxComponent,
 
 	ShortDatePipe,
 	SafeHtmlPipe,
@@ -102,6 +105,7 @@ const components = [
 		FormsModule,
 		ReactiveFormsModule,
 		A11yModule,
+		OverlayModule,
 		SelectModule,
 
 		InlineSVGModule,

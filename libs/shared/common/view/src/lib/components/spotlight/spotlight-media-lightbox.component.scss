@@ -1,0 +1,68 @@
+:host {
+	pointer-events: all;
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+.lightbox-shell {
+	pointer-events: all;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	background: var(--backdrop-color, rgba(25, 5, 5, 0.82));
+	cursor: pointer;
+}
+
+.spotlight-media-lightbox {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	max-width: 90vw;
+	max-height: 90vh;
+	cursor: default;
+
+	img,
+	video {
+		max-width: 90vw;
+		max-height: 90vh;
+		display: block;
+		object-fit: contain;
+		box-shadow: 0 0 24px rgba(0, 0, 0, 0.8);
+
+		&[hidden] {
+			display: none;
+		}
+	}
+}
+
+.close-button {
+	position: absolute;
+	top: 0;
+	right: 0;
+	z-index: 1;
+	width: 30px;
+	height: 30px;
+	background: rgba(0, 0, 0, 0.55);
+	padding: 0;
+	border: 0;
+	cursor: pointer;
+
+	svg {
+		width: 100%;
+		height: 100%;
+		color: var(--color-1, #d9c3ab);
+	}
+
+	&:hover {
+		background: var(--on-close-button-background-color, #ffb948);
+
+		svg {
+			--icon-color: var(--on-close-button-color, #2f0d0d);
+			color: var(--on-close-button-color, #2f0d0d);
+		}
+	}
+}

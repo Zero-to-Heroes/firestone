@@ -57,6 +57,11 @@ export class DevService {
 			this.cardNotification.createNewCardToast(cardId, isSecondCopy, type);
 		};
 
+		window['resetSeenSpotlights'] = async () => {
+			await this.prefs.updatePrefs('seenSpotlightIds', []);
+			console.log('[dev] reset seenSpotlightIds');
+		};
+
 		window['fakeGame'] = async (
 			fileName: string,
 			options?: {

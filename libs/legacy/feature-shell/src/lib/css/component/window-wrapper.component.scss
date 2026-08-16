@@ -70,6 +70,12 @@ body {
 		&.cdk-overlay-backdrop-showing {
 			background: var(--confirmation-backdrop-color);
 			opacity: 0.6;
+
+			&.spotlight-media-lightbox-backdrop {
+				background: transparent;
+				opacity: 0;
+				pointer-events: auto;
+			}
 		}
 
 		&.card-tooltip-backdrop {

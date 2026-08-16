@@ -4,12 +4,15 @@ import { HttpClient } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GameStateModule } from '@firestone/game-state';
+import { SettingsServicesModule } from '@firestone/settings/services';
+import { SharedCommonServiceModule } from '@firestone/shared/common/service';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { StatsDataAccessModule } from '@firestone/stats/data-access';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { MarkdownModule } from 'ngx-markdown';
+import { FeaturedSpotlightsComponent } from './components/featured-spotlights.component';
 import { NewVersionNotificationComponent } from './components/new-version-notification.component';
 import { ReleaseNotesContentComponent } from './components/release-notes-content.component';
 import { CheckOffCardsListComponent } from './counters/check-off-cards-list.component';
@@ -33,6 +36,7 @@ const components = [
 	GroupedCountersElementComponent,
 	CheckOffCardsListComponent,
 	NewVersionNotificationComponent,
+	FeaturedSpotlightsComponent,
 	ReleaseNotesContentComponent,
 	PremiumDesktopComponent,
 	PremiumPackageComponent,
@@ -52,6 +56,8 @@ const components = [
 		SharedFrameworkCommonModule,
 		StatsDataAccessModule,
 		SharedCommonViewModule,
+		SharedCommonServiceModule,
+		SettingsServicesModule,
 		GameStateModule,
 	],
 	providers: [],

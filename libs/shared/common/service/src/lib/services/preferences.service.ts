@@ -254,6 +254,25 @@ export class PreferencesService extends AbstractFacadeService<PreferencesService
 		await this.savePreferences(newPrefs);
 	}
 
+	public async acknowledgeSpotlights(ids: readonly string[]) {
+		if (!ids.length) {
+			return;
+		}
+		const prefs = await this.getPreferences();
+		const existing = prefs.seenSpotlightIds ?? [];
+		const merged = [...existing];
+		for (const id of ids) {
+			if (!merged.includes(id)) {
+				merged.push(id);
+			}
+		}
+		if (merged.length === existing.length) {
+			return;
+		}
+		const newPrefs: Preferences = { ...prefs, seenSpotlightIds: merged };
+		await this.savePreferences(newPrefs);
+	}
+
 	public async updateWidgetPosition(prefName: keyof Preferences, left: number, top: number) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, [prefName]: { left, top } };

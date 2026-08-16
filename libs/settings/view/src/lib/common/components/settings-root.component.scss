@@ -70,6 +70,43 @@
 	font-size: 13px;
 	margin-top: -1px; // to not have a double border
 
+	.search-row {
+		display: flex;
+		align-items: center;
+		width: 100%;
+		height: 30px;
+		flex-shrink: 0;
+		gap: 4px;
+		padding: 0 4px;
+		box-sizing: border-box;
+
+		.search {
+			flex: 1;
+			min-width: 0;
+			height: 30px;
+		}
+
+		.new-filter {
+			flex-shrink: 0;
+			height: 30px;
+			box-sizing: border-box;
+			padding: 0 8px;
+			font-size: 11px;
+			font-weight: bold;
+			letter-spacing: 0.4px;
+			border: 1px solid #ffb948;
+			color: #ffb948;
+			background: transparent;
+			border-radius: 3px;
+
+			&:hover,
+			&.active {
+				background: #ffb948;
+				color: #2f0d0d;
+			}
+		}
+	}
+
 	.search {
 		width: 100%;
 		height: 30px;
@@ -110,4 +147,14 @@
 	display: flex;
 	margin-left: 10px;
 	min-width: 0;
+
+	.empty-new {
+		flex-grow: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 20px;
+		text-align: center;
+		opacity: 0.8;
+	}
 }

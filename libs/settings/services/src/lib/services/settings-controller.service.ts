@@ -19,6 +19,7 @@ import { BehaviorSubject } from 'rxjs';
 export class SettingsControllerService extends AbstractFacadeService<SettingsControllerService> {
 	public selectedNodeId$$: BehaviorSubject<string | null>;
 	public searchString$$: BehaviorSubject<string | null>;
+	public showNewOnly$$: BehaviorSubject<boolean>;
 
 	private prefs: PreferencesService;
 	private fileBackend: LogFileBackend;
@@ -31,11 +32,13 @@ export class SettingsControllerService extends AbstractFacadeService<SettingsCon
 	protected override assignSubjects() {
 		this.selectedNodeId$$ = this.mainInstance.selectedNodeId$$;
 		this.searchString$$ = this.mainInstance.searchString$$;
+		this.showNewOnly$$ = this.mainInstance.showNewOnly$$;
 	}
 
 	protected async init() {
 		this.selectedNodeId$$ = new BehaviorSubject<string | null>(null);
 		this.searchString$$ = new BehaviorSubject<string | null>(null);
+		this.showNewOnly$$ = new BehaviorSubject<boolean>(false);
 
 		this.prefs = AppInjector.get(PreferencesService);
 		this.fileBackend = AppInjector.get(LOG_FILE_BACKEND);
@@ -56,6 +59,9 @@ export class SettingsControllerService extends AbstractFacadeService<SettingsCon
 		this.registerMainProcessMethod('newSearchStringInternal', (searchString: string) =>
 			this.newSearchStringInternal(searchString),
 		);
+		this.registerMainProcessMethod('setShowNewOnlyInternal', (showNewOnly: boolean) =>
+			this.setShowNewOnlyInternal(showNewOnly),
+		);
 		this.registerMainProcessMethod('openLocalCacheFolderInternal', () => this.openLocalCacheFolderInternal());
 		this.registerMainProcessMethod('openAppFilePickerInternal', () => this.openAppFilePickerInternal());
 		this.registerMainProcessMethod('reloadWindowsInternal', () => this.reloadWindowsInternal());
@@ -65,11 +71,13 @@ export class SettingsControllerService extends AbstractFacadeService<SettingsCon
 	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
 		this.selectedNodeId$$ = new BehaviorSubject<string | null>(null);
 		this.searchString$$ = new BehaviorSubject<string | null>(null);
+		this.showNewOnly$$ = new BehaviorSubject<boolean>(false);
 	}
 
 	protected override initElectronSubjects() {
 		this.setupElectronSubject(this.selectedNodeId$$, 'settings-controller-selected-node-id');
 		this.setupElectronSubject(this.searchString$$, 'settings-controller-search-string');
+		this.setupElectronSubject(this.showNewOnly$$, 'settings-controller-show-new-only');
 	}
 
 	public selectNodeId(nodeId: string | null) {
@@ -85,6 +93,13 @@ export class SettingsControllerService extends AbstractFacadeService<SettingsCon
 	private selectNodeFromOutsideInternal(nodeId: string | null) {
 		this.selectedNodeId$$.next(nodeId);
 		this.searchString$$.next(null);
+	}
+
+	public setShowNewOnly(showNewOnly: boolean) {
+		this.callOnMainProcess('setShowNewOnlyInternal', showNewOnly);
+	}
+	private setShowNewOnlyInternal(showNewOnly: boolean) {
+		this.showNewOnly$$.next(showNewOnly);
 	}
 
 	public newSearchString(searchString: string) {

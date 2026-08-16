@@ -75,7 +75,7 @@ preference-toggle ::ng-deep {
 	}
 }
 
-button {
+button:not(.new-badge):not(.spotlight-preview) {
 	border: 1px solid #d9c3ab;
 	padding-left: 25px;
 	padding-right: 25px;

@@ -1,4 +1,5 @@
 export * from './lib/app-view.module';
+export * from './lib/components/featured-spotlights.component';
 export * from './lib/components/new-version-notification.component';
 export * from './lib/components/release-notes-content.component';
 export * from './lib/counters/check-off-cards-list.component';

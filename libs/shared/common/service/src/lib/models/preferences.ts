@@ -109,6 +109,7 @@ export class Preferences implements IPreferences {
 	readonly lastSeenReleaseNotes: string;
 	readonly dontShowNewVersionNotif: boolean = false;
 	readonly releaseNotesPreferEnglish: boolean = false;
+	readonly seenSpotlightIds: readonly string[] = [];
 	readonly globalZoomLevel: number = 100;
 	readonly flashWindowOnYourTurn: boolean = true;
 	readonly showNotificationOnYourTurn: boolean = false;

@@ -29,5 +29,14 @@
 		display: flex;
 		align-items: center;
 		opacity: 0.9;
+		gap: 6px;
+
+		.new-dot {
+			width: 7px;
+			height: 7px;
+			border-radius: 50%;
+			background: #ffb948;
+			flex-shrink: 0;
+		}
 	}
 }
