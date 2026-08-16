@@ -65,7 +65,7 @@ export type StatGameModeType =
 	| 'mercenaries-pve-coop'
 	| 'mercenaries-pvp'
 	| 'mercenaries-friendly';
-export type DeckTimeFilterType = 'all-time' | 'season-start' | 'last-patch' | 'past-30' | 'past-7' | 'past-1';
+export type DeckTimeFilterType = 'all-time' | 'season-start' | 'last-patch' | 'past-30' | 'past-7' | 'past-1' | 'today';
 export type DeckSortType = 'last-played' | 'games-played' | 'winrate';
 export type DeckRankFilterType =
 	| 'all'

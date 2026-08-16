@@ -478,7 +478,10 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 			[ChangeDeckRankGroupEvent.eventName, new ChangeDeckRankGroupProcessor(this.prefs)],
 			[ChangeDeckRankCategoryFilterEvent.eventName, new ChangeDeckRankCategoryFilterProcessor(this.prefs)],
 			[ChangeDeckModeFilterEvent.eventName, new ChangeDeckModeFilterProcessor()],
-			[ChangeDeckTimeFilterEvent.eventName, new ChangeDeckTimeFilterProcessor(this.prefs)],
+			[
+				ChangeDeckTimeFilterEvent.eventName,
+				new ChangeDeckTimeFilterProcessor(this.prefs, this.constructedNavigation),
+			],
 			[ChangeDeckSortEvent.eventName, new ChangeDeckSortProcessor(this.prefs)],
 			[HideDeckSummaryEvent.eventName, new HideDeckSummaryProcessor(this.prefs)],
 			[DecktrackerResetDeckStatsEvent.eventName, new DecktrackerResetDeckStatsProcessor(this.prefs)],

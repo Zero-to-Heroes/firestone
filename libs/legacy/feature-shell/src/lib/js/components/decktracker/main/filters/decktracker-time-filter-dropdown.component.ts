@@ -48,43 +48,54 @@ export class DecktrackerTimeFilterDropdownComponent extends AbstractSubscription
 			this.patchesConfig.currentConstructedMetaPatch$$,
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.desktopDeckFilters?.time)),
 			this.nav.currentView$$,
+			this.nav.myDecksTodaySelected$$,
 		]).pipe(
 			filter(([patch, filter, currentView]) => !!filter && !!patch && !!currentView),
-			this.mapData(([patch, filter, currentView]) => {
-				const options = [
+			this.mapData(([patch, filter, currentView, myDecksTodaySelected]) => {
+				const options: TimeFilterOption[] = [
 					{
 						value: 'all-time',
 						label: this.i18n.translateString('app.decktracker.filters.time-filter.all-time'),
 						tooltip: this.i18n.translateString('app.global.filters.time.all-time-tooltip'),
-					} as TimeFilterOption,
+					},
 					{
 						value: 'season-start',
 						label: this.i18n.translateString('app.decktracker.filters.time-filter.season-start'),
-					} as TimeFilterOption,
+					},
 					{
 						value: 'last-patch',
 						label: this.i18n.translateString('app.global.filters.time-patch', {
 							value: patch.version,
 						}),
 						tooltip: formatPatch(patch, this.i18n),
-					} as TimeFilterOption,
+					},
 					{
 						value: 'past-30',
 						label: this.i18n.translateString('app.decktracker.filters.time-filter.past-30'),
-					} as TimeFilterOption,
+					},
 					{
 						value: 'past-7',
 						label: this.i18n.translateString('app.decktracker.filters.time-filter.past-7'),
-					} as TimeFilterOption,
+					},
 					{
 						value: 'past-1',
 						label: this.i18n.translateString('app.decktracker.filters.time-filter.past-1'),
-					} as TimeFilterOption,
+					},
 				];
+				const showToday =
+					currentView === 'decks' || currentView === 'ladder-stats' || currentView === 'deck-details';
+				if (showToday) {
+					options.push({
+						value: 'today',
+						label: this.i18n.translateString('app.decktracker.filters.time-filter.today'),
+						tooltip: this.i18n.translateString('app.decktracker.filters.time-filter.today-tooltip'),
+					});
+				}
+				const displayedFilter = showToday && myDecksTodaySelected ? 'today' : filter;
 				return {
-					filter: filter,
+					filter: displayedFilter,
 					options: options,
-					placeholder: options.find((option) => option.value === filter)?.label,
+					placeholder: options.find((option) => option.value === displayedFilter)?.label,
 					visible: ![
 						'constructed-deckbuilder',
 						'constructed-meta-decks',
@@ -108,4 +119,5 @@ export class DecktrackerTimeFilterDropdownComponent extends AbstractSubscription
 
 interface TimeFilterOption extends IOption {
 	value: DeckTimeFilterType;
+	tooltip?: string;
 }

@@ -8,9 +8,14 @@ export class ConstructedNavigationService extends AbstractFacadeService<Construc
 	public selectedDeckstring$$: BehaviorSubject<string | null>;
 	public selectedConstructedMetaDeck$$: BehaviorSubject<string | null>;
 	public selectedConstructedMetaArchetype$$: BehaviorSubject<number | null>;
+	public myDecksTodaySelected$$: BehaviorSubject<boolean>;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
-		super(windowManager, 'ConstructedNavigationService', () => !!this.selectedConstructedMetaDeck$$);
+		super(
+			windowManager,
+			'ConstructedNavigationService',
+			() => !!this.selectedConstructedMetaDeck$$ && !!this.myDecksTodaySelected$$,
+		);
 	}
 
 	protected override assignSubjects() {
@@ -18,6 +23,7 @@ export class ConstructedNavigationService extends AbstractFacadeService<Construc
 		this.selectedConstructedMetaDeck$$ = this.mainInstance.selectedConstructedMetaDeck$$;
 		this.selectedConstructedMetaArchetype$$ = this.mainInstance.selectedConstructedMetaArchetype$$;
 		this.selectedDeckstring$$ = this.mainInstance.selectedDeckstring$$;
+		this.myDecksTodaySelected$$ = this.mainInstance.myDecksTodaySelected$$;
 	}
 
 	protected async init() {
@@ -25,6 +31,7 @@ export class ConstructedNavigationService extends AbstractFacadeService<Construc
 		this.selectedDeckstring$$ = new BehaviorSubject<string | null>(null);
 		this.selectedConstructedMetaDeck$$ = new BehaviorSubject<string | null>(null);
 		this.selectedConstructedMetaArchetype$$ = new BehaviorSubject<number | null>(null);
+		this.myDecksTodaySelected$$ = new BehaviorSubject<boolean>(false);
 	}
 
 	override async initElectronSubjects() {
@@ -45,6 +52,7 @@ export class ConstructedNavigationService extends AbstractFacadeService<Construc
 		this.selectedDeckstring$$ = new BehaviorSubject<string | null>(null);
 		this.selectedConstructedMetaDeck$$ = new BehaviorSubject<string | null>(null);
 		this.selectedConstructedMetaArchetype$$ = new BehaviorSubject<number | null>(null);
+		this.myDecksTodaySelected$$ = new BehaviorSubject<boolean>(false);
 	}
 }
 

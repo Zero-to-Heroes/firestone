@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { DeckDefinition, DeckList, decode } from '@firestone-hs/deckstrings';
 import { GameFormat } from '@firestone-hs/reference-data';
 import {
+	ConstructedNavigationService,
 	ConstructedPersonalDecksService,
 	DeckSummary,
 	DeckSummaryVersion,
@@ -51,6 +52,7 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 	private allCards: CardsFacadeService;
 	private patchesConfig: PatchesConfigService;
 	private constructedPersonalDecks: ConstructedPersonalDecksService;
+	private nav: ConstructedNavigationService;
 	private prefs: PreferencesService;
 	private gameStats: GameStatsProviderService;
 
@@ -71,18 +73,37 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 		this.allCards = AppInjector.get(CardsFacadeService);
 		this.patchesConfig = AppInjector.get(PatchesConfigService);
 		this.constructedPersonalDecks = AppInjector.get(ConstructedPersonalDecksService);
+		this.nav = AppInjector.get(ConstructedNavigationService);
 		this.prefs = AppInjector.get(PreferencesService);
 		this.gameStats = AppInjector.get(GameStatsProviderService);
 
-		await waitForReady(this.patchesConfig, this.constructedPersonalDecks, this.prefs, this.gameStats);
+		await waitForReady(this.patchesConfig, this.constructedPersonalDecks, this.nav, this.prefs, this.gameStats);
 
 		this.decks$$.onFirstSubscribe(() => {
 			const stats$ = this.gameStats.gameStats$$.pipe(
 				distinctUntilChanged((a, b) => a?.length === b?.length),
 				shareReplay(1),
 			);
-			const filters$ = this.prefs.preferences$$.pipe(
-				map((prefs) => prefs?.desktopDeckFilters ?? new DeckFilters()),
+			const filters$ = combineLatest([
+				this.prefs.preferences$$.pipe(
+					map((prefs) => prefs?.desktopDeckFilters ?? new DeckFilters()),
+					distinctUntilChanged(
+						(a, b) =>
+							a?.gameFormat === b?.gameFormat &&
+							a?.gameMode === b?.gameMode &&
+							a?.rank === b?.rank &&
+							a?.time === b?.time,
+					),
+				),
+				this.nav.currentView$$,
+				this.nav.myDecksTodaySelected$$,
+			]).pipe(
+				map(([filters, currentView, myDecksTodaySelected]) =>
+					(currentView === 'decks' || currentView === 'ladder-stats' || currentView === 'deck-details') &&
+					myDecksTodaySelected
+						? Object.assign(new DeckFilters(), filters, { time: 'today' as DeckTimeFilterType })
+						: filters,
+				),
 				distinctUntilChanged(
 					(a, b) =>
 						a?.gameFormat === b?.gameFormat &&
@@ -488,6 +509,12 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 				const past1Date = new Date(now - 1 * 24 * 60 * 60 * 1000);
 				// Season starts always in Bronze
 				return stat.creationTimestamp >= past1Date.getTime();
+			case 'today': {
+				// Local calendar day (midnight), not HS daily reset and not rolling 24h (`past-1`).
+				const startOfToday = new Date();
+				startOfToday.setHours(0, 0, 0, 0);
+				return stat.creationTimestamp >= startOfToday.getTime();
+			}
 			case 'all-time':
 			default:
 				return true;
