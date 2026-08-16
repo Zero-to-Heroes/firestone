@@ -5206,6 +5206,7 @@
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
           "turnAtWhichCardEnteredHand": "mulligan"
         },
+        "mulliganedAway": true,
         "prepared": 0,
         "refManaCost": 4,
         "relatedCardIds": [],

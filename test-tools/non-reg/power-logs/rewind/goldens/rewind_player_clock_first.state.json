@@ -3818,6 +3818,7 @@
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
           "turnAtWhichCardEnteredHand": "mulligan"
         },
+        "mulliganedAway": true,
         "prepared": 0,
         "refManaCost": 2,
         "relatedCardIds": [],
@@ -4717,6 +4718,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
+        "mulliganedAway": true,
         "playTiming": 7,
         "prepared": 0,
         "rarity": "common",
@@ -4799,6 +4801,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
+        "mulliganedAway": true,
         "playTiming": 19,
         "prepared": 0,
         "rarity": "common",
