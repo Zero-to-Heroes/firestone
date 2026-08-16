@@ -1,0 +1,51 @@
+:host {
+	position: absolute;
+	pointer-events: none;
+	z-index: 5;
+}
+
+:host.bottom-right {
+	bottom: 20px;
+	right: 20px;
+}
+
+:host.bottom-left {
+	bottom: 20px;
+	left: 20px;
+}
+
+:host.top-right {
+	top: 20px;
+	right: 20px;
+}
+
+:host.top-left {
+	top: 20px;
+	left: 20px;
+}
+
+.flavor-text-panel {
+	width: 330px;
+	max-width: 330px;
+	padding: 12px 15px;
+	background: var(--color-7, #07081f);
+	border: 1px solid var(--color-common-2, #ffb948);
+	border-radius: 8px;
+	pointer-events: none;
+
+	.card-name {
+		color: var(--default-title-color, #ffb948);
+		font-weight: 700;
+		font-size: 14px;
+		margin-bottom: 8px;
+		padding-bottom: 8px;
+		border-bottom: 1px solid var(--color-4, #303352);
+	}
+
+	.flavor-text {
+		color: var(--default-text-color, #d9c3ab);
+		font-style: italic;
+		font-size: 13px;
+		line-height: 1.5;
+	}
+}

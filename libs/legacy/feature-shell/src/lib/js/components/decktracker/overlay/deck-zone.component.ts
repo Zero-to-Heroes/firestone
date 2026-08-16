@@ -68,6 +68,7 @@ import { groupByFunction } from '../../../services/utils';
 							[groupSameCardsTogether]="groupSameCardsTogether$ | async"
 							[zone]="zone$ | async"
 							[side]="side$ | async"
+							[showFlavorTextOnHover]="true"
 							(cardClicked)="onCardClicked($event)"
 						></deck-card>
 					</li>

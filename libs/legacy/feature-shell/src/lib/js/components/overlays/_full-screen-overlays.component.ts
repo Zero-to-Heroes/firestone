@@ -229,6 +229,7 @@ type ElectronOverlayHitTestApi = {
 			</ng-container>
 
 			<notifications></notifications>
+			<tracker-flavor-text></tracker-flavor-text>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

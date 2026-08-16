@@ -306,6 +306,7 @@ export class Preferences implements IPreferences {
 	readonly overlayShowTitleBar: boolean = true;
 	readonly overlayShowControlBar: boolean = true;
 	readonly overlayShowTooltipsOnHover: boolean = true;
+	readonly overlayShowFlavorTextOnHover: boolean = false;
 	readonly overlayShowRarityColors: boolean = true;
 	readonly overlayShowRelatedCards: boolean = true;
 	readonly overlayShowTransformedInto: boolean = true;
