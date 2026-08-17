@@ -238,8 +238,15 @@
 		top: 0;
 		height: 100%;
 
-		.copy-deckcode {
+		.deck-actions {
+			display: flex;
+			align-items: center;
+			gap: 12px;
 			margin-bottom: 10px;
+			justify-content: flex-start;
+		}
+
+		.copy-deckcode {
 			justify-content: flex-start;
 
 			::ng-deep .copy-deckstring {
@@ -247,6 +254,16 @@
 
 				&:hover {
 					--icon-color: var(--color-1);
+				}
+			}
+		}
+
+		.export-deck-picture {
+			::ng-deep .export-deck-to-picture {
+				--icon-secondary-color: var(--color-5);
+
+				&:hover {
+					--icon-secondary-color: var(--color-1);
 				}
 			}
 		}

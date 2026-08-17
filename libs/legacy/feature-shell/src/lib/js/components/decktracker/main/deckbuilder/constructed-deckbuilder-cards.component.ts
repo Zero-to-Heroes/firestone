@@ -72,13 +72,22 @@ export const DEFAULT_CARD_HEIGHT = 221;
 					>
 					</deck-list-static>
 					<div class="export-deck" *ngIf="{ valid: deckValid$ | async } as exportValue">
-						<copy-deckstring
-							class="copy-deckcode"
-							*ngIf="exportValue.valid"
-							[deckstring]="value.deckstring"
-							[copyText]="'app.duels.deckbuilder.export-deckcode-button' | owTranslate"
-						>
-						</copy-deckstring>
+						<div class="copy-actions" *ngIf="exportValue.valid">
+							<copy-deckstring
+								class="copy-deckcode"
+								[deckstring]="value.deckstring"
+								[copyText]="'app.duels.deckbuilder.export-deckcode-button' | owTranslate"
+							>
+							</copy-deckstring>
+							<export-deck-to-picture
+								class="export-deck-picture"
+								[deckstring]="value.deckstring"
+								[deckName]="deckName"
+								[origin]="'constructed-deckbuilder'"
+								[copyText]="'app.decktracker.deck-details.export-deck-picture-button' | owTranslate"
+							>
+							</export-deck-to-picture>
+						</div>
 						<ng-container *ngIf="value.deckstring">
 							<button
 								class="save-deckcode"

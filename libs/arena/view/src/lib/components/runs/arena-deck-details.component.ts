@@ -12,12 +12,21 @@ import { Observable, tap } from 'rxjs';
 	template: `
 		<div class="arena-deck-details">
 			<div class="deck-list-container" *ngIf="decklist$ | async as decklist">
-				<copy-deckstring
-					class="copy-deckcode"
-					[deckstring]="decklist"
-					[copyText]="'app.duels.deckbuilder.export-deckcode-button' | fsTranslate"
-				>
-				</copy-deckstring>
+				<div class="deck-actions">
+					<copy-deckstring
+						class="copy-deckcode"
+						[deckstring]="decklist"
+						[copyText]="'app.duels.deckbuilder.export-deckcode-button' | fsTranslate"
+					>
+					</copy-deckstring>
+					<export-deck-to-picture
+						class="export-deck-picture"
+						[deckstring]="decklist"
+						[origin]="'arena-deck-details'"
+						[copyText]="'app.decktracker.deck-details.export-deck-picture-button' | fsTranslate"
+					>
+					</export-deck-to-picture>
+				</div>
 				<deck-list-basic class="deck-list" [deckstring]="decklist"></deck-list-basic>
 			</div>
 			<div class="details">

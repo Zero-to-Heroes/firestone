@@ -110,12 +110,22 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					></decktracker-stats-for-replays>
 					<div class="overview-body">
 						<div class="deck-list-container">
-							<copy-deckstring
-								class="copy-deckcode"
-								[deckstring]="value.selectedDeck?.deckstring"
-								[copyText]="'app.decktracker.deck-details.copy-deck-code-button' | owTranslate"
-							>
-							</copy-deckstring>
+							<div class="deck-actions">
+								<copy-deckstring
+									class="copy-deckcode"
+									[deckstring]="value.selectedDeck?.deckstring"
+									[copyText]="'app.decktracker.deck-details.copy-deck-code-button' | owTranslate"
+								>
+								</copy-deckstring>
+								<export-deck-to-picture
+									class="export-deck-picture"
+									[deckstring]="value.selectedDeck?.deckstring"
+									[deckName]="value.selectedDeck?.deckName"
+									[origin]="'deck-details'"
+									[copyText]="'app.decktracker.deck-details.export-deck-picture-button' | owTranslate"
+								>
+								</export-deck-to-picture>
+							</div>
 
 							<deck-list-static
 								class="deck-list"

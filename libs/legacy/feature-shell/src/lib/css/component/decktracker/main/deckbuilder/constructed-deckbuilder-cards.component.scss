@@ -57,9 +57,17 @@
 			align-items: center;
 			justify-content: space-between;
 
-			.copy-deckcode,
-			.save-deckcode {
+			.copy-actions {
+				display: flex;
+				align-items: center;
+				gap: 10px;
 				max-width: 50%;
+				overflow: hidden;
+			}
+
+			.copy-deckcode,
+			.export-deck-picture,
+			.save-deckcode {
 				overflow: hidden;
 				font-size: 14px;
 			}

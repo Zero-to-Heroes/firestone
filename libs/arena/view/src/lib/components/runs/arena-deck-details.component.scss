@@ -19,9 +19,16 @@
 		min-height: 1px;
 		flex-shrink: 0;
 
-		.copy-deckcode {
+		.deck-actions {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 10px;
 			width: 100%;
 			margin-bottom: 10px;
+		}
+
+		.copy-deckcode {
 			align-items: center;
 			justify-content: center;
 		}

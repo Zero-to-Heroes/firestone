@@ -18,6 +18,16 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 						[showTooltip]="true"
 					>
 					</copy-deckstring>
+					<export-deck-to-picture
+						class="export-deck-picture-button"
+						*ngIf="opponentDecklist"
+						[deckstring]="opponentDecklist"
+						[deckName]="'Opponent Deck'"
+						[origin]="'coliseum-opponent-deck'"
+						[showTooltip]="true"
+						[copyText]="'app.decktracker.deck-details.export-deck-picture-tooltip' | fsTranslate"
+					>
+					</export-deck-to-picture>
 					<div
 						class="info"
 						inlineSVG="assets/svg/info.svg"
@@ -42,6 +52,16 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 						[showTooltip]="true"
 					>
 					</copy-deckstring>
+					<export-deck-to-picture
+						class="export-deck-picture-button"
+						*ngIf="decklist"
+						[deckstring]="decklist"
+						[deckName]="'Player Deck'"
+						[origin]="'coliseum-player-deck'"
+						[showTooltip]="true"
+						[copyText]="'app.decktracker.deck-details.export-deck-picture-tooltip' | fsTranslate"
+					>
+					</export-deck-to-picture>
 				</div>
 				<deck-list-basic class="deck-list" *ngIf="decklist" [deckstring]="decklist"></deck-list-basic>
 				<div class="no-list" *ngIf="!decklist">We couldn't find the decklist for this player</div>

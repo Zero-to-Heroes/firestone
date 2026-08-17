@@ -1,0 +1,138 @@
+:host {
+	display: flex;
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	color: var(--color-1);
+	max-height: 100%;
+	overflow: hidden;
+	position: relative;
+	flex-shrink: 0;
+}
+
+.export-deck-to-picture {
+	display: flex;
+	align-items: center;
+	flex-direction: row;
+	cursor: pointer;
+	--icon-color: transparent;
+	--icon-secondary-color: var(--color-4);
+
+	.icon {
+		display: flex;
+		align-items: center;
+	}
+
+	::ng-deep svg {
+		height: 16px;
+		width: 16px;
+	}
+
+	&:hover {
+		--icon-secondary-color: var(--color-1);
+	}
+
+	.message {
+		font-size: 13px;
+		margin-left: 10px;
+		white-space: nowrap;
+	}
+}
+
+.export-capture {
+	position: fixed;
+	left: -10000px;
+	top: 0;
+	width: 210px;
+	box-sizing: border-box;
+	padding: 12px;
+	background: #090a0d;
+	color: var(--color-1);
+	font-family: Open Sans;
+	pointer-events: none;
+	z-index: -1;
+
+	.deck-name {
+		font-size: 14px;
+		font-weight: 600;
+		color: var(--default-title-color, #ffb948);
+		margin-bottom: 10px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.cards {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.card {
+		margin-bottom: 1px;
+		display: flex;
+
+		::ng-deep .deck-card {
+			width: 100%;
+		}
+	}
+
+	.sideboard {
+		list-style: none;
+		padding-left: 15px;
+	}
+
+	.footer {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-top: 12px;
+		padding-top: 10px;
+		border-top: 1px solid rgba(255, 255, 255, 0.15);
+		--icon-color: #ffb948;
+
+		.dust {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			color: var(--color-1);
+
+			.dust-icon {
+				display: flex;
+				width: 16px;
+				height: 16px;
+
+				::ng-deep svg {
+					width: 16px;
+					height: 16px;
+				}
+			}
+
+			.dust-amount {
+				font-size: 13px;
+			}
+		}
+
+		.brand {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+
+			.logo {
+				display: flex;
+				width: 18px;
+				height: 18px;
+
+				::ng-deep svg {
+					width: 18px;
+					height: 18px;
+				}
+			}
+
+			.brand-name {
+				font-size: 13px;
+				color: #ffb948;
+			}
+		}
+	}
+}
