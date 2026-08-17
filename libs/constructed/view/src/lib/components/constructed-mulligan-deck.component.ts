@@ -38,7 +38,13 @@ import {
 	shareReplay,
 	takeUntil,
 } from 'rxjs';
-import { buildColor } from './utils';
+import {
+	buildColor,
+	formatMulliganSampleSize,
+	formatMulliganSampleSizeTooltip,
+	formatPersonalMinGamesWarningTooltip,
+	personalMulliganChartFields,
+} from './utils';
 
 @Component({
 	standalone: false,
@@ -59,13 +65,18 @@ import { buildColor } from './utils';
 			[opponentLabel]="opponentLabel$ | async"
 			[playCoinLabel]="playCoinLabel$ | async"
 			[playCoinTooltip]="playCoinTooltip$ | async"
+			[statsSourceLabel]="statsSourceLabel$ | async"
+			[statsSourceTooltip]="statsSourceTooltip$ | async"
 			[timeTooltip]="timeTooltip$ | async"
 			[timeLabel]="timeLabel$ | async"
 			[formatLabel]="formatLabel$ | async"
 			[sampleSize]="sampleSize$ | async"
+			[sampleSizeTooltip]="sampleSizeTooltip$ | async"
+			[personalMinGamesWarningTooltip]="personalMinGamesWarningTooltip$ | async"
 			[cycleRanks]="cycleRanks"
 			[cycleOpponent]="cycleOpponent"
 			[cyclePlayCoin]="cyclePlayCoin"
+			[cycleStatsSource]="cycleStatsSource"
 			[cycleTime]="cycleTime"
 			[cycleFormat]="cycleFormat"
 			[dismiss]="dismissMulligan"
@@ -88,10 +99,14 @@ export class ConstructedMulliganDeckComponent
 	opponentTooltip$: Observable<string>;
 	playCoinLabel$: Observable<string>;
 	playCoinTooltip$: Observable<string>;
+	statsSourceLabel$: Observable<string>;
+	statsSourceTooltip$: Observable<string>;
 	timeLabel$: Observable<string>;
 	timeTooltip$: Observable<string>;
 	formatLabel$: Observable<string>;
 	sampleSize$: Observable<string>;
+	sampleSizeTooltip$: Observable<string>;
+	personalMinGamesWarningTooltip$: Observable<string | null>;
 	hidden$: Observable<boolean>;
 
 	private opponentActualClass$$ = new BehaviorSubject<string | null>(null);
@@ -165,9 +180,14 @@ export class ConstructedMulliganDeckComponent
 							0.4,
 						),
 						impactColor: buildColor('hsl(112, 100%, 64%)', 'hsl(0, 100%, 64%)', advice.score ?? 0, 4, -4),
+						...personalMulliganChartFields(advice, guide!.statsSource === 'both'),
 					})),
 					format: guide!.format,
 					sampleSize: guide!.sampleSize,
+					personalSampleSize: guide!.personalSampleSize,
+					communitySampleSize: guide!.communitySampleSize,
+					statsSource: guide!.statsSource,
+					personalBelowMinGames: guide!.personalBelowMinGames,
 					rankBracket: guide!.rankBracket,
 					opponentClass: guide!.opponentClass,
 				};
@@ -240,6 +260,29 @@ export class ConstructedMulliganDeckComponent
 					)!,
 			),
 		);
+		this.statsSourceLabel$ = this.prefs.preferences$$.pipe(
+			this.mapData(
+				(prefs) =>
+					this.i18n.translateString(
+						`decktracker.overlay.mulligan.stats-source.${prefs.decktrackerMulliganStatsSource ?? 'community'}`,
+					)!,
+			),
+		);
+		this.statsSourceTooltip$ = this.prefs.preferences$$.pipe(
+			this.mapData(
+				(prefs) =>
+					this.i18n.translateString(
+						`decktracker.overlay.mulligan.deck-mulligan-filter-stats-source-tooltip`,
+						{
+							source: this.i18n.translateString(
+								`decktracker.overlay.mulligan.stats-source.${
+									prefs.decktrackerMulliganStatsSource ?? 'community'
+								}`,
+							),
+						},
+					)!,
+			),
+		);
 		this.timeLabel$ = this.prefs.preferences$$.pipe(
 			this.mapData(
 				(prefs) =>
@@ -267,11 +310,21 @@ export class ConstructedMulliganDeckComponent
 			this.mapData((mulliganInfo) => this.i18n.translateString(`global.format.${mulliganInfo.format}`)!),
 		);
 		this.sampleSize$ = this.allDeckMulliganInfo$.pipe(
-			this.mapData(
-				(mulliganInfo) =>
-					this.i18n.translateString(`app.decktracker.filters.sample-size-filter`, {
-						value: mulliganInfo.sampleSize.toLocaleString(this.i18n.formatCurrentLocale() ?? 'enUS'),
-					})!,
+			this.mapData((mulliganInfo) => formatMulliganSampleSize(this.i18n, mulliganInfo)),
+		);
+		this.sampleSizeTooltip$ = this.allDeckMulliganInfo$.pipe(
+			this.mapData((mulliganInfo) => formatMulliganSampleSizeTooltip(this.i18n, mulliganInfo.statsSource)),
+		);
+		this.personalMinGamesWarningTooltip$ = combineLatest([
+			this.allDeckMulliganInfo$,
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.decktrackerMulliganPersonalMinGames ?? '25')),
+		]).pipe(
+			this.mapData(([mulliganInfo, personalMinGames]) =>
+				formatPersonalMinGamesWarningTooltip(this.i18n, {
+					personalBelowMinGames: mulliganInfo.personalBelowMinGames,
+					personalSampleSize: mulliganInfo.personalSampleSize,
+					personalMinGames,
+				}),
 			),
 		);
 		this.gameState.gameState$$
@@ -368,6 +421,18 @@ export class ConstructedMulliganDeckComponent
 		const newPrefs: Preferences = {
 			...prefs,
 			decktrackerMulliganPlayCoinOverride: nextPlayCoin,
+		};
+		await this.prefs.savePreferences(newPrefs);
+	};
+
+	cycleStatsSource = async () => {
+		const prefs = await this.prefs.getPreferences();
+		const currentSource = prefs.decktrackerMulliganStatsSource ?? 'community';
+		const options: readonly ('community' | 'personal' | 'both')[] = ['community', 'personal', 'both'];
+		const nextSource = options[(options.indexOf(currentSource) + 1) % options.length];
+		const newPrefs: Preferences = {
+			...prefs,
+			decktrackerMulliganStatsSource: nextSource,
 		};
 		await this.prefs.savePreferences(newPrefs);
 	};

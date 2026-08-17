@@ -17,7 +17,12 @@ import {
 	MulliganDeckData,
 	MulliganDeckStats,
 } from '@firestone/constructed/common';
-import { buildColor } from '@firestone/constructed/view';
+import {
+	buildColor,
+	formatMulliganSampleSize,
+	formatMulliganSampleSizeTooltip,
+	personalMulliganChartFields,
+} from '@firestone/constructed/view';
 import { DeckParserFacadeService, GameStateFacadeService } from '@firestone/game-state';
 import { PatchesConfigService, Preferences, PreferencesService, formatPatch } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
@@ -28,6 +33,7 @@ import {
 	ILocalizationService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
+import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import { Observable, combineLatest, distinctUntilChanged, filter, shareReplay, switchMap, takeUntil, tap } from 'rxjs';
 
 @Component({
@@ -47,15 +53,18 @@ import { Observable, combineLatest, distinctUntilChanged, filter, shareReplay, s
 				[opponentLabel]="opponentLabel$ | async"
 				[playCoinLabel]="playCoinLabel$ | async"
 				[playCoinTooltip]="playCoinTooltip$ | async"
+				[statsSourceLabel]="statsSourceLabel$ | async"
+				[statsSourceTooltip]="statsSourceTooltip$ | async"
 				[timeTooltip]="timeTooltip$ | async"
 				[timeLabel]="timeLabel$ | async"
 				[formatLabel]="formatLabel$ | async"
 				[sampleSize]="sampleSize$ | async"
-				[sampleSizeTooltip]="'decktracker.overlay.mulligan.sample-size-tooltip' | fsTranslate"
+				[sampleSizeTooltip]="sampleSizeTooltip$ | async"
 				[allowResize]="false"
 				[cycleRanks]="cycleRanks"
 				[cycleOpponent]="cycleOpponent"
 				[cyclePlayCoin]="cyclePlayCoin"
+				[cycleStatsSource]="cycleStatsSource"
 				[cycleTime]="cycleTime"
 				[cycleFormat]="cycleFormat"
 			>
@@ -127,10 +136,13 @@ export class ConstructedDecktrackerExtendedOocComponent
 	opponentTooltip$: Observable<string>;
 	playCoinLabel$: Observable<string>;
 	playCoinTooltip$: Observable<string>;
+	statsSourceLabel$: Observable<string>;
+	statsSourceTooltip$: Observable<string>;
 	timeLabel$: Observable<string>;
 	timeTooltip$: Observable<string>;
 	formatLabel$: Observable<string>;
 	sampleSize$: Observable<string>;
+	sampleSizeTooltip$: Observable<string>;
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -143,20 +155,35 @@ export class ConstructedDecktrackerExtendedOocComponent
 		private readonly allCards: CardsFacadeService,
 		private readonly patches: PatchesConfigService,
 		private readonly deck: DeckParserFacadeService,
+		private readonly gameStats: GameStatsLoaderService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.gameState, this.ads, this.guardian, this.prefs, this.patches, this.deck, this.mulligan);
+		await waitForReady(
+			this.gameState,
+			this.ads,
+			this.guardian,
+			this.prefs,
+			this.patches,
+			this.deck,
+			this.mulligan,
+			this.gameStats,
+		);
 
 		const deckstring$ = this.deck.currentDeck$$.pipe(
 			tap((deck) => console.debug('[mulligan] new deck', deck)),
 			this.mapData((deck) => deck?.deckstring),
 		);
 
-		this.allDeckMulliganInfo$ = combineLatest([deckstring$, this.prefs.preferences$$]).pipe(
+		this.allDeckMulliganInfo$ = combineLatest([
+			deckstring$,
+			this.prefs.preferences$$,
+			this.gameStats.gameStats$$,
+		]).pipe(
 			tap((info) => console.debug('[mulligan] will get mulligan info', info)),
+			filter(([deckstring]) => !!deckstring),
 			distinctUntilChanged(),
 			switchMap(([deckstring, prefs]) =>
 				this.mulligan.getMulliganAdvice(deckstring, prefs, { useDeckFormat: true }),
@@ -187,9 +214,13 @@ export class ConstructedDecktrackerExtendedOocComponent
 							0.4,
 						),
 						impactColor: buildColor('hsl(112, 100%, 64%)', 'hsl(0, 100%, 64%)', advice.score ?? 0, 4, -4),
+						...personalMulliganChartFields(advice, guide!.statsSource === 'both'),
 					})),
 					format: guide!.format,
 					sampleSize: guide!.sampleSize,
+					personalSampleSize: guide!.personalSampleSize,
+					communitySampleSize: guide!.communitySampleSize,
+					statsSource: guide!.statsSource,
 					rankBracket: guide!.rankBracket,
 					opponentClass: guide!.opponentClass,
 					globalDeckStats: guide!.globalDeckStats,
@@ -265,6 +296,29 @@ export class ConstructedDecktrackerExtendedOocComponent
 					)!,
 			),
 		);
+		this.statsSourceLabel$ = this.prefs.preferences$$.pipe(
+			this.mapData(
+				(prefs) =>
+					this.i18n.translateString(
+						`decktracker.overlay.mulligan.stats-source.${prefs.decktrackerMulliganStatsSource ?? 'community'}`,
+					)!,
+			),
+		);
+		this.statsSourceTooltip$ = this.prefs.preferences$$.pipe(
+			this.mapData(
+				(prefs) =>
+					this.i18n.translateString(
+						`decktracker.overlay.mulligan.deck-mulligan-filter-stats-source-tooltip`,
+						{
+							source: this.i18n.translateString(
+								`decktracker.overlay.mulligan.stats-source.${
+									prefs.decktrackerMulliganStatsSource ?? 'community'
+								}`,
+							),
+						},
+					)!,
+			),
+		);
 		this.timeLabel$ = this.prefs.preferences$$.pipe(
 			this.mapData(
 				(prefs) =>
@@ -292,12 +346,10 @@ export class ConstructedDecktrackerExtendedOocComponent
 			this.mapData((mulliganInfo) => this.i18n.translateString(`global.format.${mulliganInfo.format}`)!),
 		);
 		this.sampleSize$ = this.allDeckMulliganInfo$.pipe(
-			this.mapData(
-				(mulliganInfo) =>
-					this.i18n.translateString(`app.decktracker.filters.sample-size-filter`, {
-						value: mulliganInfo.sampleSize.toLocaleString(this.i18n.formatCurrentLocale() ?? 'enUS'),
-					})!,
-			),
+			this.mapData((mulliganInfo) => formatMulliganSampleSize(this.i18n, mulliganInfo)),
+		);
+		this.sampleSizeTooltip$ = this.allDeckMulliganInfo$.pipe(
+			this.mapData((mulliganInfo) => formatMulliganSampleSizeTooltip(this.i18n, mulliganInfo.statsSource)),
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -353,6 +405,18 @@ export class ConstructedDecktrackerExtendedOocComponent
 		const newPrefs: Preferences = {
 			...prefs,
 			decktrackerMulliganPlayCoinOoc: nextPlayCoin,
+		};
+		await this.prefs.savePreferences(newPrefs);
+	};
+
+	cycleStatsSource = async () => {
+		const prefs = await this.prefs.getPreferences();
+		const currentSource = prefs.decktrackerMulliganStatsSource ?? 'community';
+		const options: readonly ('community' | 'personal' | 'both')[] = ['community', 'personal', 'both'];
+		const nextSource = options[(options.indexOf(currentSource) + 1) % options.length];
+		const newPrefs: Preferences = {
+			...prefs,
+			decktrackerMulliganStatsSource: nextSource,
 		};
 		await this.prefs.savePreferences(newPrefs);
 	};

@@ -35,6 +35,33 @@ export const mulliganLingerOptions = (context: SettingContext): readonly Dropdow
 	} as DropdownOption,
 ];
 
+export const mulliganPersonalMinGamesOptions = (context: SettingContext): readonly DropdownOption[] => [
+	{
+		value: 'never',
+		label: context.i18n.translateString('settings.decktracker.mulligan.personal-min-games-never'),
+	} as DropdownOption,
+	{
+		value: 'always',
+		label: context.i18n.translateString('settings.decktracker.mulligan.personal-min-games-always'),
+	} as DropdownOption,
+	{
+		value: '10',
+		label: context.i18n.translateString('settings.decktracker.mulligan.personal-min-games-count', { value: 10 }),
+	} as DropdownOption,
+	{
+		value: '25',
+		label: context.i18n.translateString('settings.decktracker.mulligan.personal-min-games-count', { value: 25 }),
+	} as DropdownOption,
+	{
+		value: '50',
+		label: context.i18n.translateString('settings.decktracker.mulligan.personal-min-games-count', { value: 50 }),
+	} as DropdownOption,
+	{
+		value: '100',
+		label: context.i18n.translateString('settings.decktracker.mulligan.personal-min-games-count', { value: 100 }),
+	} as DropdownOption,
+];
+
 export const useGroupedCountersSetting = (context: SettingContext): Setting => ({
 	type: 'toggle',
 	field: 'useGroupedCounters',

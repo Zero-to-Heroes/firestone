@@ -79,6 +79,16 @@
 	}
 
 	.sample-size {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+
+		.warning {
+			width: 12px;
+			height: 12px;
+			color: #ffb347;
+			cursor: help;
+		}
 	}
 }
 
@@ -134,12 +144,25 @@
 	flex-shrink: 0;
 	flex-grow: 0;
 
-	&.keep-rate {
-		width: 80px;
-	}
-
+	&.keep-rate,
 	&.impact {
 		width: 80px;
+		flex-direction: column;
+		font-variant-numeric: tabular-nums;
+
+		.stat-line {
+			display: flex;
+			align-items: baseline;
+			justify-content: center;
+			gap: 4px;
+			width: 100%;
+
+			.src {
+				font-size: 10px;
+				opacity: 0.7;
+				min-width: 10px;
+			}
+		}
 	}
 
 	&.card {
@@ -170,5 +193,9 @@
 	&.dumped {
 		outline: 1px solid hsl(25, 100%, 64%);
 		outline-offset: -1px;
+	}
+
+	&.show-both {
+		height: 38px;
 	}
 }

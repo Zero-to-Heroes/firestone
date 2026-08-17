@@ -17,6 +17,12 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 				[helpTooltip]="'decktracker.overlay.mulligan.dismiss-tooltip' | fsTranslate"
 				inlineSVG="assets/svg/close.svg"
 			></button>
+			<div
+				class="min-games-warning"
+				*ngIf="personalMinGamesWarningTooltip && showHandInfo"
+				inlineSVG="assets/svg/attention.svg"
+				[helpTooltip]="personalMinGamesWarningTooltip"
+			></div>
 			<ng-container *ngIf="showHandInfo">
 				<ul class="mulligan-guide" *ngIf="cardsInHandInfo" [ngClass]="{ wide: cardsInHandInfo.length === 4 }">
 					<ng-container *ngIf="showPremiumBanner === false">
@@ -27,10 +33,17 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 										class="label"
 										[fsTranslate]="'decktracker.overlay.mulligan.mulligan-keep-rate'"
 										[helpTooltip]="
-											'decktracker.overlay.mulligan.mulligan-keep-rate-tooltip' | fsTranslate
+											keepRateTooltip ||
+											('decktracker.overlay.mulligan.mulligan-keep-rate-tooltip' | fsTranslate)
 										"
 									></span>
 									<span class="value" [style.color]="info.keptColor">{{ info.keepRate }}</span>
+									<span
+										class="value secondary"
+										*ngIf="info.showBoth"
+										[style.color]="info.personalKeptColor"
+										>{{ info.personalKeepRate }}</span
+									>
 								</div>
 								<div class="stat mulligan-winrate">
 									<span
@@ -39,6 +52,12 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 										[helpTooltip]="impactWithFreeUsersHelpTooltip"
 									></span>
 									<span class="value" [style.color]="info.impactColor">{{ info.impact }}</span>
+									<span
+										class="value secondary"
+										*ngIf="info.showBoth"
+										[style.color]="info.personalImpactColor"
+										>{{ info.personalImpact }}</span
+									>
 								</div>
 							</div>
 							<div class="stat mulligan-winrate no-data scalable" *ngIf="info.impact === null">
@@ -71,7 +90,9 @@ export class MulliganHandViewComponent extends AbstractSubscriptionComponent {
 	@Input() showPremiumBanner: boolean | null;
 	@Input() showDismiss: boolean | null;
 	@Input() cardsInHandInfo: readonly InternalMulliganAdvice[] | null;
+	@Input() keepRateTooltip: string | null;
 	@Input() impactWithFreeUsersHelpTooltip: string | null;
+	@Input() personalMinGamesWarningTooltip: string | null;
 	@Input() premiumType: 'arena' | 'constructed';
 	@Input() freeUses: number;
 	@Input() dismiss: () => void;
@@ -88,7 +109,12 @@ export class MulliganHandViewComponent extends AbstractSubscriptionComponent {
 export interface InternalMulliganAdvice {
 	readonly impact: string | null;
 	readonly keepRate: string | null;
+	readonly personalImpact?: string | null;
+	readonly personalKeepRate?: string | null;
+	readonly showBoth?: boolean;
 	// TODO: don't make that optional?
 	readonly keptColor?: string;
 	readonly impactColor?: string;
+	readonly personalKeptColor?: string;
+	readonly personalImpactColor?: string;
 }

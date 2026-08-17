@@ -1,6 +1,6 @@
 import { SettingContext, SettingNode } from '@firestone/settings/services';
 import { Preferences } from '@firestone/shared/common/service';
-import { mulliganLingerOptions, sizeKnobs } from '../common';
+import { mulliganLingerOptions, mulliganPersonalMinGamesOptions, sizeKnobs } from '../common';
 
 export const decktrackerMulliganSettings = (context: SettingContext): SettingNode => {
 	return {
@@ -39,6 +39,15 @@ export const decktrackerMulliganSettings = (context: SettingContext): SettingNod
 						tooltip: context.i18n.translateString('settings.decktracker.mulligan.keep-after-mulligan-tooltip'),
 						dropdownConfig: {
 							options: mulliganLingerOptions(context),
+						},
+					},
+					{
+						type: 'dropdown',
+						field: 'decktrackerMulliganPersonalMinGames',
+						label: context.i18n.translateString('settings.decktracker.mulligan.personal-min-games-label'),
+						tooltip: context.i18n.translateString('settings.decktracker.mulligan.personal-min-games-tooltip'),
+						dropdownConfig: {
+							options: mulliganPersonalMinGamesOptions(context),
 						},
 					},
 					{

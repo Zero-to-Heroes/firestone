@@ -1,8 +1,9 @@
 /* eslint-disable no-case-declarations */
 import { Injectable } from '@angular/core';
-import { decode as decodeDeckstring } from '@firestone-hs/deckstrings';
 import { BgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import { decode as decodeDeckstring } from '@firestone-hs/deckstrings';
 import { getDefaultHeroDbfIdForClass, isMercenaries } from '@firestone-hs/reference-data';
+import { CardAnalysis } from '@firestone-hs/replay-metadata';
 import {
 	DiskCacheService,
 	PatchesConfigService,
@@ -100,6 +101,11 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 		this.registerMainProcessMethod('updatePowerLogAccessedInternal', (reviewId: string) =>
 			this.updatePowerLogAccessedInternal(reviewId),
 		);
+		this.registerMainProcessMethod(
+			'updateCardsAnalysisInternal',
+			(updates: readonly { reviewId: string; cardsAnalysis: readonly CardAnalysis[] }[]) =>
+				this.updateCardsAnalysisInternal(updates),
+		);
 	}
 
 	public async addGame(game: GameStat) {
@@ -128,6 +134,41 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 			stat.reviewId === reviewId ? stat.update({ powerLogAccessed: true }) : stat,
 		);
 		this.gameStats$$.next(currentStats.update({ stats: updatedStats }));
+	}
+
+	public async updateCardsAnalysis(
+		updates: readonly { reviewId: string; cardsAnalysis: readonly CardAnalysis[] }[],
+	): Promise<void> {
+		await this.callOnMainProcess('updateCardsAnalysisInternal', updates);
+	}
+	private async updateCardsAnalysisInternal(
+		updates: readonly { reviewId: string; cardsAnalysis: readonly CardAnalysis[] }[],
+	): Promise<void> {
+		if (!updates?.length) {
+			return;
+		}
+		const currentStats: GameStats = await this.gameStats$$.getValueWithInit();
+		if (!currentStats?.stats?.length) {
+			return;
+		}
+		const byReviewId = new Map(updates.map((update) => [update.reviewId, update.cardsAnalysis]));
+		const persisted: GameStat[] = [];
+		const updatedStats = currentStats.stats.map((stat) => {
+			if (!byReviewId.has(stat.reviewId)) {
+				return stat;
+			}
+			const updated = stat.update({ cardsAnalysis: byReviewId.get(stat.reviewId) ?? [] });
+			persisted.push(updated);
+			return updated;
+		});
+		this.gameStats$$.next(currentStats.update({ stats: updatedStats }));
+		if (persisted.length) {
+			try {
+				await this.indexedDb.table<GameStat, string>(MATCH_HISTORY).bulkPut(persisted);
+			} catch (e: any) {
+				console.error('[game-stats-loader] error persisting cardsAnalysis', e?.name, e?.message);
+			}
+		}
 	}
 
 	private async retrieveStats() {
@@ -194,6 +235,7 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 
 		const endpointResult: readonly GameStat[] = (data as any)?.results ?? [];
 		console.log('[game-stats-loader] Retrieved game stats from API', endpointResult?.length);
+		const existingCardsAnalysis = await this.collectExistingCardsAnalysis();
 		const stats: readonly GameStat[] = endpointResult
 			.map((stat) => {
 				let postMatchStats: BgsPostMatchStats = null;
@@ -225,6 +267,7 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 						postMatchStats: postMatchStats,
 						playerClass: stat.playerClass ?? playerInfoFromDeckstring?.playerClass,
 						playerCardId: stat.playerCardId ?? playerInfoFromDeckstring?.playerCardId,
+						cardsAnalysis: stat.cardsAnalysis ?? existingCardsAnalysis.get(stat.reviewId) ?? null,
 					});
 				} catch (e) {
 					console.warn('[game-stats-loader] error creating game stat', e, stat);
@@ -282,6 +325,27 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 			default:
 				return true;
 		}
+	}
+
+	private async collectExistingCardsAnalysis(): Promise<Map<string, readonly CardAnalysis[]>> {
+		const byReviewId = new Map<string, readonly CardAnalysis[]>();
+		try {
+			const localStats = await this.loadLocalGameStats();
+			for (const stat of localStats ?? []) {
+				if (stat.reviewId && stat.cardsAnalysis != null) {
+					byReviewId.set(stat.reviewId, stat.cardsAnalysis);
+				}
+			}
+		} catch (e: any) {
+			console.warn('[game-stats-loader] could not load local cardsAnalysis', e?.message);
+		}
+		const currentStats = this.gameStats$$?.getValue()?.stats ?? [];
+		for (const stat of currentStats) {
+			if (stat.reviewId && stat.cardsAnalysis != null) {
+				byReviewId.set(stat.reviewId, stat.cardsAnalysis);
+			}
+		}
+		return byReviewId;
 	}
 
 	private async saveLocalStats(gameStats: readonly GameStat[]) {

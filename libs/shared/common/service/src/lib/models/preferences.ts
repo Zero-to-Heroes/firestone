@@ -266,6 +266,8 @@ export class Preferences implements IPreferences {
 	readonly decktrackerMulliganFormatOverride: GameFormatEnum | null = null;
 	readonly decktrackerMulliganPlayCoinOverride: 'play' | 'coin' | 'all' | null = null;
 	readonly decktrackerMulliganPlayCoinOoc: 'play' | 'coin' | 'all' | null = null;
+	readonly decktrackerMulliganStatsSource: 'community' | 'personal' | 'both' = 'community';
+	readonly decktrackerMulliganPersonalMinGames: 'never' | 'always' | '10' | '25' | '50' | '100' = '25';
 
 	readonly arenaShowMulliganCardImpact: boolean = true;
 	readonly arenaShowMulliganDeckOverview: boolean = true;

@@ -15,13 +15,22 @@ export interface MulliganGuide {
 	readonly opponentClass: 'all' | string;
 	readonly noData?: boolean;
 	readonly againstAi?: boolean;
+	readonly statsSource?: MulliganStatsSource;
+	readonly communitySampleSize?: number;
+	readonly personalSampleSize?: number;
+	readonly personalBelowMinGames?: boolean;
 }
+
+export type MulliganStatsSource = 'community' | 'personal' | 'both';
+export type MulliganPersonalMinGames = 'never' | 'always' | '10' | '25' | '50' | '100';
 
 export interface MulliganCardAdvice {
 	readonly cardId: string;
 	readonly score: number | null;
 	readonly keepRate: number | null;
 	readonly drawnWinrateImpact: number | null;
+	readonly personalScore?: number | null;
+	readonly personalKeepRate?: number | null;
 }
 
 export interface MulliganChartData {
@@ -38,11 +47,16 @@ export interface MulliganChartDataCard {
 	readonly value: number | null;
 	readonly rawValue?: number;
 	readonly keepRate?: number | null;
+	readonly personalKeepRate?: number | null;
+	readonly personalValue?: number | null;
 	readonly selected: boolean;
 	readonly dumped?: boolean;
 	// TODO: don't make that optional?
 	readonly keptColor?: string;
 	readonly impactColor?: string;
+	readonly personalKeptColor?: string;
+	readonly personalImpactColor?: string;
+	readonly showBoth?: boolean;
 }
 
 export interface MulliganDeckData {
@@ -51,6 +65,10 @@ export interface MulliganDeckData {
 	mulliganData: readonly MulliganChartDataCard[];
 	format: GameFormatString;
 	sampleSize: number;
+	personalSampleSize?: number;
+	communitySampleSize?: number;
+	statsSource?: MulliganStatsSource;
+	personalBelowMinGames?: boolean;
 	rankBracket: string;
 	opponentClass: string;
 }

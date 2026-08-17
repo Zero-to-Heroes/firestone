@@ -19,6 +19,7 @@ import {
 	getBaseCardId,
 	isCoin,
 } from '@firestone-hs/reference-data';
+import { CardAnalysis } from '@firestone-hs/replay-metadata';
 import { ConstructedArchetypeService, GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PatchInfo, PatchesConfigService, Preferences, PreferencesService } from '@firestone/shared/common/service';
@@ -26,9 +27,12 @@ import { arraysEqual } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
 	AbstractFacadeService,
+	ApiRunner,
 	AppInjector,
 	CardsFacadeService,
 	IAdsService,
+	IUserService,
+	USER_SERVICE_TOKEN,
 	WindowManagerService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
@@ -50,11 +54,29 @@ import {
 	tap,
 	timer,
 } from 'rxjs';
-import { MulliganCardAdvice, MulliganGuide } from '../models/mulligan-advice';
+import {
+	MulliganCardAdvice,
+	MulliganGuide,
+	MulliganPersonalMinGames,
+	MulliganStatsSource,
+} from '../models/mulligan-advice';
 import { ConstructedMetaDecksStateService } from './constructed-meta-decks-state-builder.service';
 import { MULLIGAN_GUIDE_IS_ENABLED } from './constructed-mulligan-guide-guardian.service';
+import {
+	AggregatedCardMulliganData,
+	aggregatePersonalCardMulliganData,
+	buildMulliganCardAdvice,
+	chunkReviewIds,
+	filterRelevantPlayerDeckMatches,
+	isSamePlayerDecklist,
+	meetsPersonalMinGames,
+	mergeCommunityAndPersonalAdvice,
+} from './constructed-personal-mulligan-stats';
 
 export const CARD_IN_HAND_AFTER_MULLIGAN_THRESHOLD = 20;
+/** Deploy public-lambdas/api-retrieve-cards-analysis and replace with the Function URL. */
+const CARDS_ANALYSIS_LOOKUP_URL = 'https://xhglyhkyqwk2ipq7f3vle562ky0elprm.lambda-url.us-west-2.on.aws/';
+const CARDS_ANALYSIS_LOOKUP_BATCH_SIZE = 250;
 
 @Injectable()
 export class ConstructedMulliganGuideService extends AbstractFacadeService<ConstructedMulliganGuideService> {
@@ -69,7 +91,10 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 	private archetypeService: ConstructedArchetypeService;
 	private gameStats: GameStatsLoaderService;
 	private patches: PatchesConfigService;
+	private api: ApiRunner;
+	private user: IUserService;
 	private mulliganDismissed$$: BehaviorSubject<boolean>;
+	private fetchingReviewIds = new Set<string>();
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'ConstructedMulliganGuideService', () => !!this.mulliganAdvice$$);
@@ -90,6 +115,8 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 		this.archetypeService = AppInjector.get(ConstructedArchetypeService);
 		this.gameStats = AppInjector.get(GameStatsLoaderService);
 		this.patches = AppInjector.get(PatchesConfigService);
+		this.api = AppInjector.get(ApiRunner);
+		this.user = AppInjector.get(USER_SERVICE_TOKEN);
 		this.mulliganDismissed$$ = new BehaviorSubject<boolean>(false);
 
 		await waitForReady(this.scene, this.prefs, this.archetypes, this.gameState, this.gameStats, this.patches);
@@ -542,6 +569,20 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 						map((state) => state?.playerDeck.deckstring),
 						distinctUntilChanged(),
 					),
+					this.gameStats.gameStats$$,
+					this.prefs.preferences$$.pipe(
+						map((prefs) => prefs.decktrackerMulliganStatsSource ?? 'community'),
+						distinctUntilChanged(),
+					),
+					this.prefs.preferences$$.pipe(
+						map((prefs) => prefs.decktrackerMulliganPersonalMinGames ?? '25'),
+						distinctUntilChanged(),
+					),
+					this.patches.currentConstructedMetaPatch$$,
+					this.prefs.preferences$$.pipe(
+						map((prefs) => prefs.decktrackerMulliganTime),
+						distinctUntilChanged(),
+					),
 				]).pipe(
 					map(
 						([
@@ -553,6 +594,11 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 							playerRank,
 							opponentClass,
 							deckstring,
+							gameStats,
+							statsSource,
+							personalMinGames,
+							patchInfo,
+							timeFrame,
 						]) => ({
 							cardsInHand: cardsInHand,
 							cardsMulliganedAway: cardsMulliganedAway,
@@ -565,6 +611,11 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 							playerRank: playerRank,
 							opponentClass: opponentClass,
 							deckstring: deckstring,
+							gameStats: gameStats,
+							statsSource: statsSource,
+							personalMinGames: personalMinGames,
+							patchInfo: patchInfo,
+							timeFrame: timeFrame,
 						}),
 					),
 				),
@@ -582,6 +633,11 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					playerRank,
 					opponentClass,
 					deckstring,
+					gameStats,
+					statsSource,
+					personalMinGames,
+					patchInfo,
+					timeFrame,
 				}) => {
 					console.debug(
 						'[mulligan-guide] bulding mulliganAdvice$',
@@ -657,62 +713,53 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 						opponentClass === 'all'
 							? (aStatToUse?.winrate ?? dStatToUse?.winrate ?? 0)
 							: (archetypeMatchup?.winrate ?? deckMatchup?.winrate ?? 0);
-					const cardsData =
+					const communityCardsData =
 						opponentClass === 'all'
 							? (aStatToUse?.cardsData ?? dStatToUse?.cardsData ?? [])
 							: (archetypeMatchup?.cardsData ?? deckMatchup?.cardsData ?? []);
-					const sampleSize =
+					const communitySampleSize =
 						opponentClass === 'all'
 							? (aStatToUse?.totalGames ?? dStatToUse?.totalGames ?? 0)
 							: (archetypeMatchup?.totalGames ?? deckMatchup?.totalGames ?? 0);
-					const allDeckCards: readonly MulliganCardAdvice[] =
-						deckCards?.map((refCard) => {
-							const cardData =
-								cardsData.find(
-									(card) =>
-										getBaseCardId(card.cardId, this.allCards.getService()) ===
-										getBaseCardId(refCard.id, this.allCards.getService()),
-								) ??
-								cardsData.find(
-									(card) =>
-										this.allCards.getRootCardId(
-											getBaseCardId(card.cardId, this.allCards.getService()),
-										) ===
-										this.allCards.getRootCardId(
-											getBaseCardId(refCard.id, this.allCards.getService()),
-										),
-								);
-							const rawImpact = !!cardData?.inHandAfterMulligan
-								? cardData.inHandAfterMulliganThenWin / cardData?.inHandAfterMulligan - archetypeWinrate
-								: null;
-							const rawKeepRate = !!cardData?.drawnBeforeMulligan
-								? cardData?.keptInMulligan / cardData.drawnBeforeMulligan
-								: null;
-							const rawDrawnWinrateImpact = !!cardData?.drawn
-								? cardData.drawnThenWin / cardData.drawn - archetypeWinrate
-								: null;
-							const mulliganAdvice: MulliganCardAdvice = {
-								cardId: refCard.id,
-								score: rawImpact == null ? null : 100 * rawImpact,
-								keepRate: rawKeepRate,
-								drawnWinrateImpact: rawDrawnWinrateImpact,
-							};
-							return mulliganAdvice;
-						}) ?? [];
+					const playerDeckMatches = this.collectRankedPlayerDeckMatches(gameStats?.stats, deckstring);
+					const relevantPlayerMatches = filterRelevantPlayerDeckMatches(
+						playerDeckMatches,
+						opponentClass,
+						format as GameFormatEnum,
+						playCoin ?? 'all',
+						timeFrame,
+						patchInfo,
+					);
+					void this.maybeFetchMissingCardsAnalysis(relevantPlayerMatches);
+					const cardIds = deckCards?.map((refCard) => refCard.id) ?? [];
+					const adviceForSource = this.buildAdviceForSource(
+						statsSource,
+						cardIds,
+						communityCardsData,
+						communitySampleSize,
+						archetypeWinrate,
+						relevantPlayerMatches,
+						true,
+						personalMinGames,
+					);
 
 					const result: MulliganGuide = {
-						noData: !cardsData.length,
+						noData: !communityCardsData.length,
 						againstAi: gameType === GameType.GT_VS_AI,
 						cardsInHand: cardsInHand!,
 						cardsMulliganedAway: cardsMulliganedAway,
-						allDeckCards: allDeckCards,
-						sampleSize: sampleSize,
+						allDeckCards: adviceForSource.allDeckCards,
+						sampleSize: adviceForSource.sampleSize,
+						communitySampleSize: adviceForSource.communitySampleSize,
+						personalSampleSize: adviceForSource.personalSampleSize,
+						personalBelowMinGames: adviceForSource.personalBelowMinGames,
 						rankBracket: playerRank,
 						opponentClass: opponentClass,
 						format: toFormatType(format!) as GameFormatString,
 						playCoin: playCoin ?? 'all',
 						archetypeId: archetype?.id ?? null,
 						deckstring: deckstring ?? null,
+						statsSource: statsSource,
 					};
 					return result;
 				},
@@ -795,11 +842,9 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 		);
 		const deckCards = deckDefinition?.cards?.map((card) => card[0]).map((dbfId) => this.allCards.getCard(dbfId).id);
 		const allGames = await this.gameStats.gameStats$$.getValueWithInit();
-		const playerDeckMatches = allGames?.stats
-			.filter((s) => s.gameMode === 'ranked')
-			.filter((s) => s.playerDecklist === deckstring);
+		const playerDeckMatches = this.collectRankedPlayerDeckMatches(allGames?.stats, deckstring);
 
-		return this.getStatsFor(
+		return await this.getStatsFor(
 			deckstring,
 			deckCards,
 			opponentClass,
@@ -811,10 +856,11 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			archetype,
 			deckDetails,
 			playerDeckMatches,
+			prefs.decktrackerMulliganStatsSource ?? 'community',
 		);
 	}
 
-	private getStatsFor(
+	private async getStatsFor(
 		deckstring: string,
 		cardsToGetStatsFor: readonly string[],
 		opponentClass: string,
@@ -826,6 +872,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 		archetype: ArchetypeStat | null,
 		deckDetails: DeckStat | null,
 		playerDeckMatches?: readonly GameStat[],
+		statsSource: MulliganStatsSource = 'community',
 	) {
 		const aStatToUse =
 			playCoin === 'coin'
@@ -884,121 +931,235 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			opponentClass === 'all'
 				? (aStatToUse?.winrate ?? dStatToUse?.winrate ?? 0)
 				: (archetypeMatchup?.winrate ?? deckMatchup?.winrate ?? 0);
-		const cardsData =
+		const communityCardsData =
 			opponentClass === 'all'
 				? (aStatToUse?.cardsData ?? dStatToUse?.cardsData ?? [])
 				: (archetypeMatchup?.cardsData ?? deckMatchup?.cardsData ?? []);
-		const sampleSize =
+		const communitySampleSize =
 			opponentClass === 'all'
 				? (aStatToUse?.totalGames ?? dStatToUse?.totalGames ?? 0)
 				: (archetypeMatchup?.totalGames ?? deckMatchup?.totalGames ?? 0);
-		const allDeckCards: readonly MulliganCardAdvice[] =
-			cardsToGetStatsFor?.map((cardId) => {
-				const cardData =
-					cardsData.find(
-						(card) =>
-							getBaseCardId(card.cardId, this.allCards.getService()) ===
-							getBaseCardId(cardId, this.allCards.getService()),
-					) ??
-					cardsData.find(
-						(card) =>
-							this.allCards.getRootCardId(getBaseCardId(card.cardId, this.allCards.getService())) ===
-							this.allCards.getRootCardId(getBaseCardId(cardId, this.allCards.getService())),
-					);
-				const rawImpact = !!cardData?.inHandAfterMulligan
-					? cardData.inHandAfterMulliganThenWin / cardData?.inHandAfterMulligan - archetypeWinrate
-					: null;
-				const rawKeepRate = !!cardData?.drawnBeforeMulligan
-					? cardData?.keptInMulligan / cardData.drawnBeforeMulligan
-					: null;
-				const rawDrawnWinrateImpact = !!cardData?.drawn
-					? cardData.drawnThenWin / cardData.drawn - archetypeWinrate
-					: null;
-				const mulliganAdvice: MulliganCardAdvice = {
-					cardId: cardId,
-					score: rawImpact == null ? null : 100 * rawImpact,
-					keepRate: rawKeepRate,
-					drawnWinrateImpact: rawDrawnWinrateImpact,
-				};
-				return mulliganAdvice;
-			}) ?? [];
+		const relevantPlayerDeckMatches = filterRelevantPlayerDeckMatches(
+			playerDeckMatches,
+			opponentClass,
+			format,
+			playCoin,
+			timeFrame,
+			patchInfo,
+		);
+		await this.maybeFetchMissingCardsAnalysis(relevantPlayerDeckMatches);
+		const latestStats = await this.gameStats.gameStats$$.getValueWithInit();
+		const refreshedMatches = this.collectRankedPlayerDeckMatches(latestStats?.stats, deckstring);
+		const relevantAfterLookup = filterRelevantPlayerDeckMatches(
+			refreshedMatches.length ? refreshedMatches : relevantPlayerDeckMatches,
+			opponentClass,
+			format,
+			playCoin,
+			timeFrame,
+			patchInfo,
+		);
+		const adviceForSource = this.buildAdviceForSource(
+			statsSource,
+			cardsToGetStatsFor,
+			communityCardsData,
+			communitySampleSize,
+			archetypeWinrate,
+			relevantAfterLookup,
+			false,
+			'always',
+		);
 
 		const globalDeckStats =
 			opponentClass === 'all' ? dStatToUse : dMatchupInfo?.find((m) => m.opponentClass === opponentClass);
 		console.debug('globalDeckStats', globalDeckStats, deckDetails);
-		const relevantPlayerDeckMatches =
-			playerDeckMatches
-				?.filter((m) => opponentClass === 'all' || m.opponentClass === opponentClass)
-				.filter((m) => isCorrectFormat(m, format))
-				.filter((m) => isCorrectPlayCoin(m, playCoin))
-				.filter((m) => isCorrectTime(m, timeFrame, patchInfo)) ?? [];
-		const playerWins = relevantPlayerDeckMatches.filter((m) => m.result === 'won').length;
+		const playerWins = relevantAfterLookup.filter((m) => m.result === 'won').length;
 		const result: MulliganGuideWithDeckStats = {
-			noData: !cardsData.length,
+			noData: !communityCardsData.length,
 			againstAi: false,
 			cardsInHand: [],
 			cardsMulliganedAway: [],
-			allDeckCards: allDeckCards,
-			sampleSize: sampleSize,
+			allDeckCards: adviceForSource.allDeckCards,
+			sampleSize: adviceForSource.sampleSize,
+			communitySampleSize: adviceForSource.communitySampleSize,
+			personalSampleSize: adviceForSource.personalSampleSize,
+			personalBelowMinGames: adviceForSource.personalBelowMinGames,
 			rankBracket: playerRank,
 			opponentClass: opponentClass,
 			format: toFormatType(format) as GameFormatString,
 			playCoin: playCoin,
 			archetypeId: archetype?.id ?? null,
 			deckstring: deckstring ?? null,
+			statsSource: statsSource,
 			globalDeckStats: {
 				totalGames: globalDeckStats?.totalGames ?? 0,
 				winrate: globalDeckStats?.winrate ?? null,
 			},
 			playerDeckStats: {
-				totalGames: relevantPlayerDeckMatches.length ?? 0,
-				winrate: !relevantPlayerDeckMatches.length ? null : playerWins / relevantPlayerDeckMatches.length,
+				totalGames: relevantAfterLookup.length ?? 0,
+				winrate: !relevantAfterLookup.length ? null : playerWins / relevantAfterLookup.length,
 			},
 		};
 		return result;
 	}
+
+	private buildAdviceForSource(
+		statsSource: MulliganStatsSource,
+		cardIds: readonly string[],
+		communityCardsData: readonly AggregatedCardMulliganData[],
+		communitySampleSize: number,
+		communityWinrate: number,
+		relevantPlayerMatches: readonly GameStat[],
+		applyMinGames: boolean,
+		personalMinGames: MulliganPersonalMinGames,
+	): {
+		allDeckCards: readonly MulliganCardAdvice[];
+		sampleSize: number;
+		personalSampleSize: number;
+		communitySampleSize: number;
+		personalBelowMinGames: boolean;
+	} {
+		const personalCardsData = aggregatePersonalCardMulliganData(relevantPlayerMatches);
+		const personalSampleSize = relevantPlayerMatches.filter((m) => !!m.cardsAnalysis?.length).length;
+		const personalAllowed = applyMinGames
+			? meetsPersonalMinGames(personalSampleSize, personalMinGames)
+			: personalSampleSize > 0;
+		const playerWins = relevantPlayerMatches.filter((m) => m.result === 'won').length;
+		const personalWinrate = relevantPlayerMatches.length ? playerWins / relevantPlayerMatches.length : 0;
+		const communityAdvice = buildMulliganCardAdvice(
+			cardIds,
+			communityCardsData,
+			communityWinrate,
+			(cardId, cardsData) => this.findCardData(cardId, cardsData),
+		);
+		const personalAdvice = personalAllowed
+			? buildMulliganCardAdvice(cardIds, personalCardsData, personalWinrate, (cardId, cardsData) =>
+					this.findCardData(cardId, cardsData),
+				)
+			: communityAdvice.map((card) => ({
+					...card,
+					score: null,
+					keepRate: null,
+					drawnWinrateImpact: null,
+				}));
+		const personalBelowMinGames =
+			applyMinGames &&
+			(statsSource === 'personal' || statsSource === 'both') &&
+			!personalAllowed &&
+			personalSampleSize > 0;
+
+		if (statsSource === 'both') {
+			return {
+				allDeckCards: mergeCommunityAndPersonalAdvice(communityAdvice, personalAdvice),
+				sampleSize: communitySampleSize,
+				personalSampleSize: personalSampleSize,
+				communitySampleSize: communitySampleSize,
+				personalBelowMinGames: personalBelowMinGames,
+			};
+		}
+		if (statsSource === 'personal') {
+			return {
+				allDeckCards: personalAdvice,
+				sampleSize: personalSampleSize,
+				personalSampleSize: personalSampleSize,
+				communitySampleSize: communitySampleSize,
+				personalBelowMinGames: personalBelowMinGames,
+			};
+		}
+		return {
+			allDeckCards: communityAdvice,
+			sampleSize: communitySampleSize,
+			personalSampleSize: personalSampleSize,
+			communitySampleSize: communitySampleSize,
+			personalBelowMinGames: false,
+		};
+	}
+
+	private collectRankedPlayerDeckMatches(
+		stats: readonly GameStat[] | null | undefined,
+		deckstring: string | null | undefined,
+	): readonly GameStat[] {
+		return (
+			stats
+				?.filter((s) => s.gameMode === 'ranked')
+				.filter((s) =>
+					isSamePlayerDecklist(s.playerDecklist, deckstring, (d) => this.allCards.normalizeDeckList(d)),
+				) ?? []
+		);
+	}
+
+	private findCardData(
+		cardId: string,
+		cardsData: readonly AggregatedCardMulliganData[],
+	): AggregatedCardMulliganData | undefined {
+		return (
+			cardsData.find(
+				(card) =>
+					getBaseCardId(card.cardId, this.allCards.getService()) ===
+					getBaseCardId(cardId, this.allCards.getService()),
+			) ??
+			cardsData.find(
+				(card) =>
+					this.allCards.getRootCardId(getBaseCardId(card.cardId, this.allCards.getService())) ===
+					this.allCards.getRootCardId(getBaseCardId(cardId, this.allCards.getService())),
+			)
+		);
+	}
+
+	private async maybeFetchMissingCardsAnalysis(matches: readonly GameStat[]): Promise<void> {
+		if (!this.ads.hasPremiumSub$$.getValue()) {
+			return;
+		}
+		const missing = matches
+			.filter((match) => match.cardsAnalysis == null && !!match.reviewId)
+			.map((match) => match.reviewId)
+			.filter((reviewId) => !this.fetchingReviewIds.has(reviewId));
+		if (!missing.length) {
+			return;
+		}
+		missing.forEach((reviewId) => this.fetchingReviewIds.add(reviewId));
+		try {
+			await this.fetchAndStoreCardsAnalysis(missing);
+		} catch (e) {
+			console.warn('[mulligan-guide] cardsAnalysis lookup failed', e);
+		} finally {
+			missing.forEach((reviewId) => this.fetchingReviewIds.delete(reviewId));
+		}
+	}
+
+	private async fetchAndStoreCardsAnalysis(reviewIds: readonly string[]): Promise<void> {
+		const user = await this.user.getCurrentUser();
+		if (!user?.userId && !user?.username) {
+			return;
+		}
+		const found = new Map<string, readonly CardAnalysis[]>();
+		for (const batch of chunkReviewIds(reviewIds, CARDS_ANALYSIS_LOOKUP_BATCH_SIZE)) {
+			const data = await this.api.callPostApi<{
+				results?: readonly { reviewId: string; cardsAnalysis?: readonly CardAnalysis[] }[];
+			}>(CARDS_ANALYSIS_LOOKUP_URL, {
+				userId: user.userId,
+				userName: user.username,
+				reviewIds: batch,
+			});
+			if (!data) {
+				continue;
+			}
+			for (const row of data.results ?? []) {
+				if (row?.reviewId) {
+					found.set(row.reviewId, row.cardsAnalysis ?? []);
+				}
+			}
+		}
+		if (!found.size) {
+			return;
+		}
+		await this.gameStats.updateCardsAnalysis(
+			[...found.entries()].map(([reviewId, cardsAnalysis]) => ({
+				reviewId,
+				cardsAnalysis,
+			})),
+		);
+	}
 }
-
-const isCorrectFormat = (match: GameStat, format: GameFormatEnum): boolean => {
-	switch (format) {
-		case GameFormatEnum.FT_WILD:
-			return match.gameFormat === 'wild';
-		case GameFormatEnum.FT_STANDARD:
-			return match.gameFormat === 'standard';
-		case GameFormatEnum.FT_CLASSIC:
-			return match.gameFormat === 'classic';
-		default:
-			return false;
-	}
-};
-
-const isCorrectPlayCoin = (match: GameStat, playCoin: 'coin' | 'play' | 'all'): boolean => {
-	if (playCoin === 'all') {
-		return true;
-	}
-	if (playCoin === 'coin') {
-		return match.coinPlay === 'coin';
-	}
-	if (playCoin === 'play') {
-		return match.coinPlay === 'play';
-	}
-	return false;
-};
-
-const isCorrectTime = (
-	match: GameStat,
-	timeFrame: 'last-patch' | 'past-3' | 'past-7',
-	patchInfo: PatchInfo | null | undefined,
-): boolean => {
-	switch (timeFrame) {
-		case 'past-3':
-			return match.creationTimestamp > Date.now() - 3 * 24 * 60 * 60 * 1000;
-		case 'past-7':
-			return match.creationTimestamp > Date.now() - 7 * 24 * 60 * 60 * 1000;
-		case 'last-patch':
-			return !patchInfo ? false : match.creationTimestamp > new Date(patchInfo.date).getTime();
-	}
-};
 
 export interface MulliganGuideWithDeckStats extends MulliganGuide {
 	globalDeckStats: MulliganDeckStats;

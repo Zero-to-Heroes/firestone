@@ -35,7 +35,20 @@ export class MatchAnalysisService {
 		if (!game.deckstring?.length) {
 			return null;
 		}
+		if (!game.replay) {
+			console.warn('[match-analysis] missing replay, skipping analysis');
+			return null;
+		}
 
+		try {
+			return this.buildMatchStatsInternal(game);
+		} catch (e) {
+			console.error('[match-analysis] could not build match stats', e);
+			return null;
+		}
+	}
+
+	private buildMatchStatsInternal(game: GameForUpload): MatchAnalysis {
 		const replay: Replay = game.replay;
 
 		const parser = new ReplayParser(replay, this.allCards, [cardsInHand, cardDrawn, cardPlayed, cardDiscovered]);
@@ -112,22 +125,22 @@ export class MatchAnalysisService {
 			.sort();
 		const cardsAnalysis: readonly CardAnalysis[] = deckCards.map((cardId) => {
 			const refCard = this.allCards.getCard(cardId);
-			const normalizedCardId = getBaseCardId(cardId, this.allCards.getService());
-			// Remove the info from cards after mulligan
-			const cardAfterMulligan = cardsAfterMulligan.find((c) => c.cardId === cardId);
+			const cardAfterMulligan = cardsAfterMulligan.find((c) => this.isSameAnalysisCard(c.cardId, cardId));
 			if (cardAfterMulligan) {
 				cardsAfterMulligan = cardsAfterMulligan.filter((c) => c !== cardAfterMulligan);
 			}
-			const cardBeforeMulliganIdx = cardsBeforeMulligan.indexOf(cardId);
+			const cardBeforeMulliganIdx = cardsBeforeMulligan.findIndex((drawnId) =>
+				this.isSameAnalysisCard(drawnId, cardId),
+			);
 			if (cardBeforeMulliganIdx !== -1) {
 				// Remove the info from cardsBeforeMulligan array, but be careful not to remove duplicates
 				cardsBeforeMulligan.splice(cardBeforeMulliganIdx, 1);
 			}
-			const cardDrawn = cardsDrawn.find((c) => c.cardId === cardId);
+			const cardDrawn = cardsDrawn.find((c) => this.isSameAnalysisCard(c.cardId, cardId));
 			if (cardDrawn) {
 				cardsDrawn = cardsDrawn.filter((c) => c !== cardDrawn);
 			}
-			const cardPlayed = cardsPlayed.find((c) => c.cardId === cardId);
+			const cardPlayed = cardsPlayed.find((c) => this.isSameAnalysisCard(c.cardId, cardId));
 			if (cardPlayed) {
 				cardsPlayed = cardsPlayed.filter((c) => c !== cardPlayed);
 			}
@@ -159,6 +172,15 @@ export class MatchAnalysisService {
 			cardsDrawn: finalCardsDrawn,
 		};
 		return result;
+	}
+
+	private isSameAnalysisCard(drawnCardId: string, deckCardId: string): boolean {
+		const service = this.allCards.getService();
+		const drawnBase = getBaseCardId(drawnCardId, service);
+		const deckBase = getBaseCardId(deckCardId, service);
+		return (
+			drawnBase === deckBase || this.allCards.getRootCardId(drawnBase) === this.allCards.getRootCardId(deckBase)
+		);
 	}
 
 	public buildCardsPlayed(playerId: number, replay: Replay): readonly string[] {

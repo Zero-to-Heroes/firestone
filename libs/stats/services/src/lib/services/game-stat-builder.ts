@@ -71,7 +71,9 @@ export const buildGameStat = (
 		playerCardId: playerCardId,
 		playerClass: mainPlayerClass,
 		playerDeckName: game.deckName,
-		playerDecklist: game.deckstring,
+		playerDecklist: isMercenaries(game.gameMode)
+			? game.deckstring
+			: (allCards.normalizeDeckList(game.deckstring) ?? game.deckstring),
 		playerName: src.mainPlayerName ?? game.player?.name,
 		playerRank: game.playerRank,
 		newPlayerRank: game.newPlayerRank,
@@ -94,6 +96,7 @@ export const buildGameStat = (
 		bgsTrinkets: metadata.bgs?.trinkets?.map((t) => t.cardId) ?? [],
 		bgsCompArchetype: metadata.bgs?.compArchetype,
 		finalComp: encodeBgsFinalComp(metadata.bgs?.finalComp),
+		cardsAnalysis: metadata.stats?.matchAnalysis?.cardsAnalysis ?? null,
 	});
 
 	if (!isMercenaries(game.gameMode)) {

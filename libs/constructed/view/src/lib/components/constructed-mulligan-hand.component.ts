@@ -38,7 +38,7 @@ import {
 	takeUntil,
 } from 'rxjs';
 import { InternalMulliganAdvice } from './mulligan-hand-view.component';
-import { buildColor } from './utils';
+import { buildColor, formatPersonalMinGamesWarningTooltip } from './utils';
 
 @Component({
 	standalone: false,
@@ -51,7 +51,9 @@ import { buildColor } from './utils';
 				[showPremiumBanner]="showPremiumBanner$ | async"
 				[showDismiss]="showDismiss$ | async"
 				[cardsInHandInfo]="cardsInHandInfo$ | async"
+				[keepRateTooltip]="keepRateTooltip$ | async"
 				[impactWithFreeUsersHelpTooltip]="helpTooltip$ | async"
+				[personalMinGamesWarningTooltip]="personalMinGamesWarningTooltip$ | async"
 				[premiumType]="'constructed'"
 				[freeUses]="freeUses"
 				[dismiss]="dismissMulligan"
@@ -71,6 +73,8 @@ export class ConstructedMulliganHandComponent
 	showPremiumBanner$: Observable<boolean>;
 	showDismiss$: Observable<boolean>;
 	helpTooltip$: Observable<string | null>;
+	keepRateTooltip$: Observable<string | null>;
+	personalMinGamesWarningTooltip$: Observable<string | null>;
 
 	freeUses = CONSTRUCTED_MULLIGAN_DAILY_FREE_USES;
 
@@ -118,15 +122,54 @@ export class ConstructedMulliganHandComponent
 			this.mapData((prefs) => prefs.decktrackerShowMulliganCardImpact),
 		);
 		this.showDismiss$ = this.mulligan.mulliganAdvice$$.pipe(this.mapData((advice) => !!advice?.lingering));
-		this.helpTooltip$ = combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$]).pipe(
+		this.personalMinGamesWarningTooltip$ = combineLatest([
+			this.mulligan.mulliganAdvice$$,
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.decktrackerMulliganPersonalMinGames ?? '25')),
+		]).pipe(
+			this.mapData(([advice, personalMinGames]) =>
+				formatPersonalMinGamesWarningTooltip(this.i18n, {
+					personalBelowMinGames: advice?.personalBelowMinGames,
+					personalSampleSize: advice?.personalSampleSize,
+					personalMinGames,
+				}),
+			),
+		);
+		this.keepRateTooltip$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => {
+				const source = this.i18n.translateString(
+					`decktracker.overlay.mulligan.stats-source.${prefs.decktrackerMulliganStatsSource ?? 'community'}`,
+				);
+				return this.i18n.translateString(
+					'decktracker.overlay.mulligan.mulligan-keep-rate-tooltip-with-source',
+					{
+						source,
+					},
+				);
+			}),
+		);
+		this.helpTooltip$ = combineLatest([
+			this.ads.hasPremiumSub$$,
+			this.guardian.freeUsesLeft$$,
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.decktrackerMulliganStatsSource ?? 'community')),
+		]).pipe(
 			debounceTime(200),
-			this.mapData(([hasPremiumSub, freeUsesLeft]) => {
+			this.mapData(([hasPremiumSub, freeUsesLeft, statsSource]) => {
+				const source = this.i18n.translateString(`decktracker.overlay.mulligan.stats-source.${statsSource}`);
 				if (hasPremiumSub) {
-					return this.i18n.translateString('decktracker.overlay.mulligan.mulligan-impact-tooltip-premium');
+					return this.i18n.translateString(
+						'decktracker.overlay.mulligan.mulligan-impact-tooltip-premium-with-source',
+						{
+							source,
+						},
+					);
 				}
-				return this.i18n.translateString('decktracker.overlay.mulligan.mulligan-impact-tooltip-free', {
-					value: freeUsesLeft,
-				});
+				return this.i18n.translateString(
+					'decktracker.overlay.mulligan.mulligan-impact-tooltip-free-with-source',
+					{
+						value: freeUsesLeft,
+						source,
+					},
+				);
 			}),
 			distinctUntilChanged(),
 			shareReplay(1),
@@ -151,12 +194,29 @@ export class ConstructedMulliganHandComponent
 							),
 					)
 					.map((advice) => ({
+						showBoth: guide?.statsSource === 'both',
 						impact: noData ? null : advice?.score == null ? '-' : advice.score.toFixed(2),
 						keepRate: noData
 							? null
 							: advice?.keepRate == null
 								? '-'
 								: `${(100 * advice.keepRate).toFixed(1)}%`,
+						personalImpact:
+							guide?.statsSource === 'both'
+								? noData
+									? null
+									: advice?.personalScore == null
+										? '-'
+										: advice.personalScore.toFixed(2)
+								: null,
+						personalKeepRate:
+							guide?.statsSource === 'both'
+								? noData
+									? null
+									: advice?.personalKeepRate == null
+										? '-'
+										: `${(100 * advice.personalKeepRate).toFixed(1)}%`
+								: null,
 						keptColor: buildColor(
 							'hsl(112, 100%, 64%)',
 							'hsl(0, 100%, 64%)',
@@ -165,6 +225,20 @@ export class ConstructedMulliganHandComponent
 							0.4,
 						),
 						impactColor: buildColor('hsl(112, 100%, 64%)', 'hsl(0, 100%, 64%)', advice?.score ?? 0, 4, -4),
+						personalKeptColor: buildColor(
+							'hsl(112, 100%, 64%)',
+							'hsl(0, 100%, 64%)',
+							advice?.personalKeepRate ?? 0,
+							0.6,
+							0.4,
+						),
+						personalImpactColor: buildColor(
+							'hsl(112, 100%, 64%)',
+							'hsl(0, 100%, 64%)',
+							advice?.personalScore ?? 0,
+							4,
+							-4,
+						),
 					}));
 			}),
 			shareReplay(1),

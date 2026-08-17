@@ -1,5 +1,6 @@
 import { BgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { BnetRegion, isMercenariesPvP, Race } from '@firestone-hs/reference-data';
+import { CardAnalysis } from '@firestone-hs/replay-metadata';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { StatGameFormatType } from './stat-game-format.type';
 import { StatGameModeType } from './stat-game-mode.type';
@@ -51,6 +52,8 @@ export class GameStat {
 	readonly finalComp?: string;
 
 	readonly postMatchStats?: BgsPostMatchStats;
+	/** Per-card mulligan/draw flags from MatchAnalysis. Empty array means looked up with no data. */
+	readonly cardsAnalysis?: readonly CardAnalysis[] | null;
 	/** @deprecated */
 	readonly mercHeroTimings: readonly { cardId: string; turnInPlay: number }[];
 	/** @deprecated */

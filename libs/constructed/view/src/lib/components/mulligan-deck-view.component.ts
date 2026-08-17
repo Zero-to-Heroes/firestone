@@ -83,12 +83,28 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 					>
 						<div class="text">{{ playCoinLabel }}</div>
 					</div>
+					<div
+						class="filter stats-source"
+						*ngIf="cycleStatsSource"
+						(click)="cycleStatsSource()"
+						[helpTooltip]="statsSourceTooltip"
+					>
+						<div class="text">{{ statsSourceLabel }}</div>
+					</div>
 				</div>
 				<div class="additional-info">
 					<div class="filter format" *ngIf="formatLabel" (click)="cycleFormat()">
 						<div class="text">{{ formatLabel }}</div>
 					</div>
-					<div class="sample-size" [helpTooltip]="sampleSizeTooltip">{{ sampleSize }}</div>
+					<div class="sample-size" [helpTooltip]="sampleSizeTooltip">
+						<span>{{ sampleSize }}</span>
+						<div
+							class="warning"
+							*ngIf="personalMinGamesWarningTooltip"
+							inlineSVG="assets/svg/attention.svg"
+							[helpTooltip]="personalMinGamesWarningTooltip"
+						></div>
+					</div>
 				</div>
 			</div>
 			<div class="content">
@@ -126,14 +142,44 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 					<div
 						class="deck-card"
 						*ngFor="let card of allDeckMulliganInfo"
-						[ngClass]="{ selected: card.selected, dumped: card.dumped }"
+						[ngClass]="{ selected: card.selected, dumped: card.dumped, 'show-both': card.showBoth }"
 					>
-						<div class="cell keep-rate" [style.color]="card.keptColor">
-							{{ card.keepRate === null ? '-' : card.keepRate?.toFixed(2) + '%' }}
+						<div class="cell keep-rate">
+							<div class="stat-line" [style.color]="card.keptColor">
+								<span
+									class="src"
+									*ngIf="card.showBoth"
+									[fsTranslate]="'decktracker.overlay.mulligan.stats-source-short.community'"
+								></span>
+								<span>{{ card.keepRate === null ? '-' : card.keepRate?.toFixed(1) + '%' }}</span>
+							</div>
+							<div class="stat-line" *ngIf="card.showBoth" [style.color]="card.personalKeptColor">
+								<span
+									class="src"
+									[fsTranslate]="'decktracker.overlay.mulligan.stats-source-short.personal'"
+								></span>
+								<span>{{
+									card.personalKeepRate === null ? '-' : card.personalKeepRate?.toFixed(1) + '%'
+								}}</span>
+							</div>
 						</div>
 						<card-tile class="cell card" [cardId]="card.cardId"></card-tile>
-						<div class="cell impact" [style.color]="card.impactColor">
-							{{ card.value?.toFixed(2) ?? '-' }}
+						<div class="cell impact">
+							<div class="stat-line" [style.color]="card.impactColor">
+								<span
+									class="src"
+									*ngIf="card.showBoth"
+									[fsTranslate]="'decktracker.overlay.mulligan.stats-source-short.community'"
+								></span>
+								<span>{{ card.value?.toFixed(2) ?? '-' }}</span>
+							</div>
+							<div class="stat-line" *ngIf="card.showBoth" [style.color]="card.personalImpactColor">
+								<span
+									class="src"
+									[fsTranslate]="'decktracker.overlay.mulligan.stats-source-short.personal'"
+								></span>
+								<span>{{ card.personalValue?.toFixed(2) ?? '-' }}</span>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -159,15 +205,19 @@ export class MulliganDeckViewComponent extends AbstractSubscriptionComponent imp
 	@Input() opponentLabel: string | null;
 	@Input() playCoinLabel: string | null;
 	@Input() playCoinTooltip: string | null;
+	@Input() statsSourceLabel: string | null;
+	@Input() statsSourceTooltip: string | null;
 	@Input() timeTooltip: string | null;
 	@Input() timeLabel: string | null;
 	@Input() formatLabel: string | null;
 	@Input() sampleSize: string | null;
 	@Input() sampleSizeTooltip: string | null;
+	@Input() personalMinGamesWarningTooltip: string | null;
 	@Input() allowResize = true;
 	@Input() cycleRanks: () => void;
 	@Input() cycleOpponent: () => void;
 	@Input() cyclePlayCoin: () => void;
+	@Input() cycleStatsSource: () => void;
 	@Input() cycleTime: () => void;
 	@Input() cycleFormat: () => void;
 	@Input() dismiss: () => void;
