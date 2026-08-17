@@ -87,13 +87,21 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 					>
 						<div class="text">{{ playCoinLabel }}</div>
 					</div>
-					<div
-						class="filter stats-source"
-						*ngIf="cycleStatsSource"
-						(click)="cycleStatsSource()"
-						[helpTooltip]="statsSourceTooltip"
-					>
-						<div class="text">{{ statsSourceLabel }}</div>
+					<div class="stats-source-wrap" *ngIf="cycleStatsSource || statsSourceLabel">
+						<div
+							class="filter stats-source"
+							[class.locked]="!!personalMinGamesWarningTooltip"
+							(click)="onCycleStatsSource()"
+							[helpTooltip]="personalMinGamesWarningTooltip ? null : statsSourceTooltip"
+						>
+							<div class="text">{{ statsSourceLabel }}</div>
+						</div>
+						<div
+							class="warning"
+							*ngIf="personalMinGamesWarningTooltip"
+							inlineSVG="assets/svg/attention.svg"
+							[helpTooltip]="personalMinGamesWarningTooltip"
+						></div>
 					</div>
 				</div>
 				<div class="additional-info">
@@ -102,12 +110,6 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 					</div>
 					<div class="sample-size" [helpTooltip]="sampleSizeTooltip">
 						<span>{{ sampleSize }}</span>
-						<div
-							class="warning"
-							*ngIf="personalMinGamesWarningTooltip"
-							inlineSVG="assets/svg/attention.svg"
-							[helpTooltip]="personalMinGamesWarningTooltip"
-						></div>
 					</div>
 				</div>
 			</div>
@@ -261,7 +263,7 @@ export class MulliganDeckViewComponent extends AbstractSubscriptionComponent imp
 		this.deckstring$ = this.deckstring$$.pipe(this.mapData((info) => info));
 		this.archetypeId$ = this.archetypeId$$.pipe(this.mapData((info) => info));
 		this.format$ = this.fomat$$.pipe(this.mapData((info) => info));
-		this.showBoth$ = this.deckMulliganInfo$$.pipe(this.mapData((info) => info?.statsSource === 'both'));
+		this.showBoth$ = this.deckMulliganInfo$$.pipe(this.mapData((info) => !!info?.showPersonalColumns));
 		this.sortedDeckMulliganInfo$ = combineLatest([this.deckMulliganInfo$$, this.sortCriteria$$]).pipe(
 			this.mapData(([mulliganInfo, sortCriteria]) =>
 				[...(mulliganInfo?.mulliganData ?? [])].sort((a, b) => this.sortCards(a, b, sortCriteria)),
@@ -275,6 +277,13 @@ export class MulliganDeckViewComponent extends AbstractSubscriptionComponent imp
 
 	onDismiss() {
 		this.dismiss?.();
+	}
+
+	onCycleStatsSource() {
+		if (this.personalMinGamesWarningTooltip) {
+			return;
+		}
+		this.cycleStatsSource?.();
 	}
 
 	onSortClick(rawCriteria: string) {

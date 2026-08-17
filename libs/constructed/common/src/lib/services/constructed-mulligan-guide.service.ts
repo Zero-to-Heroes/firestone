@@ -753,13 +753,14 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 						communitySampleSize: adviceForSource.communitySampleSize,
 						personalSampleSize: adviceForSource.personalSampleSize,
 						personalBelowMinGames: adviceForSource.personalBelowMinGames,
+						showPersonalColumns: adviceForSource.showPersonalColumns,
 						rankBracket: playerRank,
 						opponentClass: opponentClass,
 						format: toFormatType(format!) as GameFormatString,
 						playCoin: playCoin ?? 'all',
 						archetypeId: archetype?.id ?? null,
 						deckstring: deckstring ?? null,
-						statsSource: statsSource,
+						statsSource: adviceForSource.statsSource,
 					};
 					return result;
 				},
@@ -983,13 +984,14 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			communitySampleSize: adviceForSource.communitySampleSize,
 			personalSampleSize: adviceForSource.personalSampleSize,
 			personalBelowMinGames: adviceForSource.personalBelowMinGames,
+			showPersonalColumns: adviceForSource.showPersonalColumns,
 			rankBracket: playerRank,
 			opponentClass: opponentClass,
 			format: toFormatType(format) as GameFormatString,
 			playCoin: playCoin,
 			archetypeId: archetype?.id ?? null,
 			deckstring: deckstring ?? null,
-			statsSource: statsSource,
+			statsSource: adviceForSource.statsSource,
 			globalDeckStats: {
 				totalGames: globalDeckStats?.totalGames ?? 0,
 				winrate: globalDeckStats?.winrate ?? null,
@@ -1017,6 +1019,8 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 		personalSampleSize: number;
 		communitySampleSize: number;
 		personalBelowMinGames: boolean;
+		showPersonalColumns: boolean;
+		statsSource: MulliganStatsSource;
 	} {
 		const personalCardsData = aggregatePersonalCardMulliganData(relevantPlayerMatches);
 		const personalSampleSize = relevantPlayerMatches.filter((m) => !!m.cardsAnalysis?.length).length;
@@ -1031,38 +1035,37 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			communityWinrate,
 			(cardId, cardsData) => this.findCardData(cardId, cardsData),
 		);
-		const personalAdvice = personalAllowed
-			? buildMulliganCardAdvice(cardIds, personalCardsData, personalWinrate, (cardId, cardsData) =>
-					this.findCardData(cardId, cardsData),
-				)
-			: communityAdvice.map((card) => ({
-					...card,
-					score: null,
-					keepRate: null,
-					drawnWinrateImpact: null,
-				}));
-		const personalBelowMinGames =
-			applyMinGames &&
-			(statsSource === 'personal' || statsSource === 'both') &&
-			!personalAllowed &&
-			personalSampleSize > 0;
+		const lockToCommunity = applyMinGames && !personalAllowed;
+		const effectiveSource: MulliganStatsSource = lockToCommunity ? 'community' : statsSource;
+		const personalBelowMinGames = lockToCommunity;
+		const showPersonalColumns = effectiveSource === 'both';
+		const personalAdvice =
+			effectiveSource === 'personal' || effectiveSource === 'both'
+				? buildMulliganCardAdvice(cardIds, personalCardsData, personalWinrate, (cardId, cardsData) =>
+						this.findCardData(cardId, cardsData),
+					)
+				: null;
 
-		if (statsSource === 'both') {
+		if (effectiveSource === 'both' && personalAdvice) {
 			return {
 				allDeckCards: mergeCommunityAndPersonalAdvice(communityAdvice, personalAdvice),
 				sampleSize: communitySampleSize,
 				personalSampleSize: personalSampleSize,
 				communitySampleSize: communitySampleSize,
 				personalBelowMinGames: personalBelowMinGames,
+				showPersonalColumns: showPersonalColumns,
+				statsSource: effectiveSource,
 			};
 		}
-		if (statsSource === 'personal') {
+		if (effectiveSource === 'personal' && personalAdvice) {
 			return {
 				allDeckCards: personalAdvice,
 				sampleSize: personalSampleSize,
 				personalSampleSize: personalSampleSize,
 				communitySampleSize: communitySampleSize,
 				personalBelowMinGames: personalBelowMinGames,
+				showPersonalColumns: false,
+				statsSource: effectiveSource,
 			};
 		}
 		return {
@@ -1070,7 +1073,9 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			sampleSize: communitySampleSize,
 			personalSampleSize: personalSampleSize,
 			communitySampleSize: communitySampleSize,
-			personalBelowMinGames: false,
+			personalBelowMinGames: personalBelowMinGames,
+			showPersonalColumns: false,
+			statsSource: effectiveSource,
 		};
 	}
 

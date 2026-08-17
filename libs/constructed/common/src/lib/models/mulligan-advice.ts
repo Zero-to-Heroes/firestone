@@ -19,6 +19,7 @@ export interface MulliganGuide {
 	readonly communitySampleSize?: number;
 	readonly personalSampleSize?: number;
 	readonly personalBelowMinGames?: boolean;
+	readonly showPersonalColumns?: boolean;
 }
 
 export type MulliganStatsSource = 'community' | 'personal' | 'both';
@@ -69,6 +70,7 @@ export interface MulliganDeckData {
 	communitySampleSize?: number;
 	statsSource?: MulliganStatsSource;
 	personalBelowMinGames?: boolean;
+	showPersonalColumns?: boolean;
 	rankBracket: string;
 	opponentClass: string;
 }

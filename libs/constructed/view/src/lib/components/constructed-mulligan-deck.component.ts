@@ -100,7 +100,7 @@ export class ConstructedMulliganDeckComponent
 	playCoinLabel$: Observable<string>;
 	playCoinTooltip$: Observable<string>;
 	statsSourceLabel$: Observable<string>;
-	statsSourceTooltip$: Observable<string>;
+	statsSourceTooltip$: Observable<string | null>;
 	timeLabel$: Observable<string>;
 	timeTooltip$: Observable<string>;
 	formatLabel$: Observable<string>;
@@ -180,7 +180,7 @@ export class ConstructedMulliganDeckComponent
 							0.4,
 						),
 						impactColor: buildColor('hsl(112, 100%, 64%)', 'hsl(0, 100%, 64%)', advice.score ?? 0, 4, -4),
-						...personalMulliganChartFields(advice, guide!.statsSource === 'both'),
+						...personalMulliganChartFields(advice, !!guide!.showPersonalColumns),
 					})),
 					format: guide!.format,
 					sampleSize: guide!.sampleSize,
@@ -188,6 +188,7 @@ export class ConstructedMulliganDeckComponent
 					communitySampleSize: guide!.communitySampleSize,
 					statsSource: guide!.statsSource,
 					personalBelowMinGames: guide!.personalBelowMinGames,
+					showPersonalColumns: guide!.showPersonalColumns,
 					rankBracket: guide!.rankBracket,
 					opponentClass: guide!.opponentClass,
 				};
@@ -260,27 +261,26 @@ export class ConstructedMulliganDeckComponent
 					)!,
 			),
 		);
-		this.statsSourceLabel$ = this.prefs.preferences$$.pipe(
+		this.statsSourceLabel$ = this.allDeckMulliganInfo$.pipe(
 			this.mapData(
-				(prefs) =>
+				(info) =>
 					this.i18n.translateString(
-						`decktracker.overlay.mulligan.stats-source.${prefs.decktrackerMulliganStatsSource ?? 'community'}`,
+						`decktracker.overlay.mulligan.stats-source.${info.statsSource ?? 'community'}`,
 					)!,
 			),
 		);
-		this.statsSourceTooltip$ = this.prefs.preferences$$.pipe(
-			this.mapData(
-				(prefs) =>
-					this.i18n.translateString(
-						`decktracker.overlay.mulligan.deck-mulligan-filter-stats-source-tooltip`,
-						{
-							source: this.i18n.translateString(
-								`decktracker.overlay.mulligan.stats-source.${
-									prefs.decktrackerMulliganStatsSource ?? 'community'
-								}`,
-							),
-						},
-					)!,
+		this.statsSourceTooltip$ = this.allDeckMulliganInfo$.pipe(
+			this.mapData((info) =>
+				info.personalBelowMinGames
+					? null
+					: this.i18n.translateString(
+							`decktracker.overlay.mulligan.deck-mulligan-filter-stats-source-tooltip`,
+							{
+								source: this.i18n.translateString(
+									`decktracker.overlay.mulligan.stats-source.${info.statsSource ?? 'community'}`,
+								),
+							},
+						),
 			),
 		);
 		this.timeLabel$ = this.prefs.preferences$$.pipe(
@@ -426,6 +426,9 @@ export class ConstructedMulliganDeckComponent
 	};
 
 	cycleStatsSource = async () => {
+		if (this.mulligan.mulliganAdvice$$.value?.personalBelowMinGames) {
+			return;
+		}
 		const prefs = await this.prefs.getPreferences();
 		const currentSource = prefs.decktrackerMulliganStatsSource ?? 'community';
 		const options: readonly ('community' | 'personal' | 'both')[] = ['community', 'personal', 'both'];

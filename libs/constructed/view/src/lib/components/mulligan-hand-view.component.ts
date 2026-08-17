@@ -17,12 +17,6 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 				[helpTooltip]="'decktracker.overlay.mulligan.dismiss-tooltip' | fsTranslate"
 				inlineSVG="assets/svg/close.svg"
 			></button>
-			<div
-				class="min-games-warning"
-				*ngIf="personalMinGamesWarningTooltip && showHandInfo"
-				inlineSVG="assets/svg/attention.svg"
-				[helpTooltip]="personalMinGamesWarningTooltip"
-			></div>
 			<ng-container *ngIf="showHandInfo">
 				<ul class="mulligan-guide" *ngIf="cardsInHandInfo" [ngClass]="{ wide: cardsInHandInfo.length === 4 }">
 					<ng-container *ngIf="showPremiumBanner === false">
@@ -92,7 +86,6 @@ export class MulliganHandViewComponent extends AbstractSubscriptionComponent {
 	@Input() cardsInHandInfo: readonly InternalMulliganAdvice[] | null;
 	@Input() keepRateTooltip: string | null;
 	@Input() impactWithFreeUsersHelpTooltip: string | null;
-	@Input() personalMinGamesWarningTooltip: string | null;
 	@Input() premiumType: 'arena' | 'constructed';
 	@Input() freeUses: number;
 	@Input() dismiss: () => void;

@@ -24,17 +24,6 @@
 	}
 }
 
-.min-games-warning {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 16px;
-	height: 16px;
-	color: #ffb347;
-	cursor: help;
-	z-index: 1;
-}
-
 .scalable {
 	transform: scale(var(--decktracker-mulligan-scale, 1));
 	position: relative;
