@@ -45,6 +45,7 @@ import { Observable, combineLatest, distinctUntilChanged, filter, shareReplay, s
 			<mulligan-deck-view
 				[deckMulliganInfo]="value.info"
 				[showMulliganOverview]="true"
+				[showSettings]="false"
 				[showFilters]="true"
 				[showArchetypeSelection]="true"
 				[rankBracketTooltip]="rankBracketTooltip$ | async"

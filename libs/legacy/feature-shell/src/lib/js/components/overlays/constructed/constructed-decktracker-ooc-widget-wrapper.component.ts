@@ -12,12 +12,14 @@ import { SceneMode } from '@firestone-hs/reference-data';
 import { AbstractWidgetWrapperComponent } from '@firestone/app/view';
 import { DeckParserFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
+import { SettingsControllerService } from '@firestone/settings/services';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import {
 	ADS_SERVICE_TOKEN,
 	IAdsService,
 	ILocalizationService,
 	OverwolfService,
+	WindowHandlerFacadeService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, shareReplay, takeUntil } from 'rxjs';
@@ -53,6 +55,13 @@ import { Observable, combineLatest, shareReplay, takeUntil } from 'rxjs';
 							(click)="toggleMode(value.premium)"
 							inlineSVG="assets/svg/restore.svg"
 							[helpTooltip]="toggleButtonTooltip$ | async"
+						></button>
+						<button
+							class="settings-button"
+							type="button"
+							(click)="openSettings()"
+							[helpTooltip]="'settings.title' | fsTranslate"
+							inlineSVG="assets/svg/settings.svg"
 						></button>
 						<control-close
 							[eventProvider]="closeHandler"
@@ -103,6 +112,8 @@ export class ConstructedDecktrackerOocWidgetWrapperComponent
 		private readonly deck: DeckParserFacadeService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 		private readonly i18n: ILocalizationService,
+		private readonly settings: SettingsControllerService,
+		private readonly windowHandler: WindowHandlerFacadeService,
 	) {
 		super(cdr, ow, el, prefs, renderer);
 	}
@@ -179,6 +190,12 @@ export class ConstructedDecktrackerOocWidgetWrapperComponent
 		};
 		await this.prefs.savePreferences(newPrefs);
 	};
+
+	async openSettings() {
+		this.settings.selectNodeFromOutside('decktracker-lobby');
+		const prefs = await this.prefs.getPreferences();
+		this.windowHandler.showSettingsWindow(prefs.collectionUseOverlay);
+	}
 
 	async toggleMode(hasPremium: boolean) {
 		if (!hasPremium) {

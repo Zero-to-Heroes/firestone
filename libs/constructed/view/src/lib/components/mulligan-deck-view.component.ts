@@ -44,12 +44,13 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 			[ngClass]="{ 'show-both': showBoth$ | async }"
 		>
 			<div class="widget-header">
-				<div class="header-buttons">
+				<div class="header-buttons" *ngIf="showSettings || showDismiss">
 					<button
 						class="settings-button"
+						*ngIf="showSettings"
 						type="button"
 						(click)="onOpenSettings()"
-						[helpTooltip]="'decktracker.overlay.mulligan.settings-tooltip' | fsTranslate"
+						[helpTooltip]="'settings.title' | fsTranslate"
 						inlineSVG="assets/svg/settings.svg"
 					></button>
 					<button
@@ -212,6 +213,7 @@ export class MulliganDeckViewComponent extends AbstractSubscriptionComponent imp
 	@Input() showMulliganOverview: boolean | null;
 	@Input() showArchetypeSelection: boolean | null;
 	@Input() showDismiss: boolean | null;
+	@Input() showSettings = true;
 	@Input() showFilters: boolean;
 	@Input() rankBracketTooltip: string | null;
 	@Input() rankBracketLabel: string | null;
