@@ -1,0 +1,16 @@
+:host {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	min-height: 0;
+	flex-grow: 1;
+	width: 100%;
+	height: 100%;
+}
+
+mulligan-deck-view {
+	flex-grow: 1;
+	min-height: 0;
+	width: auto;
+	max-width: 100%;
+}

@@ -18,6 +18,7 @@ import { ConstructedDustFilterDropdownComponent } from './components/meta-decks/
 import { ConstructedPlayerClassFilterDropdownComponent } from './components/meta-decks/filters/constructed-player-class-filter-dropdown.component';
 import { ConstructedSampleSizeFilterDropdownComponent } from './components/meta-decks/filters/constructed-sample-size-filter-dropdown.component';
 import { MetaDecksVisualizationComponent } from './components/meta-decks/meta-decks-visualization.component';
+import { ConstructedMulliganDeckBrowserComponent } from './components/constructed-mulligan-deck-browser.component';
 import { ConstructedMulliganDeckComponent } from './components/constructed-mulligan-deck.component';
 import { ConstructedMulliganHandComponent } from './components/constructed-mulligan-hand.component';
 import { MulliganDeckGuideArchetypeSelectionDropdownComponent } from './components/mulligan-deck-guide-archetype-selection.component';
@@ -40,6 +41,7 @@ const components = [
 	MulliganDeckViewComponent,
 	MulliganDeckViewArchetypeComponent,
 	MulliganDeckGuideArchetypeSelectionDropdownComponent,
+	ConstructedMulliganDeckBrowserComponent,
 ];
 
 @NgModule({

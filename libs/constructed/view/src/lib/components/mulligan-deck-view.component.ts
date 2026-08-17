@@ -7,6 +7,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
+	HostBinding,
 	Inject,
 	Input,
 	Renderer2,
@@ -41,7 +42,7 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 		<div
 			class="mulligan-deck-overview scalable"
 			*ngIf="showMulliganOverview"
-			[ngClass]="{ 'show-both': showBoth$ | async }"
+			[ngClass]="{ 'show-both': showBoth$ | async, embedded: embedded }"
 		>
 			<div class="widget-header">
 				<div class="header-buttons" *ngIf="showSettings || showDismiss">
@@ -62,7 +63,11 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 						inlineSVG="assets/svg/close.svg"
 					></button>
 				</div>
-				<div class="title" [fsTranslate]="'decktracker.overlay.mulligan.deck-mulligan-overview-title'"></div>
+				<div
+					class="title"
+					*ngIf="!embedded"
+					[fsTranslate]="'decktracker.overlay.mulligan.deck-mulligan-overview-title'"
+				></div>
 				<mulligan-deck-view-archetype
 					*ngIf="showArchetypeSelection"
 					class="archetype-info"
@@ -117,7 +122,12 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 					</div>
 				</div>
 				<div class="additional-info">
-					<div class="filter format" *ngIf="formatLabel" (click)="cycleFormat()">
+					<div
+						class="filter format"
+						*ngIf="formatLabel"
+						[class.locked]="!cycleFormat"
+						(click)="onCycleFormat()"
+					>
 						<div class="text">{{ formatLabel }}</div>
 					</div>
 					<div class="sample-size" [helpTooltip]="sampleSizeTooltip">
@@ -211,6 +221,9 @@ export class MulliganDeckViewComponent extends AbstractSubscriptionComponent imp
 	showBoth$: Observable<boolean>;
 
 	@Input() showMulliganOverview: boolean | null;
+	@Input()
+	@HostBinding('class.embedded')
+	embedded = false;
 	@Input() showArchetypeSelection: boolean | null;
 	@Input() showDismiss: boolean | null;
 	@Input() showSettings = true;
@@ -236,7 +249,7 @@ export class MulliganDeckViewComponent extends AbstractSubscriptionComponent imp
 	@Input() cyclePlayCoin: () => void;
 	@Input() cycleStatsSource: () => void;
 	@Input() cycleTime: () => void;
-	@Input() cycleFormat: () => void;
+	@Input() cycleFormat?: () => void;
 	@Input() dismiss: () => void;
 
 	@Input() set deckMulliganInfo(value: MulliganDeckData | null) {
@@ -306,6 +319,10 @@ export class MulliganDeckViewComponent extends AbstractSubscriptionComponent imp
 			return;
 		}
 		this.cycleStatsSource?.();
+	}
+
+	onCycleFormat() {
+		this.cycleFormat?.();
 	}
 
 	onSortClick(rawCriteria: string) {

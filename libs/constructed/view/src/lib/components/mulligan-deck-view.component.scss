@@ -2,6 +2,14 @@
 	max-height: 100%;
 	display: flex;
 	align-items: baseline;
+
+	&.embedded {
+		max-height: none;
+		height: 100%;
+		width: 100%;
+		align-items: center;
+		justify-content: flex-start;
+	}
 }
 
 .mulligan-deck-overview {
@@ -21,6 +29,33 @@
 
 	&.show-both {
 		max-width: 487px;
+	}
+
+	&.embedded {
+		// Always use the "Both" width so Community / Yours / Both don't shift the header filters
+		max-width: 620px;
+		width: 100%;
+		height: 100%;
+		border-radius: 0;
+		background: transparent;
+		transform: none;
+
+		.widget-header .archetype-info {
+			margin-top: 0;
+		}
+
+		.content {
+			flex-grow: 1;
+		}
+
+		// Reserve the personal column widths so cards don't stretch when those columns are hidden
+		&:not(.show-both) {
+			.deck-header,
+			.deck-card {
+				padding-left: 70px;
+				padding-right: 70px;
+			}
+		}
 	}
 }
 

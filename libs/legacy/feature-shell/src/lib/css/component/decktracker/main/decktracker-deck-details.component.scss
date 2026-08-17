@@ -54,12 +54,56 @@
 		}
 	}
 
+	.tabs {
+		display: flex;
+		list-style: none;
+		margin: 0 0 15px;
+		gap: 35px;
+		border-bottom: 1px solid var(--color-3);
+		padding-bottom: 0;
+		flex-shrink: 0;
+
+		.tab {
+			display: flex;
+			cursor: pointer;
+			color: var(--color-1);
+			padding-bottom: 10px;
+
+			&:hover {
+				color: var(--default-title-color);
+			}
+
+			&.selected {
+				color: var(--default-title-color);
+				border-bottom: 1px solid var(--default-title-color);
+			}
+		}
+	}
+
 	.container {
 		display: flex;
 		width: 100%;
 		justify-content: space-between;
 		min-height: 1px;
 		flex-grow: 1;
+		position: relative;
+
+		&.mulligan-tab {
+			min-height: 0;
+		}
+	}
+
+	.overview {
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
+		min-width: 0;
+	}
+
+	.overview-body {
+		display: flex;
+		flex-grow: 1;
+		min-height: 1px;
 		position: relative;
 		padding-right: calc(var(--decklist-width) + 40px); // margins
 	}
@@ -219,6 +263,12 @@
 		&.with-versions {
 			// max-width: calc(100% - var(--decklist-width) - 50px - 180px);
 		}
+	}
+
+	.mulligan-browser {
+		flex-grow: 1;
+		min-width: 0;
+		min-height: 0;
 	}
 }
 

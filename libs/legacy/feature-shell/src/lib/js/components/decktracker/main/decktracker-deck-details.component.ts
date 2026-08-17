@@ -47,11 +47,21 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					(blur)="onDeckGroupNameBlur(value.deck)"
 				/>
 			</div>
-			<decktracker-stats-for-replays
-				class="global-stats"
-				[replays]="replays$ | async"
-			></decktracker-stats-for-replays>
-			<div class="container">
+			<ul class="tabs">
+				<li class="tab" [ngClass]="{ selected: selectedTab === 'overview' }" (click)="selectTab('overview')">
+					<div class="text" [owTranslate]="'app.decktracker.ladder-stats.tab-selection.overview'"></div>
+				</li>
+				<li class="tab" [ngClass]="{ selected: selectedTab === 'mulligan' }" (click)="selectTab('mulligan')">
+					<div class="text" [owTranslate]="'settings.decktracker.menu.mulligan'"></div>
+				</li>
+			</ul>
+			<div
+				class="container"
+				[ngClass]="{
+					'mulligan-tab': selectedTab === 'mulligan',
+					'with-versions': value.deck?.allVersions?.length && value.deck?.allVersions?.length > 1,
+				}"
+			>
 				<div
 					class="deck-versions"
 					*ngIf="value.deck?.allVersions?.length && value.deck?.allVersions?.length > 1"
@@ -93,27 +103,40 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 						></div>
 					</div>
 				</div>
-				<div class="deck-list-container">
-					<copy-deckstring
-						class="copy-deckcode"
-						[deckstring]="value.selectedDeck?.deckstring"
-						[copyText]="'app.decktracker.deck-details.copy-deck-code-button' | owTranslate"
-					>
-					</copy-deckstring>
+				<div class="overview" *ngIf="selectedTab === 'overview'">
+					<decktracker-stats-for-replays
+						class="global-stats"
+						[replays]="replays$ | async"
+					></decktracker-stats-for-replays>
+					<div class="overview-body">
+						<div class="deck-list-container">
+							<copy-deckstring
+								class="copy-deckcode"
+								[deckstring]="value.selectedDeck?.deckstring"
+								[copyText]="'app.decktracker.deck-details.copy-deck-code-button' | owTranslate"
+							>
+							</copy-deckstring>
 
-					<deck-list-static
-						class="deck-list"
-						[deckstring]="value.selectedDeck?.deckstring"
-					></deck-list-static>
+							<deck-list-static
+								class="deck-list"
+								[deckstring]="value.selectedDeck?.deckstring"
+							></deck-list-static>
+						</div>
+						<deck-winrate-matrix
+							[deck]="value.selectedDeck"
+							[showMatchupAsPercentagesValue]="showMatchupAsPercentages$ | async"
+							[ngClass]="{
+								'with-versions': value.deck?.allVersions?.length && value.deck?.allVersions?.length > 1,
+							}"
+						>
+						</deck-winrate-matrix>
+					</div>
 				</div>
-				<deck-winrate-matrix
-					[deck]="value.selectedDeck"
-					[showMatchupAsPercentagesValue]="showMatchupAsPercentages$ | async"
-					[ngClass]="{
-						'with-versions': value.deck?.allVersions?.length && value.deck?.allVersions?.length > 1,
-					}"
-				>
-				</deck-winrate-matrix>
+				<constructed-mulligan-deck-browser
+					*ngIf="selectedTab === 'mulligan'"
+					class="mulligan-browser"
+					[deckstring]="value.selectedDeck?.deckstring"
+				></constructed-mulligan-deck-browser>
 			</div>
 		</div>
 	`,
@@ -129,6 +152,7 @@ export class DecktrackerDeckDetailsComponent
 	selectedDeck$: Observable<DeckSummary>;
 	showMatchupAsPercentages$: Observable<boolean>;
 
+	selectedTab: DeckDetailsTab = 'overview';
 	groupNameDraft = '';
 
 	constructor(
@@ -234,4 +258,10 @@ export class DecktrackerDeckDetailsComponent
 		}
 		return this.i18n.translateString('app.decktracker.decks.versions.click-to-view-all-stats-tooltip');
 	}
+
+	selectTab(tab: DeckDetailsTab) {
+		this.selectedTab = tab;
+	}
 }
+
+type DeckDetailsTab = 'overview' | 'mulligan';
