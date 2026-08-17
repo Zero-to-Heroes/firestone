@@ -51,6 +51,14 @@ export const decktrackerMulliganSettings = (context: SettingContext): SettingNod
 						},
 					},
 					{
+						type: 'toggle',
+						field: 'decktrackerMulliganDownloadPastStats',
+						label: context.i18n.translateString('settings.decktracker.mulligan.sync-past-games-label'),
+						tooltip: context.i18n.translateString('settings.decktracker.mulligan.sync-past-games-tooltip'),
+						premiumSetting: true,
+						disabledIf: (prefs: Preferences) => prefs.decktrackerMulliganPersonalMinGames === 'never',
+					},
+					{
 						type: 'slider',
 						field: 'decktrackerMulliganScale',
 						label: context.i18n.translateString('settings.decktracker.mulligan.size'),

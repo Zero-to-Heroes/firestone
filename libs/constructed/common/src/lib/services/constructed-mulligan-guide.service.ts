@@ -1114,6 +1114,13 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 		if (!this.ads.hasPremiumSub$$.getValue()) {
 			return;
 		}
+		const prefs = await this.prefs.getPreferences();
+		if (
+			prefs.decktrackerMulliganDownloadPastStats === false ||
+			prefs.decktrackerMulliganPersonalMinGames === 'never'
+		) {
+			return;
+		}
 		const missing = matches
 			.filter((match) => match.cardsAnalysis == null && !!match.reviewId)
 			.map((match) => match.reviewId)

@@ -9,7 +9,7 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, uuidShort } from '@firestone/shared/framework/common';
 import { Subscription } from 'rxjs';
 
@@ -77,7 +77,10 @@ export class PreferenceToggleComponent extends AbstractSubscriptionComponent imp
 
 	private sub$$: Subscription;
 
-	constructor(protected override readonly cdr: ChangeDetectorRef, private readonly prefs: PreferencesService) {
+	constructor(
+		protected override readonly cdr: ChangeDetectorRef,
+		private readonly prefs: PreferencesService,
+	) {
 		super(cdr);
 		this.loadDefaultValues();
 		this.uniqueId = uuidShort();
@@ -87,7 +90,7 @@ export class PreferenceToggleComponent extends AbstractSubscriptionComponent imp
 		await this.prefs.isReady();
 
 		this.sub$$ = this.prefs.preferences$$
-			.pipe(this.mapData((prefs) => prefs[this.field]))
+			.pipe(this.mapData((prefs) => this.readToggleValue(prefs)))
 			.subscribe(async (value) => {
 				this.value = await this.valueExtractor(value);
 				this.cdr?.detectChanges();
@@ -130,7 +133,7 @@ export class PreferenceToggleComponent extends AbstractSubscriptionComponent imp
 
 	private async loadDefaultValues() {
 		const prefs = await this.prefs.getPreferences();
-		this.value = await this.valueExtractor(prefs[this.field]);
+		this.value = await this.valueExtractor(this.readToggleValue(prefs));
 		this.toggled = false;
 		if (this.callbackOnLoad) {
 			this.callbackOnLoad(this.value);
@@ -138,5 +141,13 @@ export class PreferenceToggleComponent extends AbstractSubscriptionComponent imp
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();
 		}
+	}
+
+	private readToggleValue(prefs: Preferences): boolean {
+		const stored = prefs?.[this.field];
+		if (stored !== undefined && stored !== null) {
+			return stored;
+		}
+		return new Preferences()[this.field] ?? false;
 	}
 }

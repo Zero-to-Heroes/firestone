@@ -268,6 +268,7 @@ export class Preferences implements IPreferences {
 	readonly decktrackerMulliganPlayCoinOoc: 'play' | 'coin' | 'all' | null = null;
 	readonly decktrackerMulliganStatsSource: 'community' | 'personal' | 'both' = 'community';
 	readonly decktrackerMulliganPersonalMinGames: 'never' | 'always' | '10' | '25' | '50' | '100' = '25';
+	readonly decktrackerMulliganDownloadPastStats: boolean = true;
 
 	readonly arenaShowMulliganCardImpact: boolean = true;
 	readonly arenaShowMulliganDeckOverview: boolean = true;
@@ -895,6 +896,7 @@ export class Preferences implements IPreferences {
 			arenaCurrentSessionStartDate: input.arenaCurrentSessionStartDate
 				? new Date(input.arenaCurrentSessionStartDate)
 				: null,
+			decktrackerMulliganDownloadPastStats: input.decktrackerMulliganDownloadPastStats ?? true,
 		};
 	}
 }
