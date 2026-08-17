@@ -35,7 +35,7 @@ import { IOption } from './filter-dropdown-multiselect.component';
 					[cardTooltip]="showCardTooltip ? option.value : null"
 				/>
 				<span
-					[helpTooltip]="option.tooltip ?? option.label"
+					[helpTooltip]="option.tooltip"
 					[ngClass]="{ unselectable: option?.unselectable }"
 					[innerHTML]="option?.label"
 				></span>
