@@ -12,7 +12,11 @@ import { IOption } from './filter-dropdown-multiselect.component';
 	template: `
 		<label class="label" *ngIf="label">
 			{{ label }}
-			<div class="info" *ngIf="tooltip" [helpTooltip]="tooltip"></div>
+			<i class="info" *ngIf="tooltip" [helpTooltip]="tooltip">
+				<svg>
+					<use xlink:href="assets/svg/sprite.svg#info" />
+				</svg>
+			</i>
 		</label>
 		<filter-dropdown
 			*ngIf="filter$ | async as value"

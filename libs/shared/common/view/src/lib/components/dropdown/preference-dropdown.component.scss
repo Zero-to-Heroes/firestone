@@ -2,9 +2,23 @@
 	align-items: center;
 }
 
-// .label {
-// 	width: 250px;
-// }
+.label {
+	display: flex;
+	align-items: center;
+}
+
+.info {
+	margin-left: 5px;
+	width: 15px;
+	height: 15px;
+	flex-shrink: 0;
+	cursor: help;
+
+	svg {
+		width: 15px;
+		height: 15px;
+	}
+}
 
 filter-dropdown {
 	--color-1: var(--color-3);
