@@ -20,6 +20,7 @@ import {
 	MulliganDeckData,
 } from '@firestone/constructed/common';
 import { GameStateFacadeService } from '@firestone/game-state';
+import { SettingsControllerService } from '@firestone/settings/services';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, SortCriteria, invertDirection } from '@firestone/shared/framework/common';
 import {
@@ -27,6 +28,7 @@ import {
 	CardsFacadeService,
 	IAdsService,
 	ILocalizationService,
+	WindowHandlerFacadeService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
@@ -42,14 +44,23 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 			[ngClass]="{ 'show-both': showBoth$ | async }"
 		>
 			<div class="widget-header">
-				<button
-					class="close-button"
-					*ngIf="showDismiss"
-					type="button"
-					(click)="onDismiss()"
-					[helpTooltip]="'decktracker.overlay.mulligan.dismiss-tooltip' | fsTranslate"
-					inlineSVG="assets/svg/close.svg"
-				></button>
+				<div class="header-buttons">
+					<button
+						class="settings-button"
+						type="button"
+						(click)="onOpenSettings()"
+						[helpTooltip]="'decktracker.overlay.mulligan.settings-tooltip' | fsTranslate"
+						inlineSVG="assets/svg/settings.svg"
+					></button>
+					<button
+						class="close-button"
+						*ngIf="showDismiss"
+						type="button"
+						(click)="onDismiss()"
+						[helpTooltip]="'decktracker.overlay.mulligan.dismiss-tooltip' | fsTranslate"
+						inlineSVG="assets/svg/close.svg"
+					></button>
+				</div>
 				<div class="title" [fsTranslate]="'decktracker.overlay.mulligan.deck-mulligan-overview-title'"></div>
 				<mulligan-deck-view-archetype
 					*ngIf="showArchetypeSelection"
@@ -216,6 +227,7 @@ export class MulliganDeckViewComponent extends AbstractSubscriptionComponent imp
 	@Input() sampleSize: string | null;
 	@Input() sampleSizeTooltip: string | null;
 	@Input() personalMinGamesWarningTooltip: string | null;
+	@Input() settingsNodeId = 'decktracker-mulligan';
 	@Input() allowResize = true;
 	@Input() cycleRanks: () => void;
 	@Input() cycleOpponent: () => void;
@@ -248,6 +260,8 @@ export class MulliganDeckViewComponent extends AbstractSubscriptionComponent imp
 		private readonly mulligan: ConstructedMulliganGuideService,
 		private readonly guardian: ConstructedMulliganGuideGuardianService,
 		private readonly prefs: PreferencesService,
+		private readonly settings: SettingsControllerService,
+		private readonly windowHandler: WindowHandlerFacadeService,
 		private readonly i18n: ILocalizationService,
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
@@ -277,6 +291,12 @@ export class MulliganDeckViewComponent extends AbstractSubscriptionComponent imp
 
 	onDismiss() {
 		this.dismiss?.();
+	}
+
+	async onOpenSettings() {
+		this.settings.selectNodeFromOutside(this.settingsNodeId);
+		const prefs = await this.prefs.getPreferences();
+		this.windowHandler.showSettingsWindow(prefs.collectionUseOverlay);
 	}
 
 	onCycleStatsSource() {

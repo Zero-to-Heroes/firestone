@@ -55,6 +55,7 @@ import {
 			[cycleOpponent]="cycleOpponent"
 			[cycleTime]="cycleTime"
 			[dismiss]="dismissMulligan"
+			[settingsNodeId]="'arena-general'"
 		>
 		</mulligan-deck-view>
 	`,
