@@ -36,7 +36,11 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 	selector: 'mulligan-deck-view',
 	styleUrls: ['./mulligan-deck-view.component.scss'],
 	template: `
-		<div class="mulligan-deck-overview scalable" *ngIf="showMulliganOverview">
+		<div
+			class="mulligan-deck-overview scalable"
+			*ngIf="showMulliganOverview"
+			[ngClass]="{ 'show-both': showBoth$ | async }"
+		>
 			<div class="widget-header">
 				<button
 					class="close-button"
@@ -110,6 +114,16 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 			<div class="content">
 				<div class="deck-header" *ngIf="sortCriteria$ | async as sort">
 					<sortable-table-label
+						class="cell keep-rate yours"
+						*ngIf="showBoth$ | async"
+						[name]="'decktracker.overlay.mulligan.stats-source.personal' | fsTranslate"
+						[sort]="sort"
+						[criteria]="'personal-keep-rate'"
+						[helpTooltip]="'decktracker.overlay.mulligan.mulligan-keep-rate-yours-tooltip' | fsTranslate"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
+					<sortable-table-label
 						class="cell keep-rate"
 						[name]="'decktracker.overlay.mulligan.mulligan-keep-rate' | fsTranslate"
 						[sort]="sort"
@@ -137,49 +151,35 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 						(sortClick)="onSortClick($event)"
 					>
 					</sortable-table-label>
+					<sortable-table-label
+						class="cell impact yours"
+						*ngIf="showBoth$ | async"
+						[name]="'decktracker.overlay.mulligan.stats-source.personal' | fsTranslate"
+						[sort]="sort"
+						[criteria]="'personal-impact'"
+						[helpTooltip]="'decktracker.overlay.mulligan.mulligan-impact-yours-tooltip' | fsTranslate"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
 				</div>
 				<div class="deck" *ngIf="sortedDeckMulliganInfo$ | async as allDeckMulliganInfo">
 					<div
 						class="deck-card"
 						*ngFor="let card of allDeckMulliganInfo"
-						[ngClass]="{ selected: card.selected, dumped: card.dumped, 'show-both': card.showBoth }"
+						[ngClass]="{ selected: card.selected, dumped: card.dumped }"
 					>
-						<div class="cell keep-rate">
-							<div class="stat-line" [style.color]="card.keptColor">
-								<span
-									class="src"
-									*ngIf="card.showBoth"
-									[fsTranslate]="'decktracker.overlay.mulligan.stats-source-short.community'"
-								></span>
-								<span>{{ card.keepRate === null ? '-' : card.keepRate?.toFixed(1) + '%' }}</span>
-							</div>
-							<div class="stat-line" *ngIf="card.showBoth" [style.color]="card.personalKeptColor">
-								<span
-									class="src"
-									[fsTranslate]="'decktracker.overlay.mulligan.stats-source-short.personal'"
-								></span>
-								<span>{{
-									card.personalKeepRate === null ? '-' : card.personalKeepRate?.toFixed(1) + '%'
-								}}</span>
-							</div>
+						<div class="cell keep-rate yours" *ngIf="card.showBoth" [style.color]="card.personalKeptColor">
+							{{ card.personalKeepRate === null ? '-' : card.personalKeepRate?.toFixed(1) + '%' }}
+						</div>
+						<div class="cell keep-rate" [style.color]="card.keptColor">
+							{{ card.keepRate === null ? '-' : card.keepRate?.toFixed(1) + '%' }}
 						</div>
 						<card-tile class="cell card" [cardId]="card.cardId"></card-tile>
-						<div class="cell impact">
-							<div class="stat-line" [style.color]="card.impactColor">
-								<span
-									class="src"
-									*ngIf="card.showBoth"
-									[fsTranslate]="'decktracker.overlay.mulligan.stats-source-short.community'"
-								></span>
-								<span>{{ card.value?.toFixed(2) ?? '-' }}</span>
-							</div>
-							<div class="stat-line" *ngIf="card.showBoth" [style.color]="card.personalImpactColor">
-								<span
-									class="src"
-									[fsTranslate]="'decktracker.overlay.mulligan.stats-source-short.personal'"
-								></span>
-								<span>{{ card.personalValue?.toFixed(2) ?? '-' }}</span>
-							</div>
+						<div class="cell impact" [style.color]="card.impactColor">
+							{{ card.value?.toFixed(2) ?? '-' }}
+						</div>
+						<div class="cell impact yours" *ngIf="card.showBoth" [style.color]="card.personalImpactColor">
+							{{ card.personalValue?.toFixed(2) ?? '-' }}
 						</div>
 					</div>
 				</div>
@@ -194,6 +194,7 @@ export class MulliganDeckViewComponent extends AbstractSubscriptionComponent imp
 	deckstring$: Observable<string | null>;
 	archetypeId$: Observable<number | null>;
 	format$: Observable<GameFormatString | null>;
+	showBoth$: Observable<boolean>;
 
 	@Input() showMulliganOverview: boolean | null;
 	@Input() showArchetypeSelection: boolean | null;
@@ -260,6 +261,7 @@ export class MulliganDeckViewComponent extends AbstractSubscriptionComponent imp
 		this.deckstring$ = this.deckstring$$.pipe(this.mapData((info) => info));
 		this.archetypeId$ = this.archetypeId$$.pipe(this.mapData((info) => info));
 		this.format$ = this.fomat$$.pipe(this.mapData((info) => info));
+		this.showBoth$ = this.deckMulliganInfo$$.pipe(this.mapData((info) => info?.statsSource === 'both'));
 		this.sortedDeckMulliganInfo$ = combineLatest([this.deckMulliganInfo$$, this.sortCriteria$$]).pipe(
 			this.mapData(([mulliganInfo, sortCriteria]) =>
 				[...(mulliganInfo?.mulliganData ?? [])].sort((a, b) => this.sortCards(a, b, sortCriteria)),
@@ -298,6 +300,10 @@ export class MulliganDeckViewComponent extends AbstractSubscriptionComponent imp
 				return this.sortByImpact(a, b, sortCriteria.direction);
 			case 'keep-rate':
 				return this.sortByKeepRate(a, b, sortCriteria.direction);
+			case 'personal-keep-rate':
+				return this.sortByPersonalKeepRate(a, b, sortCriteria.direction);
+			case 'personal-impact':
+				return this.sortByPersonalImpact(a, b, sortCriteria.direction);
 			default:
 				return 0;
 		}
@@ -320,6 +326,26 @@ export class MulliganDeckViewComponent extends AbstractSubscriptionComponent imp
 		const bData = b.keepRate ?? 0;
 		return direction === 'asc' ? aData - bData : bData - aData;
 	}
+
+	private sortByPersonalKeepRate(
+		a: MulliganChartDataCard,
+		b: MulliganChartDataCard,
+		direction: 'asc' | 'desc',
+	): number {
+		const aData = a.personalKeepRate ?? 0;
+		const bData = b.personalKeepRate ?? 0;
+		return direction === 'asc' ? aData - bData : bData - aData;
+	}
+
+	private sortByPersonalImpact(
+		a: MulliganChartDataCard,
+		b: MulliganChartDataCard,
+		direction: 'asc' | 'desc',
+	): number {
+		const aData = a.personalValue ?? 0;
+		const bData = b.personalValue ?? 0;
+		return direction === 'asc' ? aData - bData : bData - aData;
+	}
 }
 
-type ColumnSortType = 'card' | 'keep-rate' | 'impact';
+type ColumnSortType = 'card' | 'keep-rate' | 'impact' | 'personal-keep-rate' | 'personal-impact';
