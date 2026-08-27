@@ -42,6 +42,14 @@ export class LinuxOverlayService extends EventEmitter {
 	private pointerProc: ChildProcess | null = null;
 	private pointerPos: { x: number; y: number } | null = null;
 	private buttonDown = false;
+	// Last cursor/button state the hit-test tick actually processed. A stationary cursor over an
+	// unchanged DOM yields an identical hit result, so ticks that match this are skipped entirely --
+	// otherwise the loop injects a synthetic mouseMove and runs a getComputedStyle layout flush in
+	// the renderer 20x/sec forever, which is the overlay's whole idle CPU cost. NaN forces the first
+	// tick to process.
+	private lastPollX = Number.NaN;
+	private lastPollY = Number.NaN;
+	private lastPollButton = false;
 
 	public get overlayApi(): any {
 		// No Overwolf overlay package on Linux; callers null-check this.
@@ -255,6 +263,16 @@ export class LinuxOverlayService extends EventEmitter {
 						);
 					}
 				}
+				// Skip the tick if nothing the hit result depends on has moved since it was last
+				// computed. The pointer tracker only emits on change, so a resting cursor leaves
+				// these identical and the costly injection + layout flush below never runs.
+				const btn = this.buttonDown;
+				if (cursor.x === this.lastPollX && cursor.y === this.lastPollY && btn === this.lastPollButton) {
+					return;
+				}
+				this.lastPollX = cursor.x;
+				this.lastPollY = cursor.y;
+				this.lastPollButton = btn;
 				if (!inside) {
 					this.setPassthrough(true);
 					return;
