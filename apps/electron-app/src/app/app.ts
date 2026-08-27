@@ -10,12 +10,14 @@ import { DiskCacheService, LogListenerService } from '@firestone/shared/common/s
 import { CardsFacadeStandaloneService, DATABASE_SERVICE_TOKEN } from '@firestone/shared/framework/core';
 import { BrowserWindow, app as electronApp, ipcMain, shell } from 'electron';
 import { appendFileSync, existsSync, mkdirSync, readdirSync, statSync, unlinkSync } from 'fs';
-import { appendFile } from 'fs/promises';
+import { appendFile, readFile, unlink, writeFile } from 'fs/promises';
 import { join } from 'path';
 import { environment } from '../environments/environment';
+import { rendererUrl } from './constants';
 import { buildAppInjector } from './services/electron-app-injector-setup';
 import { ElectronDiskCacheService } from './services/electron-disk-cache.service';
 import { MindVisionElectronService } from './services/mind-vision-electron.service';
+import { LinuxOverlayService } from './services/linux-overlay.service';
 import { OverlayService } from './services/overlay.service';
 import { destroySystemTray, initSystemTray } from './services/system-tray';
 
@@ -31,8 +33,9 @@ export interface AuthCallbackData {
 
 export default class App {
 	static application: Electron.App;
-	static overlay: OverlayService;
+	static overlay: OverlayService | LinuxOverlayService;
 	static gameWindow: ElectronGameWindowService;
+	static mainWindow: BrowserWindow | null = null;
 	static flushRendererLogs: (() => Promise<void>) | null = null;
 	static rendererLogFlushTimer: NodeJS.Timeout | null = null;
 
@@ -277,6 +280,42 @@ export default class App {
 			return true;
 		});
 
+		// Fs-backed app-file storage for the renderer's disk cache. On Overwolf this goes through
+		// overwolf.extensions.io (appData); ow-electron does not shim that on Linux, so the
+		// OverwolfService routes these calls here instead. Files live under userData/data, the
+		// same directory ElectronDiskCacheService uses.
+		const appFileDir = () => {
+			const dir = join(electronApp.getPath('userData'), 'data');
+			mkdirSync(dir, { recursive: true });
+			return dir;
+		};
+		// Keep the key to a single flat filename so it can never escape the cache dir.
+		const appFilePath = (fileName: string) => join(appFileDir(), require('path').basename(fileName));
+		ipcMain.handle('store-app-file', async (event, fileName: string, content: string) => {
+			try {
+				await writeFile(appFilePath(fileName), content, 'utf8');
+				return true;
+			} catch (e) {
+				console.error('[app-file] store failed', fileName, e);
+				return false;
+			}
+		});
+		ipcMain.handle('read-app-file', async (event, fileName: string) => {
+			try {
+				return await readFile(appFilePath(fileName), 'utf8');
+			} catch (e) {
+				return null; // missing file is a normal cache miss
+			}
+		});
+		ipcMain.handle('delete-app-file', async (event, fileName: string) => {
+			try {
+				await unlink(appFilePath(fileName));
+				return true;
+			} catch (e) {
+				return false;
+			}
+		});
+
 		// Set up IPC handler for renderer process logging with batching
 		// Create a shared renderer log file (one per app session)
 		const rendererLogNow = new Date();
@@ -422,12 +461,15 @@ export default class App {
 		// initialization and is ready to create browser windows.
 		// Some APIs can only be used after this event occurs.
 
-		// Skip main window creation for overlay-only mode
-		console.log('🚫 Skipping main window creation (overlay-only mode)');
-		// if (rendererAppName) {
-		// 	App.initMainWindow();
-		// 	App.loadMainWindow();
-		// }
+		// The electron-frontend currently only implements the /overlay and /settings routes
+		// (there is no main-application window UI in the port yet). On Linux the ow-electron
+		// overlay package is unavailable, so open a normal window onto the Settings route to
+		// give the app a visible, interactive surface. In Linux overlay mode the in-game overlay
+		// is the primary surface and this window would cover the game, so it is not auto-opened;
+		// Settings is reachable from the system tray instead.
+		if (process.platform === 'win32') {
+			App.initMainWindow();
+		}
 
 		// Initialize game detection
 		await App.initGameDetection();
@@ -463,21 +505,31 @@ export default class App {
 		const db = electronInjector.get(DATABASE_SERVICE_TOKEN);
 		await db.init();
 
-		// Initialize game services
+		// Initialize game services.
+		// The ow-electron overlay package only exists on Windows, and it is what normally detects
+		// the game and hosts the overlay. On Linux both jobs are done natively instead: game
+		// detection from /proc + X11, and the overlay as a click-through always-on-top window.
+		const useLinuxOverlay = process.platform !== 'win32';
 		App.gameWindow = ElectronGameWindowService.getInstance();
-		App.overlay = OverlayService.getInstance();
+		App.overlay = useLinuxOverlay ? LinuxOverlayService.getInstance() : OverlayService.getInstance();
 		App.gameWindow.initialize(App.overlay);
 
-		// Wait for overlay to be ready before registering to games
-		App.overlay.on('ready', async () => {
-			console.log('🎯 Overlay service is ready!');
-
-			// Register to monitor Hearthstone
+		if (useLinuxOverlay) {
+			// No overlay package to wait on; the detector is the source of game events.
 			await App.overlay.registerToHearthstone();
-
-			// Don't create overlay window yet - wait for game launch event
 			console.log('⏳ Waiting for Hearthstone to launch...');
-		});
+		} else {
+			// Wait for overlay to be ready before registering to games
+			App.overlay.on('ready', async () => {
+				console.log('🎯 Overlay service is ready!');
+
+				// Register to monitor Hearthstone
+				await App.overlay.registerToHearthstone();
+
+				// Don't create overlay window yet - wait for game launch event
+				console.log('⏳ Waiting for Hearthstone to launch...');
+			});
+		}
 
 		// Keep the old game detection for logging purposes
 		// App.gameDetection.on('game-launched', (gameInfo) => {
@@ -490,6 +542,39 @@ export default class App {
 
 		// // Start monitoring (both process detection and ow-electron overlay)
 		// App.gameDetection.startMonitoring();
+	}
+
+	private static initMainWindow() {
+		if (App.mainWindow && !App.mainWindow.isDestroyed()) {
+			App.mainWindow.focus();
+			return;
+		}
+
+		const preloadPath = join(__dirname, 'main.preload.js');
+		App.mainWindow = new BrowserWindow({
+			width: 1400,
+			height: 900,
+			show: false,
+			title: 'Firestone',
+			webPreferences: {
+				nodeIntegration: true,
+				contextIsolation: false,
+				preload: preloadPath,
+			},
+		});
+		App.mainWindow.setMenu(null);
+		App.mainWindow.once('ready-to-show', () => App.mainWindow?.show());
+		App.mainWindow.once('closed', () => (App.mainWindow = null));
+
+		// HashLocationStrategy: the route must live in the hash. The port only implements
+		// /overlay and /settings; Settings is the fully-rendered surface.
+		const url = rendererUrl('/settings');
+		console.log('[app] loading main window', url);
+		App.mainWindow.loadURL(url).catch((err) => console.error('[app] main window load failed:', err));
+
+		if (App.isDevelopmentMode()) {
+			App.mainWindow.webContents.openDevTools({ mode: 'detach' });
+		}
 	}
 
 	private static onActivate() {

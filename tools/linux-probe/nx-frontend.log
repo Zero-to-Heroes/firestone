@@ -1,0 +1,1231 @@
+
+ NX   --skip-nx-cache disables the connection to Nx Cloud for the current run.
+
+The remote cache will not be read from or written to during this run.
+
+
+ NX   Running target build for project electron-frontend and 40 tasks it depends on:
+
+
+
+> nx run shared/framework/common:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/shared/framework/common'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Writing FESM bundles
+[32m✔[39m Writing FESM bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/shared/framework/common
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/shared/framework/common[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/shared/framework/common[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:25:41.480Z[22m - Time: [1m2167[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run shared/framework/core:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/shared/framework/core'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Writing FESM bundles
+[32m✔[39m Writing FESM bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/shared/framework/core
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/shared/framework/core[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/shared/framework/core[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:25:45.194Z[22m - Time: [1m2555[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run achievements/data-access:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/achievements/data-access'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Writing FESM bundles
+[32m✔[39m Writing FESM bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/achievements/data-access
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/achievements/data-access[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/achievements/data-access[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:25:48.485Z[22m - Time: [1m2041[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run shared/common/service:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/shared/common/service'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Writing FESM bundles
+[32m✔[39m Writing FESM bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/shared/common/service
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/shared/common/service[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/shared/common/service[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:25:51.930Z[22m - Time: [1m5518[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run stats/data-access:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/stats/data-access'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Writing FESM bundles
+[32m✔[39m Writing FESM bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/stats/data-access
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/stats/data-access[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/stats/data-access[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:25:56.342Z[22m - Time: [1m3090[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run memory:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/memory'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Writing FESM bundles
+[32m✔[39m Writing FESM bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/memory
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/memory[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/memory[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:25:56.960Z[22m - Time: [1m3744[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run shared/common/view:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/shared/common/view'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Writing FESM bundles
+[32m✔[39m Writing FESM bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/shared/common/view
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/shared/common/view[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/shared/common/view[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:25:58.900Z[22m - Time: [1m5656[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run battlegrounds/data-access:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/battlegrounds/data-access'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Writing FESM bundles
+[32m✔[39m Writing FESM bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/battlegrounds/data-access
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/battlegrounds/data-access[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/battlegrounds/data-access[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:26:00.717Z[22m - Time: [1m2872[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run profile-common:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/profile/common'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Writing FESM bundles
+[32m✔[39m Writing FESM bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/profile/common
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/profile/common[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/profile/common[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:26:01.003Z[22m - Time: [1m2556[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run collection/common:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/collection/common'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Writing FESM bundles
+[32m✔[39m Writing FESM bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/collection/common
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/collection/common[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/collection/common[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:26:05.274Z[22m - Time: [1m2893[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run battlegrounds/core:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/battlegrounds/core'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Writing FESM bundles
+[32m✔[39m Writing FESM bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/battlegrounds/core
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/battlegrounds/core[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/battlegrounds/core[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:26:05.690Z[22m - Time: [1m3631[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run replay/coliseum:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/replay/coliseum'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Writing FESM bundles
+[32m✔[39m Writing FESM bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/replay/coliseum
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/replay/coliseum[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/replay/coliseum[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:26:06.666Z[22m - Time: [1m6257[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run mercenaries/common:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/mercenaries/common'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Writing FESM bundles
+[32m✔[39m Writing FESM bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/mercenaries/common
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/mercenaries/common[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/mercenaries/common[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:26:09.553Z[22m - Time: [1m2858[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run stats/services:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/stats/services'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/stats/services
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/stats/services[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/stats/services[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:26:11.209Z[22m - Time: [1m3075[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run achievements/view:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/achievements/view'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Writing FESM bundles
+[32m✔[39m Writing FESM bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/achievements/view
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/achievements/view[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/achievements/view[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:26:14.016Z[22m - Time: [1m2994[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run stats/common:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/stats/common'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Writing FESM bundles
+[32m✔[39m Writing FESM bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/stats/common
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/stats/common[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/stats/common[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:26:16.122Z[22m - Time: [1m3470[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run collection/view:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/collection/view'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Writing FESM bundles
+[32m✔[39m Writing FESM bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/collection/view
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/collection/view[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/collection/view[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:26:18.483Z[22m - Time: [1m3078[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run firestone/electron/view:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/electron/view'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/electron/view
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/electron/view[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/electron/view[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:26:20.279Z[22m - Time: [1m2753[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run game-state:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/game-state'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Writing FESM bundles
+[32m✔[39m Writing FESM bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/game-state
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/game-state[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/game-state[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:26:24.229Z[22m - Time: [1m17139[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run achievements/common:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/achievements/common'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Writing FESM bundles
+[32m✔[39m Writing FESM bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/achievements/common
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/achievements/common[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/achievements/common[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:26:28.776Z[22m - Time: [1m3181[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run constructed/common:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/constructed/common'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Writing FESM bundles
+[32m✔[39m Writing FESM bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/constructed/common
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/constructed/common[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/constructed/common[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:26:28.950Z[22m - Time: [1m3413[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run battlegrounds/services:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/battlegrounds/services'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/battlegrounds/services
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/battlegrounds/services[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/battlegrounds/services[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:26:29.368Z[22m - Time: [1m3828[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run app/ow-native:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/app/ow-native'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/app/ow-native
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/app/ow-native[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/app/ow-native[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:26:32.460Z[22m - Time: [1m1759[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run lottery/common:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/lottery/common'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/lottery/common
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/lottery/common[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/lottery/common[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:26:32.989Z[22m - Time: [1m2948[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run arena/common:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/arena/common'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Writing FESM bundles
+[32m✔[39m Writing FESM bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/arena/common
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/arena/common[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/arena/common[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:26:33.793Z[22m - Time: [1m3544[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run discord:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/discord'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Writing FESM bundles
+[32m✔[39m Writing FESM bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/discord
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/discord[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/discord[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:26:36.458Z[22m - Time: [1m2683[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run settings/services:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/settings/services'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Writing FESM bundles
+[32m✔[39m Writing FESM bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/settings/services
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/settings/services[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/settings/services[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:26:37.911Z[22m - Time: [1m2764[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run app/common:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/app/common'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Writing FESM bundles
+[32m✔[39m Writing FESM bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/app/common
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/app/common[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/app/common[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:26:40.355Z[22m - Time: [1m5242[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run mainwindow/common:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/mainwindow/common'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Writing FESM bundles
+[32m✔[39m Writing FESM bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/mainwindow/common
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/mainwindow/common[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/mainwindow/common[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:26:40.488Z[22m - Time: [1m2710[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run mods-common:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/mods/common'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Writing FESM bundles
+[32m✔[39m Writing FESM bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/mods/common
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/mods/common[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/mods/common[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:26:44.915Z[22m - Time: [1m3196[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run constructed/view:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/constructed/view'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Writing FESM bundles
+[32m✔[39m Writing FESM bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/constructed/view
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/constructed/view[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/constructed/view[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:26:46.181Z[22m - Time: [1m4507[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run app/view:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/app/view'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Writing FESM bundles
+[32m✔[39m Writing FESM bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/app/view
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/app/view[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/app/view[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:26:46.344Z[22m - Time: [1m4721[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run communities/common:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/communities/common'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Writing FESM bundles
+[32m✔[39m Writing FESM bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/communities/common
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/communities/common[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/communities/common[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:26:50.820Z[22m - Time: [1m4457[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run arena/view:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/arena/view'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/arena/view
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/arena/view[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/arena/view[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:26:53.941Z[22m - Time: [1m6246[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run battlegrounds/view:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/battlegrounds/view'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Writing FESM bundles
+[32m✔[39m Writing FESM bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/battlegrounds/view
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/battlegrounds/view[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/battlegrounds/view[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:26:54.006Z[22m - Time: [1m6308[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run battlegrounds/common:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/battlegrounds/common'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Writing FESM bundles
+[32m✔[39m Writing FESM bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/battlegrounds/common
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/battlegrounds/common[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/battlegrounds/common[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:26:59.655Z[22m - Time: [1m4377[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run battlegrounds/simulator:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/battlegrounds/simulator'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Writing FESM bundles
+[32m✔[39m Writing FESM bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/battlegrounds/simulator
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/battlegrounds/simulator[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/battlegrounds/simulator[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:27:05.312Z[22m - Time: [1m4452[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run twitch/common:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/twitch/common'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Writing FESM bundles
+[32m✔[39m Writing FESM bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/twitch/common
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/twitch/common[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/twitch/common[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:27:10.148Z[22m - Time: [1m3622[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run settings/view:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/settings/view'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+- Writing FESM bundles
+[32m✔[39m Writing FESM bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/settings/view
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/settings/view[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/settings/view[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:27:15.957Z[22m - Time: [1m4615[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run legacy/feature-shell:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[34mBuilding Angular Package[39m
+[37m[39m
+[37m------------------------------------------------------------------------------[39m
+[37mBuilding entry point '@firestone/legacy/feature-shell'[39m
+[37m------------------------------------------------------------------------------[39m
+- Compiling with Angular sources in Ivy full compilation mode.
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✔[39m Compiling with Angular sources in Ivy full compilation mode.
+[32m✔[39m Generating FESM bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built @firestone/legacy/feature-shell
+[32m[39m
+[32m------------------------------------------------------------------------------[39m
+[32mBuilt Angular Package[39m
+[32m - from: /home/twilde/src/firestone/firestone/libs/legacy/feature-shell[39m
+[32m - to:   /home/twilde/src/firestone/firestone/dist/libs/legacy/feature-shell[39m
+[32m------------------------------------------------------------------------------[39m
+[37m[37m[39m[37m[39m
+[37m[37mBuild at: [1m2026-07-17T07:27:42.454Z[22m - Time: [1m25249[22mms[39m[37m[39m
+[37m[37m[39m[37m[39m
+
+> nx run electron-frontend:build:production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+- Generating browser application bundles (phase: setup)...
+[32m✔[39m Browser application bundle generation complete.
+[32m✔[39m Browser application bundle generation complete.
+- Copying assets...
+[32m✔[39m Copying assets complete.
+- Generating index html...
+[32m✔[39m Index html generation complete.
+[37m[0m[0m[39m
+[37m[0m[1mInitial chunk files[22m          [2m | [22m[1mNames[22m        [2m | [22m[1mRaw size[22m[2m | [22m[1mEstimated transfer size[22m[0m[39m
+[37m[0m[32mmain.ac0e3d95eec0d32e.js[39m[37m     [2m | [22m[2mmain[22m         [2m | [22m [36m8.10 MB[39m[37m[2m | [22m                [36m1.43 MB[39m[37m[0m[39m
+[37m[0m[32mpolyfills.9a485eea7f38aa77.js[39m[37m[2m | [22m[2mpolyfills[22m    [2m | [22m[36m34.90 kB[39m[37m[2m | [22m               [36m11.33 kB[39m[37m[0m[39m
+[37m[0m[32mstyles.d373e74de2a64932.css[39m[37m  [2m | [22m[2mstyles[22m       [2m | [22m [36m9.25 kB[39m[37m[2m | [22m                [36m1.84 kB[39m[37m[0m[39m
+[37m[0m[32mruntime.01ece896a871195f.js[39m[37m  [2m | [22m[2mruntime[22m      [2m | [22m [36m1.57 kB[39m[37m[2m | [22m              [36m787 bytes[39m[37m[0m[39m
+[37m[0m[0m[39m
+[37m[0m[1m [22m                            [2m | [22m[1mInitial total[22m[2m | [22m [1m[93m8.15 MB[39m[37m[22m[2m | [22m                [1m1.45 MB[22m[0m[39m
+[37m[0m[0m[39m
+[37m[0mBuild at: [1m[37m2026-07-17T07:30:29.200Z[39m[37m[22m - Hash: [1m[37m3c9704665a5b2862[39m[37m[22m - Time: [1m[37m164369[39m[37m[22mms[0m[39m
+[1m[33m[39m[22m
+[1m[33m[0m[33mWarning: [39m[33m[0mbundle initial exceeded maximum budget. Budget 5.00 MB was not met by 3.15 MB with a total of 8.15 MB.[39m[22m
+[1m[33m[39m[22m
+[1m[33m[39m[22m
+
+
+
+ NX   Successfully ran target build for project electron-frontend and 40 tasks it depends on
+
+

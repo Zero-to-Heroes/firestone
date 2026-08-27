@@ -41,6 +41,28 @@ export class ElectronGameWindowService {
 		return this.currentGameInfo;
 	}
 
+	/**
+	 * Feed game info from an external detector. Used on Linux, where the ow-electron overlay
+	 * package never emits game events, so detection is done from /proc + X11 instead.
+	 * Passing null means the game exited.
+	 */
+	public applyExternalGameInfo(gameInfo: GameWindowInfo | null): void {
+		const previous = this.currentGameInfo;
+		this.currentGameInfo = gameInfo;
+
+		if (!gameInfo) {
+			if (previous) {
+				this.notifyGameExit(previous);
+			}
+			return;
+		}
+
+		this.notifyGameInfoChanged();
+		if (previous?.isInFocus !== gameInfo.isInFocus) {
+			this.notifyGameFocusChanged(!!gameInfo.isInFocus);
+		}
+	}
+
 	public onGameInfoChanged(callback: (gameInfo: GameWindowInfo | null) => void): void {
 		this.gameInfoChangeListeners.push(callback);
 	}

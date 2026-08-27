@@ -1,0 +1,9 @@
+/UnitySpy/bin
+/UnitySpy/obj
+/UnitySpy.HearthstoneLib/bin
+/UnitySpy.HearthstoneLib/obj
+/UnitySpy.HearthstoneLibTests/bin
+/UnitySpy.HearthstoneLibTests/obj
+packages
+.vs
+**/*.csproj.user

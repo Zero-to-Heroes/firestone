@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <AssemblyName>FirestoneMindVisionEdge</AssemblyName>
+    <RootNamespace>FirestoneMindVisionEdge</RootNamespace>
+    <Nullable>disable</Nullable>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <NoWarn>$(NoWarn);CA1416</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\UnitySpy.HearthstoneLib\UnitySpy.HearthstoneLib.Linux.csproj" />
+    <ProjectReference Include="..\UnitySpy\UnitySpy.Linux.csproj" />
+  </ItemGroup>
+</Project>

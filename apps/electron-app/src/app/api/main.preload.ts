@@ -104,6 +104,10 @@ const electronAPI = {
 	startOverlayDragging: () => ipcRenderer.send('start-overlay-dragging'),
 	/** Close the current window (Settings overlay or regular). */
 	closeSettingsWindow: () => ipcRenderer.send('close-settings-window'),
+	/** Fs-backed app-file storage for the disk cache (replaces overwolf.extensions.io on electron). */
+	storeAppFile: (fileName: string, content: string) => ipcRenderer.invoke('store-app-file', fileName, content),
+	readAppFile: (fileName: string) => ipcRenderer.invoke('read-app-file', fileName),
+	deleteAppFile: (fileName: string) => ipcRenderer.invoke('delete-app-file', fileName),
 	platform: process.platform,
 };
 

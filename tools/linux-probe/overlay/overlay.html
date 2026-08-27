@@ -1,0 +1,180 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<style>
+			* { margin: 0; padding: 0; box-sizing: border-box; }
+			html, body {
+				width: 100%; height: 100%;
+				background: transparent;
+				overflow: hidden;
+				font-family: "Noto Sans", "DejaVu Sans", sans-serif;
+				-webkit-user-select: none;
+				cursor: default;
+			}
+
+			/* Outlines the tracked window bounds. If this frame lines up with the
+			   game's edges, geometry tracking is correct. */
+			#frame {
+				position: absolute; inset: 0;
+				border: 2px solid rgba(0, 255, 170, 0.9);
+				box-shadow: inset 0 0 40px rgba(0, 255, 170, 0.15);
+			}
+			.corner {
+				position: absolute;
+				width: 28px; height: 28px;
+				border: 3px solid rgba(255, 90, 90, 0.95);
+			}
+			.tl { top: 0; left: 0; border-right: none; border-bottom: none; }
+			.tr { top: 0; right: 0; border-left: none; border-bottom: none; }
+			.bl { bottom: 0; left: 0; border-right: none; border-top: none; }
+			.br { bottom: 0; right: 0; border-left: none; border-top: none; }
+
+			/* Mimics a Firestone tracker widget: rounded, translucent, blurred.
+			   This is the real test of compositing quality over a Wine window. */
+			#widget {
+				position: absolute;
+				top: 40px; right: 40px;
+				width: 260px;
+				background: rgba(18, 22, 34, 0.82);
+				backdrop-filter: blur(6px);
+				border: 1px solid rgba(120, 160, 255, 0.35);
+				border-radius: 10px;
+				color: #e8ecf5;
+				font-size: 12px;
+				overflow: hidden;
+			}
+			#widget h1 {
+				font-size: 12px; font-weight: 600; letter-spacing: 0.04em;
+				padding: 9px 12px;
+				background: linear-gradient(90deg, rgba(70,110,220,0.55), rgba(70,110,220,0.1));
+				text-transform: uppercase;
+			}
+			.card {
+				display: flex; align-items: center; justify-content: space-between;
+				padding: 5px 12px;
+				border-top: 1px solid rgba(255,255,255,0.05);
+			}
+			.card .cost {
+				width: 18px; height: 18px; border-radius: 50%;
+				background: #2a6ad4; color: #fff;
+				font-size: 10px; font-weight: 700;
+				display: flex; align-items: center; justify-content: center;
+				margin-right: 8px; flex: 0 0 auto;
+			}
+			.card .nm { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+			.card .qty { opacity: 0.6; }
+
+			#status {
+				position: absolute;
+				top: 40px; left: 40px;
+				background: rgba(10, 10, 14, 0.86);
+				color: #d8ffe8;
+				border: 1px solid rgba(0, 255, 170, 0.4);
+				border-radius: 8px;
+				padding: 12px 14px;
+				font-family: "DejaVu Sans Mono", monospace;
+				font-size: 12px;
+				line-height: 1.55;
+				min-width: 340px;
+			}
+			#status b { color: #00ffaa; font-weight: 600; }
+			.warn { color: #ffcc55; }
+			.bad { color: #ff6b6b; }
+
+			/* Click target: only interactive when click-through is OFF. */
+			#hit {
+				position: absolute;
+				bottom: 40px; left: 40px;
+				padding: 14px 20px;
+				background: rgba(200, 60, 60, 0.85);
+				border: 2px solid #ff9a9a;
+				border-radius: 8px;
+				color: #fff; font-size: 13px; font-weight: 600;
+				cursor: pointer;
+			}
+			#hit.armed { background: rgba(40, 160, 90, 0.9); border-color: #7dffb0; }
+
+			/* Animated element to eyeball compositing smoothness / tearing. */
+			#pulse {
+				position: absolute;
+				bottom: 40px; right: 40px;
+				width: 54px; height: 54px;
+				border-radius: 50%;
+				background: rgba(90, 150, 255, 0.85);
+				animation: bob 1.4s ease-in-out infinite;
+			}
+			@keyframes bob { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-22px) scale(1.15); } }
+		</style>
+	</head>
+	<body>
+		<div id="frame">
+			<div class="corner tl"></div><div class="corner tr"></div>
+			<div class="corner bl"></div><div class="corner br"></div>
+		</div>
+
+		<div id="status">booting…</div>
+
+		<div id="widget">
+			<h1>Opponent's deck (probe)</h1>
+			<div class="card"><span class="cost">1</span><span class="nm">Ancestral Knowledge</span><span class="qty">2</span></div>
+			<div class="card"><span class="cost">2</span><span class="nm">Frostbolt</span><span class="qty">2</span></div>
+			<div class="card"><span class="cost">3</span><span class="nm">Arcane Intellect</span><span class="qty">1</span></div>
+			<div class="card"><span class="cost">6</span><span class="nm">Blizzard</span><span class="qty">2</span></div>
+			<div class="card"><span class="cost">10</span><span class="nm">Pyroblast</span><span class="qty">1</span></div>
+		</div>
+
+		<div id="hit">click me (needs Ctrl+Shift+O first)</div>
+		<div id="pulse"></div>
+
+		<script>
+			const statusEl = document.getElementById('status');
+			const hitEl = document.getElementById('hit');
+			let clicks = 0;
+			let fps = 0, frames = 0, last = performance.now();
+
+			function loop(now) {
+				frames++;
+				if (now - last >= 1000) { fps = frames; frames = 0; last = now; }
+				requestAnimationFrame(loop);
+			}
+			requestAnimationFrame(loop);
+
+			hitEl.addEventListener('click', () => {
+				clicks++;
+				window.probe.reportClick();
+			});
+
+			let state = null;
+			window.probe.onTarget((t) => { state = t; });
+
+			setInterval(() => {
+				if (!state) {
+					statusEl.innerHTML =
+						'<b>OVERLAY PROBE</b><br>' +
+						'<span class="warn">no target window found</span><br>' +
+						'waiting for Hearthstone / Battle.net…<br>' +
+						'fps: ' + fps + '<br>' +
+						'Ctrl+Shift+Q to quit';
+					hitEl.classList.remove('armed');
+					return;
+				}
+				hitEl.classList.toggle('armed', !state.clickThrough);
+				hitEl.textContent = state.clickThrough
+					? 'click-through ON — clicks pass to game'
+					: 'click-through OFF — click me! (' + clicks + ')';
+
+				statusEl.innerHTML =
+					'<b>OVERLAY PROBE</b><br>' +
+					'target : ' + state.name + '<br>' +
+					'class  : ' + state.cls + '<br>' +
+					'geom   : ' + state.width + 'x' + state.height + ' @ ' + state.x + ',' + state.y + '<br>' +
+					'focus  : ' + (state.gameFocused ? '<b>game has focus</b>' : '<span class="warn">game not focused</span>') + '<br>' +
+					'input  : ' + (state.clickThrough ? 'click-through (passes to game)' : '<b>intercepting</b>') + '<br>' +
+					'clicks : ' + clicks + '<br>' +
+					'fps    : ' + fps + '<br>' +
+					'<br>Ctrl+Shift+O toggle input · Ctrl+Shift+Q quit';
+			}, 200);
+		</script>
+	</body>
+</html>

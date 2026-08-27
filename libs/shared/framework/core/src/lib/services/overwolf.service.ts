@@ -843,6 +843,11 @@ export class OverwolfService {
 	}
 
 	public async storeAppFile(fileName: string, content: string): Promise<boolean> {
+		// On electron, overwolf.extensions.io is unavailable; go through the fs-backed IPC bridge.
+		const electronApi = OverwolfService.electronApi();
+		if (electronApi?.storeAppFile) {
+			return electronApi.storeAppFile(fileName, content);
+		}
 		return new Promise<boolean>((resolve) => {
 			overwolf.extensions.io.writeTextFile(
 				overwolf.extensions.io.enums.StorageSpace.appData,
@@ -856,6 +861,10 @@ export class OverwolfService {
 	}
 
 	public async readAppFile(fileName: string): Promise<string | null> {
+		const electronApi = OverwolfService.electronApi();
+		if (electronApi?.readAppFile) {
+			return electronApi.readAppFile(fileName);
+		}
 		return new Promise<string | null>((resolve) => {
 			overwolf.extensions.io.readTextFile(overwolf.extensions.io.enums.StorageSpace.appData, fileName, (res) => {
 				resolve(res?.success ? res.content : null);
@@ -864,12 +873,25 @@ export class OverwolfService {
 	}
 
 	public async deleteAppFile(fileName: string): Promise<boolean> {
+		const electronApi = OverwolfService.electronApi();
+		if (electronApi?.deleteAppFile) {
+			return electronApi.deleteAppFile(fileName);
+		}
 		return new Promise<boolean>((resolve) => {
 			overwolf.extensions.io.delete(overwolf.extensions.io.enums.StorageSpace.appData, fileName, (res) => {
 				// console.debug('[overwolf-utils] deleted app file', fileName, res);
 				resolve(res.success);
 			});
 		});
+	}
+
+	// The preload-exposed electron bridge, present only when running under electron.
+	private static electronApi(): any | null {
+		try {
+			return (typeof window !== 'undefined' && (window as any).electronAPI) || null;
+		} catch (e) {
+			return null;
+		}
 	}
 
 	public async openLocalCacheFolder(): Promise<void> {

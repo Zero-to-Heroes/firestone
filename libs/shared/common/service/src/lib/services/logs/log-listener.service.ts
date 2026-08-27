@@ -91,7 +91,10 @@ export class LogListenerService {
 		}
 
 		console.log('[log-listener] [' + this.logFile + '] Logs dir', logsDir);
-		this.logsLocation = logsDir + '\\' + this.logFile;
+		// Use the platform separator: Blizzard's logs live on a Windows path on Overwolf but on a
+		// native Linux path under Wine, where a backslash would be a literal filename character.
+		const separator = logsDir.includes('/') ? '/' : '\\';
+		this.logsLocation = logsDir + separator + this.logFile;
 		console.log('[log-listener] [' + this.logFile + '] Logs location', this.logsLocation);
 		if (this.backend.gameRunning(gameInfo)) {
 			console.log('[log-listener] [' + this.logFile + '] Game is running!', gameInfo.executionPath);

@@ -46,3 +46,12 @@ Thumbs.db
 .github\instructions\nx.instructions.md
 .nx
 .cursor/reviews
+
+# Linux MindVision helper — self-contained net8.0 publish output, produced by the build
+libs/electron-edge-libs/mindvision-helper/
+libs/electron-edge-libs/game-events-helper/
+
+# Vendored .NET helper build output (sources are tracked, artifacts are not)
+tools/linux-helpers/**/bin/
+tools/linux-helpers/**/obj/
+tools/linux-helpers/**/publish/
