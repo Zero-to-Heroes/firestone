@@ -147,7 +147,7 @@
 		"elementtree": "^0.1.7",
 		"flag-icons": "^6.6.6",
 		"html2canvas": "^1.4.1",
-		"immutable": "^4.3.0",
+		"immutable": "^4.3.9",
 		"jsonwebtoken": "^9.0.0",
 		"jszip": "^3.10.1",
 		"marked": "^15.0.0",
